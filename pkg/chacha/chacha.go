@@ -13,20 +13,20 @@ type Validator func(params ...interface{}) (interface{}, error)
 type DontCheckChildrens struct{}
 
 // Дерево проверок
-type List struct {
+type Tree struct {
 	Validator Validator
 	Data      interface{}
 	Result    error
 	Valid     bool
-	Childrens []List
+	Childrens []Tree
 }
 
 // Проверять детей
-func (l *List) CheckChildrens() bool {
+func (t *Tree) CheckChildrens() bool {
 	checkChildrens := true
 
-	if l.Data != nil {
-		valData := reflect.ValueOf(l.Data)
+	if t.Data != nil {
+		valData := reflect.ValueOf(t.Data)
 		checkChildrens = valData.Type().String() != "*chacha.DontCheckChildrens"
 	}
 
@@ -34,31 +34,31 @@ func (l *List) CheckChildrens() bool {
 }
 
 // Валидировать рекурсивно дерево
-func (l *List) Validate(params ...interface{}) {
-	l.Data, l.Result = l.Validator(params...)
-	if l.Result != nil {
-		l.Valid = false
+func (t *Tree) Validate(params ...interface{}) {
+	t.Data, t.Result = t.Validator(params...)
+	if t.Result != nil {
+		t.Valid = false
 	} else {
-		l.Valid = true
-		if l.CheckChildrens() {
-			for index := range l.Childrens {
-				params[0] = l.Data
-				l.Childrens[index].Validate(params...)
-				l.Valid = l.Valid && l.Childrens[index].Valid
+		t.Valid = true
+		if t.CheckChildrens() {
+			for index := range t.Childrens {
+				params[0] = t.Data
+				t.Childrens[index].Validate(params...)
+				t.Valid = t.Valid && t.Childrens[index].Valid
 			}
 		}
 	}
 }
 
-func (l *List) ShowErrors() {
-	if l.Result != nil {
+func (t *Tree) ShowErrors() {
+	if t.Result != nil {
 		invalidColor := color.New(color.FgRed).SprintFunc()
-		fmt.Printf(" %v %v\n", invalidColor("♥"), l.Result)
+		fmt.Printf(" %v %v\n", invalidColor("♥"), t.Result)
 	}
 
-	if l.CheckChildrens() {
-		for index := range l.Childrens {
-			l.Childrens[index].ShowErrors()
+	if t.CheckChildrens() {
+		for index := range t.Childrens {
+			t.Childrens[index].ShowErrors()
 		}
 	}
 }
