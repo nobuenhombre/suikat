@@ -29,6 +29,7 @@ func (l *List) CheckChildrens() bool {
 		valData := reflect.ValueOf(l.Data)
 		checkChildrens = valData.Type().String() != "*chacha.DontCheckChildrens"
 	}
+
 	return checkChildrens
 }
 
