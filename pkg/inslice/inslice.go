@@ -6,6 +6,7 @@ func String(a string, list *[]string) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -15,6 +16,7 @@ func Int(a int, list *[]int) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -24,6 +26,7 @@ func Int32(a int32, list *[]int32) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -33,6 +36,7 @@ func Int64(a int64, list *[]int64) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -42,6 +46,7 @@ func Float32(a float32, list *[]float32) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -51,5 +56,6 @@ func Float64(a float64, list *[]float64) bool {
 			return true
 		}
 	}
+
 	return false
 }
