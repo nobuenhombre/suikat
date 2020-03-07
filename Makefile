@@ -1,4 +1,4 @@
-PROJECT_NAME="suikat"
+PROJECT_NAME="github.com/nobuenhombre/suikat"
 
 help: Makefile
 	@echo "Выберите опицию сборки "$(BINARY_NAME)":"
