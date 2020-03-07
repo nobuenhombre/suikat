@@ -58,6 +58,7 @@ func Trim(s []string, trimmers []string) []string {
 			result = append(result, trimmed)
 		}
 	}
+
 	return result
 }
 
@@ -65,6 +66,7 @@ func Trim(s []string, trimmers []string) []string {
 func Words(text string) []string {
 	words := strings.Split(text, Space)
 	words = Trim(words, []string{NbspSpaceInUtf8, Space, NewLine, CarriageReturn, Tab})
+
 	return words
 }
 
@@ -77,6 +79,7 @@ func Words(text string) []string {
 func NormalizeText(text string) string {
 	words := Words(text)
 	result := strings.Join(words, Space)
+
 	return result
 }
 
@@ -84,5 +87,6 @@ func NormalizeText(text string) string {
 func IsHTML(s string) bool {
 	fullLength := StrLen(s)
 	strippedLength := StrLen(StripHTML(s))
+
 	return fullLength != strippedLength
 }

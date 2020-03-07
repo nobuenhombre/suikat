@@ -94,5 +94,6 @@ func GetStructureFieldsTypes(value interface{}) (FieldsInfo, error) {
 			Order: order,
 		}
 	}
+
 	return result, nil
 }
