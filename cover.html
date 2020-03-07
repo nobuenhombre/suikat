@@ -95,7 +95,7 @@
     <div id="nav">
         <select id="files">
 
-            <option value="file0">suikat/pkg/inslice/inslice.go (100.0%)</option>
+            <option value="file0">github.com/nobuenhombre/suikat/pkg/inslice/inslice.go (100.0%)</option>
 
         </select>
     </div>
@@ -112,56 +112,86 @@
 		<pre class="file" id="file0" style="display: none">package inslice
 
 func String(a string, list *[]string) bool <span class="cov8" title="1">{
-        for _, b := range *list </span><span class="cov8" title="1">{
+        if list == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, b := range *list </span><span class="cov8" title="1">{
                 if b == a </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
+
         <span class="cov8" title="1">return false</span>
 }
 
 func Int(a int, list *[]int) bool <span class="cov8" title="1">{
-        for _, b := range *list </span><span class="cov8" title="1">{
+        if list == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, b := range *list </span><span class="cov8" title="1">{
                 if b == a </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
+
         <span class="cov8" title="1">return false</span>
 }
 
 func Int32(a int32, list *[]int32) bool <span class="cov8" title="1">{
-        for _, b := range *list </span><span class="cov8" title="1">{
+        if list == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, b := range *list </span><span class="cov8" title="1">{
                 if b == a </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
+
         <span class="cov8" title="1">return false</span>
 }
 
 func Int64(a int64, list *[]int64) bool <span class="cov8" title="1">{
-        for _, b := range *list </span><span class="cov8" title="1">{
+        if list == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, b := range *list </span><span class="cov8" title="1">{
                 if b == a </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
+
         <span class="cov8" title="1">return false</span>
 }
 
 func Float32(a float32, list *[]float32) bool <span class="cov8" title="1">{
-        for _, b := range *list </span><span class="cov8" title="1">{
+        if list == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, b := range *list </span><span class="cov8" title="1">{
                 if b == a </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
+
         <span class="cov8" title="1">return false</span>
 }
 
 func Float64(a float64, list *[]float64) bool <span class="cov8" title="1">{
-        for _, b := range *list </span><span class="cov8" title="1">{
+        if list == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">for _, b := range *list </span><span class="cov8" title="1">{
                 if b == a </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
+
         <span class="cov8" title="1">return false</span>
 }
 </pre>

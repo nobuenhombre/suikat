@@ -7,7 +7,7 @@ import (
 
 type inputStringParams struct {
 	a    string
-	list []string
+	list *[]string
 }
 
 type insliceStringTest struct {
@@ -26,14 +26,14 @@ var stringTests = []insliceStringTest{
 	{
 		in: inputStringParams{
 			a:    "a",
-			list: []string{"b", "c", "d"},
+			list: &[]string{"b", "c", "d"},
 		},
 		out: false,
 	},
 	{
 		in: inputStringParams{
 			a:    "a",
-			list: []string{"b", "a", "d"},
+			list: &[]string{"b", "a", "d"},
 		},
 		out: true,
 	},
@@ -42,7 +42,7 @@ var stringTests = []insliceStringTest{
 func TestString(t *testing.T) {
 	for i := 0; i < len(stringTests); i++ {
 		test := &stringTests[i]
-		out := String(test.in.a, &test.in.list)
+		out := String(test.in.a, test.in.list)
 
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(

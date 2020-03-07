@@ -7,7 +7,7 @@ import (
 
 type inputFloat64Params struct {
 	a    float64
-	list []float64
+	list *[]float64
 }
 
 type insliceFloat64Test struct {
@@ -26,14 +26,14 @@ var float64Tests = []insliceFloat64Test{
 	{
 		in: inputFloat64Params{
 			a:    5.73,
-			list: []float64{3.12, 7.45, 9.88},
+			list: &[]float64{3.12, 7.45, 9.88},
 		},
 		out: false,
 	},
 	{
 		in: inputFloat64Params{
 			a:    5.73,
-			list: []float64{3.12, 5.73, 9.88},
+			list: &[]float64{3.12, 5.73, 9.88},
 		},
 		out: true,
 	},
@@ -42,7 +42,7 @@ var float64Tests = []insliceFloat64Test{
 func TestFloat64(t *testing.T) {
 	for i := 0; i < len(float64Tests); i++ {
 		test := &float64Tests[i]
-		out := Float64(test.in.a, &test.in.list)
+		out := Float64(test.in.a, test.in.list)
 
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
