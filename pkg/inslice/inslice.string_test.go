@@ -43,6 +43,7 @@ func TestString(t *testing.T) {
 	for i := 0; i < len(stringTests); i++ {
 		test := &stringTests[i]
 		out := String(test.in.a, &test.in.list)
+
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
 				"String(%v, %v), Expected %v, Actual %v",

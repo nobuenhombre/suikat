@@ -43,6 +43,7 @@ func TestFloat64(t *testing.T) {
 	for i := 0; i < len(float64Tests); i++ {
 		test := &float64Tests[i]
 		out := Float64(test.in.a, &test.in.list)
+
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
 				"Float64(%v, %v), Expected %v, Actual %v",

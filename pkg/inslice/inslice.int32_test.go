@@ -43,6 +43,7 @@ func TestInt32(t *testing.T) {
 	for i := 0; i < len(int32Tests); i++ {
 		test := &int32Tests[i]
 		out := Int32(test.in.a, &test.in.list)
+
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
 				"Int32(%v, %v), Expected %v, Actual %v",

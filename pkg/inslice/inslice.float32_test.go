@@ -43,6 +43,7 @@ func TestFloat32(t *testing.T) {
 	for i := 0; i < len(float32Tests); i++ {
 		test := &float32Tests[i]
 		out := Float32(test.in.a, &test.in.list)
+
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
 				"Float32(%v, %v), Expected %v, Actual %v",

@@ -43,6 +43,7 @@ func TestInt(t *testing.T) {
 	for i := 0; i < len(intTests); i++ {
 		test := &intTests[i]
 		out := Int(test.in.a, &test.in.list)
+
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
 				"Int(%v, %v), Expected %v, Actual %v",

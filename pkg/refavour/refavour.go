@@ -14,6 +14,7 @@ func GetReflectValue(s interface{}) reflect.Value {
 	if val.Kind() == reflect.Ptr {
 		val = reflect.Indirect(val)
 	}
+
 	return val
 }
 
@@ -22,12 +23,14 @@ func GetReflectValue(s interface{}) reflect.Value {
 func CheckKind(value interface{}, expectedKind reflect.Kind) error {
 	reflectValue := GetReflectValue(value)
 	reflectKind := reflectValue.Kind()
+
 	if reflectKind != expectedKind {
 		return &KindNotMatchedError{
 			Expected: expectedKind.String(),
 			Actual:   reflectKind.String(),
 		}
 	}
+
 	return nil
 }
 
@@ -56,6 +59,7 @@ func CheckCanBeChanged(value interface{}) error {
 	if !reflectValue.CanSet() {
 		return &CantBeSetError{}
 	}
+
 	return nil
 }
 

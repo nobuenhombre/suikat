@@ -18,7 +18,7 @@ const (
 	Comma           = ","
 	Semicolon       = ";"
 	NbspSpaceInUtf8 = "\xc2\xa0"
-	HtmlSpace       = "&nbsp;"
+	HTMLSpace       = "&nbsp;"
 )
 
 // Сколько Символов в строке
@@ -27,7 +27,7 @@ func StrLen(s string) int {
 }
 
 // Очистить строку от Html
-func StripHtml(s string) string {
+func StripHTML(s string) string {
 	strippedBytes := bluemonday.StrictPolicy().SanitizeBytes([]byte(s))
 	return string(strippedBytes)
 }
@@ -44,12 +44,16 @@ func StripHtml(s string) string {
  */
 func Trim(s []string, trimmers []string) []string {
 	var result []string
+
 	trimmed := ""
+
 	for _, v := range s {
 		trimmed = v
+
 		for _, trimmer := range trimmers {
 			trimmed = strings.Trim(trimmed, trimmer)
 		}
+
 		if utf8.RuneCountInString(trimmed) > 0 {
 			result = append(result, trimmed)
 		}
@@ -77,8 +81,8 @@ func NormalizeText(text string) string {
 }
 
 // Содержит ли строка HTML?
-func IsHtml(s string) bool {
+func IsHTML(s string) bool {
 	fullLength := StrLen(s)
-	strippedLength := StrLen(StripHtml(s))
+	strippedLength := StrLen(StripHTML(s))
 	return fullLength != strippedLength
 }

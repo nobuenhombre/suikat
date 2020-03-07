@@ -43,6 +43,7 @@ func TestInt64(t *testing.T) {
 	for i := 0; i < len(int64Tests); i++ {
 		test := &int64Tests[i]
 		out := Int64(test.in.a, &test.in.list)
+
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
 				"Int64(%v, %v), Expected %v, Actual %v",

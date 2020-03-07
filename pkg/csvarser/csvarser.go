@@ -30,13 +30,16 @@ func (p *CsvParser) setStructureFieldData(value interface{}, fieldName string, f
 	reflectValue := refavour.GetReflectValue(value)
 
 	parserFunc, found := p.TypeParsers[fieldType.String()]
+
 	if !found {
 		return &ParserNotFoundError{
 			FieldType: fieldType.String(),
 		}
 	}
+
 	parsedData, parserErr := parserFunc(data)
 	reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(parsedData))
+
 	if parserErr != nil {
 		return parserErr
 	}
@@ -67,6 +70,7 @@ func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []stri
 		if exists {
 			value := sliceData[fieldInfo.Order]
 			setFieldError := p.setStructureFieldData(structData, fieldName, fieldInfo.Type, value)
+
 			if setFieldError != nil {
 				return setFieldError
 			}

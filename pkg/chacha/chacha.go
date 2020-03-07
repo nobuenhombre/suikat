@@ -24,6 +24,7 @@ type List struct {
 // Проверять детей
 func (l *List) CheckChildrens() bool {
 	checkChildrens := true
+
 	if l.Data != nil {
 		valData := reflect.ValueOf(l.Data)
 		checkChildrens = valData.Type().String() != "*chacha.DontCheckChildrens"
@@ -53,6 +54,7 @@ func (l *List) ShowErrors() {
 		invalidColor := color.New(color.FgRed).SprintFunc()
 		fmt.Printf(" %v %v\n", invalidColor("♥"), l.Result)
 	}
+
 	if l.CheckChildrens() {
 		for index := range l.Childrens {
 			l.Childrens[index].ShowErrors()
