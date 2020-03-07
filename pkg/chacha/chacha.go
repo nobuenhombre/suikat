@@ -35,7 +35,7 @@ func (l *List) CheckChildrens() bool {
 
 // Валидировать рекурсивно дерево
 func (l *List) Validate(params ...interface{}) {
-	l.Data, l.Result = l.Validator([]interface{}(params)...)
+	l.Data, l.Result = l.Validator(params...)
 	if l.Result != nil {
 		l.Valid = false
 	} else {
@@ -43,7 +43,7 @@ func (l *List) Validate(params ...interface{}) {
 		if l.CheckChildrens() {
 			for index := range l.Childrens {
 				params[0] = l.Data
-				l.Childrens[index].Validate([]interface{}(params)...)
+				l.Childrens[index].Validate(params...)
 				l.Valid = l.Valid && l.Childrens[index].Valid
 			}
 		}
