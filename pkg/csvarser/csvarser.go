@@ -26,7 +26,12 @@ func (p *CsvParser) AddTypeParser(dataType string, parser ParserFunc) {
 // fieldType - тип поля
 // data - Данные
 //-------------------------------------------
-func (p *CsvParser) setStructureFieldData(value interface{}, fieldName string, fieldType reflect.Type, data string) error {
+func (p *CsvParser) setStructureFieldData(
+	value interface{},
+	fieldName string,
+	fieldType reflect.Type,
+	data string,
+) error {
 	reflectValue := refavour.GetReflectValue(value)
 
 	parserFunc, found := p.TypeParsers[fieldType.String()]
