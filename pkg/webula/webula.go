@@ -52,10 +52,13 @@ func Trim(s []string, trimmers []string) []string {
 
 		for {
 			lenBefore := len(trimmed)
+
 			for _, trimmer := range trimmers {
 				trimmed = strings.Trim(trimmed, trimmer)
 			}
+
 			lenAfter := len(trimmed)
+
 			if lenAfter == lenBefore {
 				break
 			}
