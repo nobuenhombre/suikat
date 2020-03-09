@@ -11,11 +11,33 @@ all: clean deps test build
 test:
 	go test -v ./...
 
-## coverage: Получить информацию о покрытии тестами кода
+## cover: Получить информацию о покрытии тестами кода
 cover:
 	go test -coverprofile=cover.out ./...
 	go tool cover -html=cover.out -o cover.html
 	rm -f cover.out
+
+## codecove: Бейджик Покрытия на гитхабе
+codecove:
+	for d in $(shell go list ./...); do \
+		go test -v -covermode=count -coverprofile=profile.out $$d > tmp.out; \
+		cat tmp.out; \
+		if grep -q "^--- FAIL" tmp.out; then \
+			rm tmp.out; \
+			exit 1; \
+		elif grep -q "build failed" tmp.out; then \
+			rm tmp.out; \
+			exit 1; \
+		elif grep -q "setup failed" tmp.out; then \
+			rm tmp.out; \
+			exit 1; \
+		fi; \
+		if [ -f profile.out ]; then \
+			cat profile.out | grep -v "mode:" >> coverage.out; \
+			rm profile.out; \
+		fi; \
+		rm tmp.out; \
+	done
 
 ## clean: Удалить старые сборки
 clean:
