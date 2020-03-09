@@ -33,11 +33,16 @@ codecove:
 			exit 1; \
 		fi; \
 		if [ -f profile.out ]; then \
-			cat profile.out | grep -v "mode:" >> coverage.out; \
+			cat profile.out | grep -v "mode:" >> codecove.out; \
 			rm profile.out; \
 		fi; \
-		rm tmp.out; \
-	done
+		rm -f tmp.out; \
+	done; \
+	echo "mode: count" > coverage.out; \
+	cat codecove.out >> coverage.out; \
+	gocov convert coverage.out | gocov-xml > coverage.xml;
+	rm -f codecove.out;
+	rm -f coverage.out;
 
 ## clean: Удалить старые сборки
 clean:

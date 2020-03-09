@@ -3,6 +3,8 @@ module github.com/nobuenhombre/suikat
 go 1.13
 
 require (
+	github.com/AlekSi/gocov-xml v0.0.0-20190121064608-3a14fb1c4737 // indirect
+	github.com/axw/gocov v1.0.0 // indirect
 	github.com/fatih/color v1.9.0
 	github.com/mattn/go-colorable v0.1.6 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.2

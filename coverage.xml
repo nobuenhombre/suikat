@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage line-rate="1" branch-rate="0" lines-covered="65" lines-valid="65" branches-covered="0" branches-valid="0"
+          complexity="0" version="" timestamp="1583774020935">
+    <packages>
+        <package name="github.com/nobuenhombre/suikat/pkg/inslice" line-rate="1" branch-rate="0" complexity="0"
+                 line-count="36" line-hits="36">
+            <classes>
+                <class name="-" filename="pkg/inslice/inslice.go" line-rate="1" branch-rate="0" complexity="0"
+                       line-count="36" line-hits="36">
+                    <methods>
+                        <method name="String" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="4" hits="15"></line>
+                                <line number="5" hits="5"></line>
+                                <line number="8" hits="10"></line>
+                                <line number="9" hits="25"></line>
+                                <line number="10" hits="5"></line>
+                                <line number="14" hits="5"></line>
+                            </lines>
+                        </method>
+                        <method name="Int" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="18" hits="15"></line>
+                                <line number="19" hits="5"></line>
+                                <line number="22" hits="10"></line>
+                                <line number="23" hits="25"></line>
+                                <line number="24" hits="5"></line>
+                                <line number="28" hits="5"></line>
+                            </lines>
+                        </method>
+                        <method name="Int32" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="32" hits="15"></line>
+                                <line number="33" hits="5"></line>
+                                <line number="36" hits="10"></line>
+                                <line number="37" hits="25"></line>
+                                <line number="38" hits="5"></line>
+                                <line number="42" hits="5"></line>
+                            </lines>
+                        </method>
+                        <method name="Int64" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="46" hits="15"></line>
+                                <line number="47" hits="5"></line>
+                                <line number="50" hits="10"></line>
+                                <line number="51" hits="25"></line>
+                                <line number="52" hits="5"></line>
+                                <line number="56" hits="5"></line>
+                            </lines>
+                        </method>
+                        <method name="Float32" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="60" hits="15"></line>
+                                <line number="61" hits="5"></line>
+                                <line number="64" hits="10"></line>
+                                <line number="65" hits="25"></line>
+                                <line number="66" hits="5"></line>
+                                <line number="70" hits="5"></line>
+                            </lines>
+                        </method>
+                        <method name="Float64" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="74" hits="15"></line>
+                                <line number="75" hits="5"></line>
+                                <line number="78" hits="10"></line>
+                                <line number="79" hits="25"></line>
+                                <line number="80" hits="5"></line>
+                                <line number="84" hits="5"></line>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="4" hits="15"></line>
+                        <line number="5" hits="5"></line>
+                        <line number="8" hits="10"></line>
+                        <line number="9" hits="25"></line>
+                        <line number="10" hits="5"></line>
+                        <line number="14" hits="5"></line>
+                        <line number="18" hits="15"></line>
+                        <line number="19" hits="5"></line>
+                        <line number="22" hits="10"></line>
+                        <line number="23" hits="25"></line>
+                        <line number="24" hits="5"></line>
+                        <line number="28" hits="5"></line>
+                        <line number="32" hits="15"></line>
+                        <line number="33" hits="5"></line>
+                        <line number="36" hits="10"></line>
+                        <line number="37" hits="25"></line>
+                        <line number="38" hits="5"></line>
+                        <line number="42" hits="5"></line>
+                        <line number="46" hits="15"></line>
+                        <line number="47" hits="5"></line>
+                        <line number="50" hits="10"></line>
+                        <line number="51" hits="25"></line>
+                        <line number="52" hits="5"></line>
+                        <line number="56" hits="5"></line>
+                        <line number="60" hits="15"></line>
+                        <line number="61" hits="5"></line>
+                        <line number="64" hits="10"></line>
+                        <line number="65" hits="25"></line>
+                        <line number="66" hits="5"></line>
+                        <line number="70" hits="5"></line>
+                        <line number="74" hits="15"></line>
+                        <line number="75" hits="5"></line>
+                        <line number="78" hits="10"></line>
+                        <line number="79" hits="25"></line>
+                        <line number="80" hits="5"></line>
+                        <line number="84" hits="5"></line>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+        <package name="github.com/nobuenhombre/suikat/pkg/webula" line-rate="1" branch-rate="0" complexity="0"
+                 line-count="29" line-hits="29">
+            <classes>
+                <class name="-" filename="pkg/webula/webula.go" line-rate="1" branch-rate="0" complexity="0"
+                       line-count="29" line-hits="29">
+                    <methods>
+                        <method name="StrLen" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="26" hits="55"></line>
+                            </lines>
+                        </method>
+                        <method name="StripHTML" signature="" line-rate="1" branch-rate="0" complexity="0"
+                                line-count="0" line-hits="0">
+                            <lines>
+                                <line number="31" hits="25"></line>
+                                <line number="32" hits="25"></line>
+                            </lines>
+                        </method>
+                        <method name="Trim" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="46" hits="25"></line>
+                                <line number="48" hits="25"></line>
+                                <line number="50" hits="25"></line>
+                                <line number="51" hits="285"></line>
+                                <line number="53" hits="285"></line>
+                                <line number="54" hits="330"></line>
+                                <line number="56" hits="330"></line>
+                                <line number="57" hits="1545"></line>
+                                <line number="60" hits="330"></line>
+                                <line number="62" hits="330"></line>
+                                <line number="63" hits="285"></line>
+                                <line number="67" hits="285"></line>
+                                <line number="68" hits="105"></line>
+                                <line number="72" hits="25"></line>
+                            </lines>
+                        </method>
+                        <method name="Words" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="77" hits="15"></line>
+                                <line number="79" hits="15"></line>
+                                <line number="80" hits="75"></line>
+                                <line number="83" hits="15"></line>
+                                <line number="84" hits="15"></line>
+                                <line number="86" hits="15"></line>
+                            </lines>
+                        </method>
+                        <method name="NormalizeText" signature="" line-rate="1" branch-rate="0" complexity="0"
+                                line-count="0" line-hits="0">
+                            <lines>
+                                <line number="96" hits="10"></line>
+                                <line number="97" hits="10"></line>
+                                <line number="99" hits="10"></line>
+                            </lines>
+                        </method>
+                        <method name="IsHTML" signature="" line-rate="1" branch-rate="0" complexity="0" line-count="0"
+                                line-hits="0">
+                            <lines>
+                                <line number="104" hits="15"></line>
+                                <line number="105" hits="15"></line>
+                                <line number="107" hits="15"></line>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="26" hits="55"></line>
+                        <line number="31" hits="25"></line>
+                        <line number="32" hits="25"></line>
+                        <line number="46" hits="25"></line>
+                        <line number="48" hits="25"></line>
+                        <line number="50" hits="25"></line>
+                        <line number="51" hits="285"></line>
+                        <line number="53" hits="285"></line>
+                        <line number="54" hits="330"></line>
+                        <line number="56" hits="330"></line>
+                        <line number="57" hits="1545"></line>
+                        <line number="60" hits="330"></line>
+                        <line number="62" hits="330"></line>
+                        <line number="63" hits="285"></line>
+                        <line number="67" hits="285"></line>
+                        <line number="68" hits="105"></line>
+                        <line number="72" hits="25"></line>
+                        <line number="77" hits="15"></line>
+                        <line number="79" hits="15"></line>
+                        <line number="80" hits="75"></line>
+                        <line number="83" hits="15"></line>
+                        <line number="84" hits="15"></line>
+                        <line number="86" hits="15"></line>
+                        <line number="96" hits="10"></line>
+                        <line number="97" hits="10"></line>
+                        <line number="99" hits="10"></line>
+                        <line number="104" hits="15"></line>
+                        <line number="105" hits="15"></line>
+                        <line number="107" hits="15"></line>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+    </packages>
+    <sources>
+        <source>/home/go/src/suikat</source>
+    </sources>
+</coverage>

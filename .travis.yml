@@ -12,4 +12,4 @@ script:
   - make codecove
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -v
+  - bash <(curl -s https://codecov.io/bash) -f coverage.xml -v
