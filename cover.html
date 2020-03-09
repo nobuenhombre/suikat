@@ -97,6 +97,8 @@
 
             <option value="file0">github.com/nobuenhombre/suikat/pkg/inslice/inslice.go (100.0%)</option>
 
+            <option value="file1">github.com/nobuenhombre/suikat/pkg/webula/webula.go (100.0%)</option>
+
         </select>
     </div>
     <div id="legend">
@@ -194,6 +196,114 @@ func Float64(a float64, list *[]float64) bool <span class="cov8" title="1">{
 
         <span class="cov8" title="1">return false</span>
 }
+</pre>
+
+    <pre class="file" id="file1" style="display: none">package webula
+
+import (
+        "strings"
+        "unicode/utf8"
+
+        "github.com/microcosm-cc/bluemonday"
+)
+
+const (
+        EmptyString     = ""
+        Space           = " "
+        Underline       = "_"
+        Dot             = "."
+        NewLine         = "\n"
+        CarriageReturn  = "\r"
+        Tab             = "\t"
+        Comma           = ","
+        Semicolon       = ";"
+        HTMLSpaceInUtf8 = "\xc2\xa0"
+        HTMLSpace       = "&amp;nbsp;"
+)
+
+// Сколько Символов в строке
+func StrLen(s string) int <span class="cov8" title="1">{
+        return utf8.RuneCountInString(s)
+}</span>
+
+// Очистить строку от Html
+func StripHTML(s string) string <span class="cov8" title="1">{
+        strippedBytes := bluemonday.StrictPolicy().SanitizeBytes([]byte(s))
+        return string(strippedBytes)
+}</span>
+
+/**
+ * Тримит элементы массива строк - если после трима длинна элемента=0
+ * то элемент удаляется из массива
+ *
+ * &amp;nbsp; как и другие xml-сущности (кажется, все) имеют аналог в utf-8.
+ * так, &amp;nbsp; можно представить в виде последовательности 0xC2 0xA0
+ * (двумя байтами вместо шести), чем достаточно нередко пользуются разработчики.
+ * поэтому такой символ мы тоже будем тримить.
+ * Я с этим символом где то столкнулся а где не помню.
+ */
+func Trim(s []string, trimmers []string) []string <span class="cov8" title="1">{
+        var result []string
+
+        trimmed := ""
+
+        for _, v := range s </span><span class="cov8" title="1">{
+                trimmed = v
+
+                for </span><span class="cov8" title="1">{
+                        lenBefore := len(trimmed)
+                        for _, trimmer := range trimmers </span><span class="cov8" title="1">{
+                                trimmed = strings.Trim(trimmed, trimmer)
+                        }</span>
+                        <span class="cov8" title="1">lenAfter := len(trimmed)
+                        if lenAfter == lenBefore </span><span class="cov8" title="1">{
+                                break</span>
+                        }
+                }
+
+                <span class="cov8" title="1">if utf8.RuneCountInString(trimmed) &gt; 0 </span><span class="cov8"
+                                                                                                    title="1">{
+                        result = append(result, trimmed)
+                }</span>
+        }
+
+        <span class="cov8" title="1">return result</span>
+}
+
+// Функция возвращает Слайс из слов
+func Words(text string) []string <span class="cov8" title="1">{
+        splittersTrimmers := []string{HTMLSpaceInUtf8, Space, NewLine, CarriageReturn, Tab}
+
+        for _, value := range splittersTrimmers </span><span class="cov8" title="1">{
+                text = strings.ReplaceAll(text, value, Space)
+        }</span>
+
+        <span class="cov8" title="1">words := strings.Split(text, Space)
+        words = Trim(words, splittersTrimmers)
+
+        return words</span>
+}
+
+// Функция нормалицации текста - для устранения множественных повторяющихся символов
+// По умолчанию повторяющимся символом является пробел.
+//
+// Функция делит строку на массив по указанным символам - пробелам
+// затем Тримит - т.е. удаляет пустые элементы
+// затем обратно склеивает с указанным символом
+func NormalizeText(text string, glue string) string <span class="cov8" title="1">{
+        words := Words(text)
+        result := strings.Join(words, glue)
+
+        return result
+}</span>
+
+// Содержит ли строка HTML?
+func IsHTML(s string) bool <span class="cov8" title="1">{
+        fullLength := StrLen(s)
+        strippedLength := StrLen(StripHTML(s))
+
+        return fullLength != strippedLength
+}</span>
 </pre>
 
 </div>

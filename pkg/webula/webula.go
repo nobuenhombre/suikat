@@ -17,7 +17,7 @@ const (
 	Tab             = "\t"
 	Comma           = ","
 	Semicolon       = ";"
-	NbspSpaceInUtf8 = "\xc2\xa0"
+	HTMLSpaceInUtf8 = "\xc2\xa0"
 	HTMLSpace       = "&nbsp;"
 )
 
@@ -50,8 +50,15 @@ func Trim(s []string, trimmers []string) []string {
 	for _, v := range s {
 		trimmed = v
 
-		for _, trimmer := range trimmers {
-			trimmed = strings.Trim(trimmed, trimmer)
+		for {
+			lenBefore := len(trimmed)
+			for _, trimmer := range trimmers {
+				trimmed = strings.Trim(trimmed, trimmer)
+			}
+			lenAfter := len(trimmed)
+			if lenAfter == lenBefore {
+				break
+			}
 		}
 
 		if utf8.RuneCountInString(trimmed) > 0 {
@@ -64,8 +71,14 @@ func Trim(s []string, trimmers []string) []string {
 
 // Функция возвращает Слайс из слов
 func Words(text string) []string {
+	splittersTrimmers := []string{HTMLSpaceInUtf8, Space, NewLine, CarriageReturn, Tab}
+
+	for _, value := range splittersTrimmers {
+		text = strings.ReplaceAll(text, value, Space)
+	}
+
 	words := strings.Split(text, Space)
-	words = Trim(words, []string{NbspSpaceInUtf8, Space, NewLine, CarriageReturn, Tab})
+	words = Trim(words, splittersTrimmers)
 
 	return words
 }
@@ -76,9 +89,9 @@ func Words(text string) []string {
 // Функция делит строку на массив по указанным символам - пробелам
 // затем Тримит - т.е. удаляет пустые элементы
 // затем обратно склеивает с указанным символом
-func NormalizeText(text string) string {
+func NormalizeText(text string, glue string) string {
 	words := Words(text)
-	result := strings.Join(words, Space)
+	result := strings.Join(words, glue)
 
 	return result
 }
