@@ -56,6 +56,11 @@ deps:
 	go mod init $(PROJECT_NAME)
 	go get -u ./...
 
+## fmt: Автоформатирование
+fmt:
+	go fmt ./... && \
+	./go-imports.sh;
+
 ## lint: Проверка кода линтерами
 lint: lint-standart lint-bugs lint-complexity lint-format lint-performance lint-style lint-unused
 
