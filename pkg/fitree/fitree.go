@@ -15,9 +15,11 @@ type TreeNodeListStruct struct {
 // Добавляем Узел
 func (list *TreeNodeListStruct) Add(node TreeNodeStruct) {
 	list.List = append(list.List, node)
+
 	if list.Reverse == nil {
 		list.Reverse = make(map[string]int)
 	}
+
 	list.Reverse[node.Path] = len(list.List) - 1
 }
 
@@ -26,6 +28,7 @@ func (list *TreeNodeListStruct) Scan(path string, depth int, ignoreErr bool) err
 	path += string(os.PathSeparator)
 
 	node := TreeNodeStruct{}
+
 	fillErr := node.Fill(path, depth)
 	if fillErr != nil && !ignoreErr {
 		return fillErr

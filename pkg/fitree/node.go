@@ -31,6 +31,7 @@ func (node *TreeNodeStruct) Fill(path string, depth int) error {
 	node.Path = path
 	node.Name = DirInfo.Name()
 	node.Depth = depth
+
 	for _, f := range files {
 		if f.IsDir() {
 			node.SubDirs = append(node.SubDirs, f)
@@ -38,6 +39,7 @@ func (node *TreeNodeStruct) Fill(path string, depth int) error {
 			node.Files = append(node.Files, f)
 		}
 	}
+
 	node.FilesCount = len(node.Files)
 	node.SubDirsCount = len(node.SubDirs)
 

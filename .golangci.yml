@@ -1,3 +1,9 @@
+# all available settings of specific linters
+linters:
+  disable:
+    - godot
+    - testpackage
+
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
