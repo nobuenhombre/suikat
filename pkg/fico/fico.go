@@ -71,3 +71,17 @@ func (f *TxtFile) WriteGZ(content string) error {
 
 	return nil
 }
+
+func (f *TxtFile) GZ() error {
+	data, err := f.Read()
+	if err != nil {
+		return err
+	}
+
+	err = f.WriteGZ(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
