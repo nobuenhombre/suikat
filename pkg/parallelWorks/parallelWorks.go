@@ -5,7 +5,6 @@ import (
 )
 
 const (
-	BufferLength = 10
 	WorkersCount = 28
 )
 
@@ -24,11 +23,11 @@ func (worker Worker) goWorker(jobs <-chan JobData, result chan<- JobData, wg *sy
 	}
 }
 
-func (worker Worker) Run(dataList []JobData, workersCount, bufferLength int) map[int]interface{} {
+func (worker Worker) Run(dataList []JobData, workersCount int) map[int]interface{} {
 	var wg sync.WaitGroup
 
-	jobsChan := make(chan JobData, bufferLength)
-	resultsChan := make(chan JobData, bufferLength)
+	jobsChan := make(chan JobData, len(dataList))
+	resultsChan := make(chan JobData, len(dataList))
 
 	wg.Add(workersCount)
 	for w := 1; w <= workersCount; w++ {
