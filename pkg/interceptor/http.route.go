@@ -27,9 +27,5 @@ func (route *HTTPRoute) MatchURI(r *http.Request, regexp HTTPRegexp) bool {
 	routeURIParts := strings.Split(URI, "/")
 	requestURLParts := strings.Split(Path, "/")
 
-	if len(routeURIParts) > 0 && len(routeURIParts) == len(requestURLParts) {
-		return regexp.MatchURIParts(routeURIParts, requestURLParts)
-	}
-
-	return false
+	return regexp.MatchURIParts(routeURIParts, requestURLParts)
 }

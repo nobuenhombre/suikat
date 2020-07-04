@@ -39,6 +39,10 @@ func (reg *HTTPRegexp) Add(pattern, regExpPattern string) {
 }
 
 func (reg *HTTPRegexp) MatchURIParts(routeURIParts, requestURLParts []string) bool {
+	if !(len(routeURIParts) > 0 && len(routeURIParts) == len(requestURLParts)) {
+		return false
+	}
+
 	matched := true
 
 	for index, requestURLPart := range requestURLParts {
