@@ -20,5 +20,5 @@ func (e *KindNotMatchedError) Error() string {
 type CantBeSetError struct{}
 
 func (e *CantBeSetError) Error() string {
-	return fmt.Sprintf("Field of Structure can't be set because it's not a Pointer")
+	return "Field of Structure can't be set because it's not a Pointer"
 }

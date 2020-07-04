@@ -6,52 +6,30 @@ import (
 )
 
 // Один Роут и методы его сравнения
-type HttpRoute struct {
+type HTTPRoute struct {
 	Method string
 	URI    string
 	F      func(http.ResponseWriter, *http.Request)
 }
 
-func (route *HttpRoute) MatchMethod(r *http.Request) bool {
+func (route *HTTPRoute) MatchMethod(r *http.Request) bool {
 	return route.Method == r.Method
 }
 
-func (route *HttpRoute) MatchURI(r *http.Request, regexp HttpRegexp) bool {
+func (route *HTTPRoute) MatchURI(r *http.Request, regexp HTTPRegexp) bool {
 	if route.URI == r.URL.Path {
 		// Полное совпадение
 		return true
-	} else {
-		URI := strings.Trim(route.URI, "/")
-		Path := strings.Trim(r.URL.Path, "/")
-		URIParts := strings.Split(URI, "/")
-		PathParts := strings.Split(Path, "/")
-
-		var pattern string
-
-		if len(URIParts) > 0 && len(URIParts) == len(PathParts) {
-			matched := true
-			for index, pathPart := range PathParts {
-				if len(pathPart) > 0 && len(URIParts[index]) > 0 {
-					if pathPart == URIParts[index] {
-						// Прямое совпадение куска роута
-						matched = matched && true
-					} else {
-						// Совпадение по паттерну
-						pattern = URIParts[index]
-						r, found := regexp.List[pattern]
-						if found {
-							matched = matched && r.MatchString(pathPart)
-						} else {
-							matched = matched && false
-						}
-					}
-				} else {
-					return false
-				}
-			}
-			return matched
-		}
-
-		return false
 	}
+
+	URI := strings.Trim(route.URI, "/")
+	Path := strings.Trim(r.URL.Path, "/")
+	routeURIParts := strings.Split(URI, "/")
+	requestURLParts := strings.Split(Path, "/")
+
+	if len(routeURIParts) > 0 && len(routeURIParts) == len(requestURLParts) {
+		return regexp.MatchURIParts(routeURIParts, requestURLParts)
+	}
+
+	return false
 }

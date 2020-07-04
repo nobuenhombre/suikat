@@ -14,29 +14,29 @@ const (
 	ContentTypeJS       = "text/javascript"
 )
 
-type HttpAnswer struct {
+type HTTPAnswer struct {
 	ResponseCode int
 	Content      interface{}
 	ContentType  string
 }
 
-func (answer *HttpAnswer) Send(w http.ResponseWriter) {
+func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 	var outContent, outContentType string
 
 	w.WriteHeader(answer.ResponseCode)
 
-	switch answer.Content.(type) {
+	switch v := answer.Content.(type) {
 	case nil:
 		// Empty content
 		outContent = ""
 	case string:
 		// Just String
-		outContent = answer.Content.(string)
+		outContent = v
 		outContentType = ContentTypeHTML
 	case []byte:
 		// Bytes - this is file
 		// ContentType require
-		outContent = string(answer.Content.([]byte))
+		outContent = string(v)
 	default:
 		// Struct or map
 		outBytes, outError := json.Marshal(answer.Content)
@@ -55,6 +55,7 @@ func (answer *HttpAnswer) Send(w http.ResponseWriter) {
 		}
 
 		w.Header().Add("content-type", outContentType)
+
 		_, err := io.WriteString(w, outContent)
 		if err != nil {
 			return
