@@ -2,16 +2,9 @@ package interceptor
 
 import (
 	"encoding/json"
+	"github.com/nobuenhombre/suikat/pkg/mimes"
 	"io"
 	"net/http"
-)
-
-const (
-	ContentTypeJSON     = "application/json"
-	ContentTypeHTML     = "text/html"
-	ContentTypeImagePNG = "image/png"
-	ContentTypeCSS      = "text/css"
-	ContentTypeJS       = "text/javascript"
 )
 
 type HTTPAnswer struct {
@@ -27,14 +20,16 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 	case nil:
 		// Empty content
 		outContent = ""
+		outContentType = mimes.Text
 	case string:
 		// Just String
 		outContent = v
-		outContentType = ContentTypeHTML
+		outContentType = mimes.HyperTextMarkupLanguage
 	case []byte:
 		// Bytes - this is file
 		// ContentType require
 		outContent = string(v)
+		outContentType = mimes.BinaryData
 	default:
 		// Struct or map
 		outBytes, outError := json.Marshal(answer.Content)
@@ -44,7 +39,7 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 		}
 
 		outContent = string(outBytes)
-		outContentType = ContentTypeJSON
+		outContentType = mimes.JSON
 	}
 
 	if len(answer.ContentType) > 0 {
