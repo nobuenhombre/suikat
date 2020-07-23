@@ -23,8 +23,6 @@ type HTTPAnswer struct {
 func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 	var outContent, outContentType string
 
-	w.WriteHeader(answer.ResponseCode)
-
 	switch v := answer.Content.(type) {
 	case nil:
 		// Empty content
@@ -49,13 +47,13 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 		outContentType = ContentTypeJSON
 	}
 
+	if len(answer.ContentType) > 0 {
+		outContentType = answer.ContentType
+	}
+	w.Header().Add("content-type", outContentType)
+	w.WriteHeader(answer.ResponseCode)
+
 	if len(outContent) > 0 {
-		if len(answer.ContentType) > 0 {
-			outContentType = answer.ContentType
-		}
-
-		w.Header().Add("content-type", outContentType)
-
 		_, err := io.WriteString(w, outContent)
 		if err != nil {
 			return
