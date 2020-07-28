@@ -69,6 +69,7 @@ const (
 	ZIPArchive                        = "application/zip"
 	SevenZipArchive                   = "application/x-7z-compressed"
 	XML                               = "application/xml"
+	FormUrlencoded                    = "application/x-www-form-urlencoded"
 )
 
 func mimesByExt() map[string]string {

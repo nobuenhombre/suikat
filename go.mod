@@ -6,6 +6,7 @@ require (
 	github.com/andybalholm/brotli v1.0.0 // indirect
 	github.com/fatih/color v1.9.0
 	github.com/golang/gddo v0.0.0-20200715224205-051695c33a3f // indirect
+	github.com/gorilla/schema v1.1.0
 	github.com/klauspost/compress v1.10.10 // indirect
 	github.com/klauspost/pgzip v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.7 // indirect
