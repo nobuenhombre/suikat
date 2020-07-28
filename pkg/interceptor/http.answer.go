@@ -2,9 +2,10 @@ package interceptor
 
 import (
 	"encoding/json"
-	"github.com/nobuenhombre/suikat/pkg/mimes"
 	"io"
 	"net/http"
+
+	"github.com/nobuenhombre/suikat/pkg/mimes"
 )
 
 type HTTPAnswer struct {
@@ -45,6 +46,7 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 	if len(answer.ContentType) > 0 {
 		outContentType = answer.ContentType
 	}
+
 	w.Header().Add("content-type", outContentType)
 	w.WriteHeader(answer.ResponseCode)
 

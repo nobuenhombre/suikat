@@ -149,6 +149,7 @@ func mimesByExt() map[string]string {
 
 func GetByExt(ext string) string {
 	list := mimesByExt()
+
 	mime, found := list[ext]
 	if found {
 		return mime
