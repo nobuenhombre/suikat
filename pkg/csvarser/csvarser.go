@@ -55,6 +55,8 @@ func (p *CsvParser) setStructureFieldData(
 // Заполнить структуру из слайса
 //------------------------------
 func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []string) error {
+	tagProcessor := NewTagProcessor()
+
 	structError := refavour.CheckStructure(structData)
 	if structError != nil {
 		return structError
@@ -65,16 +67,16 @@ func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []stri
 		return canBeChangedError
 	}
 
-	structureFields, getStructErr := refavour.GetStructureFieldsTypes(structData)
+	structureFields, getStructErr := refavour.GetStructureFieldsTypes(structData, tagProcessor)
 	if getStructErr != nil {
 		return getStructErr
 	}
 
 	for fieldName, fieldInfo := range structureFields {
-		exists := len(sliceData) > fieldInfo.Order
+		exists := len(sliceData) > fieldInfo.(*CSVFieldInfo).Order
 		if exists {
-			value := sliceData[fieldInfo.Order]
-			setFieldError := p.setStructureFieldData(structData, fieldName, fieldInfo.Type, value)
+			value := sliceData[fieldInfo.(*CSVFieldInfo).Order]
+			setFieldError := p.setStructureFieldData(structData, fieldName, fieldInfo.(*CSVFieldInfo).Type, value)
 
 			if setFieldError != nil {
 				return setFieldError
@@ -82,8 +84,8 @@ func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []stri
 		} else {
 			return &FieldNotExistsInSliceError{
 				FieldName: fieldName,
-				FieldType: fieldInfo.Type.String(),
-				Index:     fieldInfo.Order,
+				FieldType: fieldInfo.(*CSVFieldInfo).Type.String(),
+				Index:     fieldInfo.(*CSVFieldInfo).Order,
 			}
 		}
 	}
