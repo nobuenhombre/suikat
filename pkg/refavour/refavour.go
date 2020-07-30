@@ -2,10 +2,11 @@ package refavour
 
 import (
 	"reflect"
-	"strconv"
 )
 
-const TagOrder = "order"
+type TagProcessor interface {
+	GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error)
+}
 
 // Получить значение рефлекса
 //-------------------------------
@@ -63,18 +64,13 @@ func CheckCanBeChanged(value interface{}) error {
 	return nil
 }
 
-type FieldInfo struct {
-	Type  reflect.Type
-	Order int
-}
-
 // Типы полей структуры
 //-------------------------------
-type FieldsInfo map[string]FieldInfo
+type FieldsInfo map[string]interface{}
 
 // Функция читает из интерфейса структуру и формирует список имен полей и их типы
 //-------------------------------------------------------------------------------
-func GetStructureFieldsTypes(value interface{}) (FieldsInfo, error) {
+func GetStructureFieldsTypes(value interface{}, tagProcessor TagProcessor) (FieldsInfo, error) {
 	reflectValue := GetReflectValue(value)
 	reflectedValueType := reflectValue.Type()
 
@@ -84,15 +80,12 @@ func GetStructureFieldsTypes(value interface{}) (FieldsInfo, error) {
 		valueField := reflectValue.Field(i)
 		typeField := reflectedValueType.Field(i)
 
-		order, orderErr := strconv.Atoi(typeField.Tag.Get(TagOrder))
-		if orderErr != nil {
-			return nil, orderErr
+		fieldInfo, err := tagProcessor.GetFieldInfo(typeField, valueField)
+		if err != nil {
+			return nil, err
 		}
 
-		result[typeField.Name] = FieldInfo{
-			Type:  valueField.Type(),
-			Order: order,
-		}
+		result[typeField.Name] = fieldInfo
 	}
 
 	return result, nil

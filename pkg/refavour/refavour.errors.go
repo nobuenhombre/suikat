@@ -22,3 +22,14 @@ type CantBeSetError struct{}
 func (e *CantBeSetError) Error() string {
 	return "Field of Structure can't be set because it's not a Pointer"
 }
+
+// Ошибка - неправильный формат Тега
+//--------------------------------------------------
+type InvalidTagError struct {
+	Actual   string
+	Expected string
+}
+
+func (e *InvalidTagError) Error() string {
+	return fmt.Sprintf("invalid tag: actual[%v], expected[%v]", e.Actual, e.Expected)
+}
