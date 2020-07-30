@@ -9,6 +9,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/nobuenhombre/suikat/pkg/envar"
 )
 
@@ -19,9 +21,17 @@ type AppConfig struct {
 	MakeSomeAction bool    `env:"MSA:bool=false"`
 }
 
+func (cfg *AppConfig) Load() error {
+	return envar.Load(cfg)
+}
+
 func main() {
 	cfg := &AppConfig{}
-	envar.GetENV(cfg)
+
+	err := cfg.Load()
+	if err != nil {
+		log.Fatalf("ENV config error [%v]", err)
+	}
 
 	fmt.Printf("%#v", cfg)
 }

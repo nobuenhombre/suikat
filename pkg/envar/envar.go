@@ -51,7 +51,7 @@ func (ev *EnvVar) GetBool() bool {
 	return ev.DefaultValue.(bool)
 }
 
-func GetENV(structData interface{}) error {
+func Load(structData interface{}) error {
 	tagProcessor := NewTagProcessor()
 
 	structError := refavour.CheckStructure(structData)
