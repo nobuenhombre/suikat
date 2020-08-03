@@ -4,9 +4,16 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/nobuenhombre/suikat/pkg/mimes"
 )
+
+type FileData struct {
+	Name string
+	Size int64
+	Data []byte
+}
 
 type HTTPAnswer struct {
 	ResponseCode int
@@ -26,11 +33,15 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 		// Just String
 		outContent = v
 		outContentType = mimes.HyperTextMarkupLanguage
-	case []byte:
+	case FileData:
 		// Bytes - this is file
 		// ContentType require
-		outContent = string(v)
+		outContent = string(v.Data)
 		outContentType = mimes.BinaryData
+
+		//Send the headers
+		w.Header().Set("Content-Disposition", "attachment; filename="+v.Name)
+		w.Header().Set("Content-Length", strconv.FormatInt(v.Size, 10))
 	default:
 		// Struct or map
 		outBytes, outError := json.Marshal(answer.Content)
