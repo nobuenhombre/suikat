@@ -3,10 +3,14 @@ package lessrestclient
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/nobuenhombre/suikat/pkg/mimes"
@@ -38,6 +42,99 @@ func New(c *Client) LRC {
 	return c
 }
 
+func (c *Client) GetBodyFormMultipartData(
+	urlAddr, method string,
+	inData interface{},
+	addHeader *map[string]string,
+) (reqBody io.Reader, reqRawBody string, err error) {
+	reqBody = &bytes.Buffer{}
+
+	w := multipart.NewWriter(reqBody.(io.Writer))
+
+	for k, v := range inData.(url.Values) {
+		for _, iv := range v {
+			if strings.HasPrefix(k, "@") { // file
+				err = addFile(w, k[1:], iv)
+				if err != nil {
+					return
+				}
+			} else { // form value
+				err = w.WriteField(k, iv)
+				if err != nil {
+					return
+				}
+			}
+		}
+	}
+
+	// Set the Boundary in the Content-Type
+	(*addHeader)["Content-Type"] = w.FormDataContentType()
+
+	// Set Content-Length
+	(*addHeader)["Content-Length"] = fmt.Sprintf("%d", reqBody.(*bytes.Buffer).Len())
+
+	err = w.Close()
+	if err != nil {
+		return
+	}
+
+	reqRawBody = reqBody.(*bytes.Buffer).String()
+
+	return
+}
+
+func (c *Client) GetBodyFormUrlencoded(
+	urlAddr, method string,
+	inData interface{},
+	addHeader *map[string]string,
+) (reqBody io.Reader, reqRawBody string, err error) {
+	var encoder = schema.NewEncoder()
+
+	q := url.Values{}
+
+	err = encoder.Encode(inData, q)
+	if err != nil {
+		err = &EncoderError{
+			URL:    urlAddr,
+			Method: method,
+			Data:   inData,
+			Parent: err,
+		}
+
+		return
+	}
+
+	reqRawBody = q.Encode()
+	reqBody = strings.NewReader(reqRawBody)
+
+	return
+}
+
+func (c *Client) GetBodyJSON(
+	urlAddr, method string,
+	inData interface{},
+	addHeader *map[string]string,
+) (reqBody io.Reader, reqRawBody string, err error) {
+	var tmp []byte
+
+	tmp, err = json.Marshal(inData)
+	if err != nil {
+		err = &MarshalingError{
+			URL:    urlAddr,
+			Method: method,
+			Data:   inData,
+			Parent: err,
+		}
+
+		return
+	}
+
+	reqBody = bytes.NewBuffer(tmp)
+	reqRawBody = string(tmp)
+
+	return
+}
+
 func (c *Client) Request(
 	method, route string,
 	inData interface{},
@@ -49,6 +146,8 @@ func (c *Client) Request(
 		reqRawBody string
 	)
 
+	addHeader := make(map[string]string)
+
 	URL := c.URL + route
 
 	switch inData.(type) {
@@ -57,42 +156,12 @@ func (c *Client) Request(
 		reqRawBody = "nil"
 	default:
 		switch c.ContentType {
+		case mimes.FormMultipartData:
+			reqBody, reqRawBody, err = c.GetBodyFormMultipartData(URL, method, inData, &addHeader)
 		case mimes.FormUrlencoded:
-			var encoder = schema.NewEncoder()
-
-			q := url.Values{}
-
-			err = encoder.Encode(inData, q)
-			if err != nil {
-				err = &EncoderError{
-					URL:    URL,
-					Method: method,
-					Data:   inData,
-					Parent: err,
-				}
-
-				return
-			}
-
-			reqRawBody = q.Encode()
-			reqBody = strings.NewReader(reqRawBody)
+			reqBody, reqRawBody, err = c.GetBodyFormUrlencoded(URL, method, inData, &addHeader)
 		case mimes.JSON:
-			var tmp []byte
-
-			tmp, err = json.Marshal(inData)
-			if err != nil {
-				err = &MarshalingError{
-					URL:    URL,
-					Method: method,
-					Data:   inData,
-					Parent: err,
-				}
-
-				return
-			}
-
-			reqBody = bytes.NewBuffer(tmp)
-			reqRawBody = string(tmp)
+			reqBody, reqRawBody, err = c.GetBodyJSON(URL, method, inData, &addHeader)
 		default:
 			err = &UnknownContentTypeError{
 				URL:    URL,
@@ -116,7 +185,17 @@ func (c *Client) Request(
 		return
 	}
 
-	req.Header.Add("Content-Type", c.ContentType)
+	contentType, found := addHeader["Content-Type"]
+	if found {
+		req.Header.Add("Content-Type", contentType)
+		delete(addHeader, "Content-Type")
+	} else {
+		req.Header.Add("Content-Type", c.ContentType)
+	}
+
+	for key, value := range addHeader {
+		req.Header.Add(key, value)
+	}
 
 	switch c.AuthType {
 	case AuthTypeNone:
@@ -246,4 +325,23 @@ func (c *Client) GET(
 	expectedStatusCode int,
 ) (statusCode int, respBody []byte, err error) {
 	return c.Request(http.MethodGet, route, nil, outData, expectedStatusCode)
+}
+
+// Add a file to the multipart request
+func addFile(w *multipart.Writer, fieldName, path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	part, err := w.CreateFormFile(fieldName, filepath.Base(path))
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(part, file)
+
+	return err
 }
