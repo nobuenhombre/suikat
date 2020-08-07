@@ -219,7 +219,11 @@ func (c *Client) Request(
 		return
 	}
 
-	client := &http.Client{}
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {
