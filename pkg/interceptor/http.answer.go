@@ -47,6 +47,7 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 		outBytes, outError := json.Marshal(answer.Content)
 		if outError != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+
 			return
 		}
 

@@ -29,6 +29,7 @@ func StrLen(s string) int {
 // Очистить строку от Html
 func StripHTML(s string) string {
 	strippedBytes := bluemonday.StrictPolicy().SanitizeBytes([]byte(s))
+
 	return string(strippedBytes)
 }
 

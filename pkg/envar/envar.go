@@ -69,6 +69,8 @@ func Load(structData interface{}) error {
 		return getStructErr
 	}
 
+	reflectValue := refavour.GetReflectValue(structData)
+
 	for fieldName, fieldInfo := range structureFields {
 		ev := EnvVar{
 			Key:          fieldInfo.(*ENVFieldInfo).Name,
@@ -115,7 +117,6 @@ func Load(structData interface{}) error {
 			}
 		}
 
-		reflectValue := refavour.GetReflectValue(structData)
 		reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(value))
 	}
 

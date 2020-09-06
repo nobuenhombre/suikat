@@ -30,6 +30,7 @@ func (router *HTTPRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			// URI Matched
 			if route.MatchURI(r, router.HTTPRegexp) {
 				route.F(w, r)
+
 				return
 			}
 		}
