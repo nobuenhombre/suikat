@@ -20,9 +20,11 @@ type Palette struct {
 
 type ColoredLog struct {
 	Palette
+	ShowTime   bool
+	TimeFormat string
 }
 
-func NewColoredLog() *ColoredLog {
+func NewColoredLog(showTime bool, timeFormat string) *ColoredLog {
 	coloredLog := &ColoredLog{
 		Palette: Palette{
 			TimeColor:    color.New(color.FgMagenta),
@@ -33,6 +35,8 @@ func NewColoredLog() *ColoredLog {
 			FatalColor:   color.New(color.FgRed),
 			PanicColor:   color.New(color.FgWhite, color.BgRed),
 		},
+		ShowTime:   showTime,
+		TimeFormat: timeFormat,
 	}
 
 	// Change Log Format
@@ -43,11 +47,26 @@ func NewColoredLog() *ColoredLog {
 }
 
 func (cl *ColoredLog) Write(bytes []byte) (int, error) {
-	return fmt.Printf(
-		"%v %v",
-		cl.TimeColor.Sprint(time.Now().UTC().Format("2006-01-02 15:04:05")),
-		string(bytes),
-	)
+	timeStr := ""
+
+	if cl.ShowTime {
+		timeFormat := "2006-01-02 15:04:05"
+
+		if len(cl.TimeFormat) > 0 {
+			timeFormat = cl.TimeFormat
+		}
+
+		timeStr = cl.TimeColor.Sprint(
+			time.Now().UTC().Format(timeFormat),
+		)
+	}
+
+	messagePrefix := ""
+	if len(timeStr) > 0 {
+		messagePrefix = " "
+	}
+
+	return fmt.Printf("%v%v%v", timeStr, messagePrefix, string(bytes))
 }
 
 func (cl *ColoredLog) Success(v ...interface{}) {
