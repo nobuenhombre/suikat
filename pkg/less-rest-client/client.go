@@ -135,6 +135,19 @@ func (c *Client) GetBodyJSON(
 	return
 }
 
+func (c *Client) ErrorRawBody(contentType, rawBody string) string {
+	switch c.ContentType {
+	case mimes.FormMultipartData:
+		return fmt.Sprintf("FormMultipartData(len=%v)", len(rawBody))
+	case mimes.FormUrlencoded:
+		return fmt.Sprintf("FormUrlencoded(%v)", rawBody)
+	case mimes.JSON:
+		return fmt.Sprintf("JSON(%v)", rawBody)
+	default:
+		return fmt.Sprintf("Unknown(len=%v)", len(rawBody))
+	}
+}
+
 func (c *Client) Request(
 	method, route string,
 	inData interface{},
@@ -158,10 +171,46 @@ func (c *Client) Request(
 		switch c.ContentType {
 		case mimes.FormMultipartData:
 			reqBody, reqRawBody, err = c.GetBodyFormMultipartData(URL, method, inData, &addHeader)
+			if err != nil {
+				err = &BodyFormMultipartDataError{
+					FormDataError{
+						URL:    URL,
+						Method: method,
+						Parent: err,
+					},
+				}
+
+				return
+			}
+
 		case mimes.FormUrlencoded:
 			reqBody, reqRawBody, err = c.GetBodyFormUrlencoded(URL, method, inData, &addHeader)
+			if err != nil {
+				err = &BodyFormUrlencodedError{
+					FormDataError{
+						URL:    URL,
+						Method: method,
+						Parent: err,
+					},
+				}
+
+				return
+			}
+
 		case mimes.JSON:
 			reqBody, reqRawBody, err = c.GetBodyJSON(URL, method, inData, &addHeader)
+			if err != nil {
+				err = &BodyJSONError{
+					FormDataError{
+						URL:    URL,
+						Method: method,
+						Parent: err,
+					},
+				}
+
+				return
+			}
+
 		default:
 			err = &UnknownContentTypeError{
 				URL:    URL,
@@ -178,7 +227,7 @@ func (c *Client) Request(
 		err = &CreateRequestError{
 			URL:     URL,
 			Method:  method,
-			RawBody: reqRawBody,
+			RawBody: c.ErrorRawBody(c.ContentType, reqRawBody),
 			Parent:  err,
 		}
 
@@ -226,7 +275,7 @@ func (c *Client) Request(
 		err = &ClientError{
 			URL:     URL,
 			Method:  method,
-			RawBody: reqRawBody,
+			RawBody: c.ErrorRawBody(c.ContentType, reqRawBody),
 			Parent:  err,
 		}
 
@@ -242,7 +291,7 @@ func (c *Client) Request(
 		err = &ReadResponseBodyError{
 			URL:     URL,
 			Method:  method,
-			RawBody: reqRawBody,
+			RawBody: c.ErrorRawBody(c.ContentType, reqRawBody),
 			Parent:  err,
 		}
 
@@ -255,7 +304,7 @@ func (c *Client) Request(
 		err = &WrongStatusCodeError{
 			URL:             URL,
 			Method:          method,
-			RequestRawBody:  reqRawBody,
+			RequestRawBody:  c.ErrorRawBody(c.ContentType, reqRawBody),
 			ResponseRawBody: respRawBody,
 			Expected:        expectedStatusCode,
 			Actual:          statusCode,

@@ -158,3 +158,31 @@ func (e *WrongStatusCodeError) Error() string {
 		e.Actual,
 	)
 }
+
+type FormDataError struct {
+	URL    string
+	Method string
+	Parent error
+}
+
+func (e *FormDataError) Error() string {
+	return fmt.Sprintf("form multipart data error,\n"+
+		" - method[%v],\n - url[%v],\n"+
+		" - error[%v]",
+		e.Method,
+		e.URL,
+		e.Parent,
+	)
+}
+
+type BodyFormMultipartDataError struct {
+	FormDataError
+}
+
+type BodyFormUrlencodedError struct {
+	FormDataError
+}
+
+type BodyJSONError struct {
+	FormDataError
+}
