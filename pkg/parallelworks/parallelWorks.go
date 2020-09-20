@@ -42,7 +42,9 @@ func (worker Worker) sendData(dataList []JobData, jobsChan chan<- JobData) {
 	}
 }
 
-func (worker Worker) readResults(resultsChan <-chan JobData, outData *map[int]interface{}) {
+func (worker Worker) readResults(resultsChan <-chan JobData, outData *map[int]interface{}, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	for res := range resultsChan {
 		(*outData)[res.ID] = res.Data
 	}
@@ -70,7 +72,9 @@ func (worker Worker) Run(dataList []JobData, workersCount int) map[int]interface
 		go worker.goWorker(jobsChan, resultsChan, &wg)
 	}
 
-	go worker.readResults(resultsChan, &outData)
+	wg.Add(1)
+
+	go worker.readResults(resultsChan, &outData, &wg)
 
 	wg.Wait()
 
