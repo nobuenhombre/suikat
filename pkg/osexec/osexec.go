@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	osDetector "github.com/nobuenhombre/suikat/pkg/os-detector"
 )
 
@@ -27,8 +26,25 @@ func (e *RunError) Error() string {
 	)
 }
 
-func Run(command string, args []string) (string, error) {
+func RunUnix(command string, args []string) (string, error) {
 	cmd := exec.Command(command, args...)
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(out), &RunError{
+			Command: command,
+			Args:    args,
+			Parent:  err,
+			StdOut:  string(out),
+		}
+	}
+
+	return string(out), nil
+}
+
+func RunWindows(command string, args []string) (string, error) {
+	arg := fmt.Sprintf("%v %v", command, strings.Join(args, " "))
+	cmd := exec.Command("CMD", "/c", arg)
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -46,12 +62,10 @@ func Run(command string, args []string) (string, error) {
 func OSRun(command string, args []string) (string, error) {
 	switch runtime.GOOS {
 	case osDetector.OSLinux, osDetector.OSMacOs:
-		return Run(command, args)
+		return RunUnix(command, args)
 
 	case osDetector.OSWindows:
-		return "", &ge.NotReleasedError{
-			Name: "NotReleasedError for OS Windows",
-		}
+		return RunWindows(command, args)
 
 	default:
 		return "", &osDetector.UnknownOSError{
