@@ -60,23 +60,26 @@ func (worker Worker) Run(dataList []JobData, workersCount int) map[int]interface
 	jobsChan := make(chan JobData, channelsLength)
 	resultsChan := make(chan JobData, channelsLength)
 
-	defer close(resultsChan)
-
 	go worker.sendData(dataList, jobsChan)
 
-	var wg sync.WaitGroup
+	var waitWorkers, waitResults sync.WaitGroup
 
-	wg.Add(workersCount)
+	waitWorkers.Add(workersCount)
 
 	for w := 1; w <= workersCount; w++ {
-		go worker.goWorker(jobsChan, resultsChan, &wg)
+		go worker.goWorker(jobsChan, resultsChan, &waitWorkers)
 	}
 
-	wg.Add(1)
+	go func() {
+		waitWorkers.Wait()
+		close(resultsChan)
+	}()
 
-	go worker.readResults(resultsChan, &outData, &wg)
+	waitResults.Add(1)
 
-	wg.Wait()
+	go worker.readResults(resultsChan, &outData, &waitResults)
+
+	waitResults.Wait()
 
 	return outData
 }
