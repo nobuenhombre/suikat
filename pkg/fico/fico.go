@@ -3,6 +3,8 @@ package fico
 import (
 	"bufio"
 	"compress/gzip"
+	"encoding/base64"
+	"encoding/hex"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -79,6 +81,74 @@ func (f *TxtFile) GZ() error {
 	}
 
 	err = f.WriteGZ(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (f *TxtFile) ReadAsB64String() (string, error) {
+	data, err := f.Read()
+	if err != nil {
+		return "", err
+	}
+
+	strB64 := base64.StdEncoding.EncodeToString([]byte(data))
+
+	return strB64, nil
+}
+
+func (f *TxtFile) B64() error {
+	strB64, err := f.ReadAsB64String()
+	if err != nil {
+		return err
+	}
+
+	txtOutFile := TxtFile(string(*f) + ".b64")
+
+	err = txtOutFile.Write(strB64)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func strBytes(in string) string {
+	out := ""
+	bytes := []byte(in)
+
+	for _, b := range bytes {
+		out += hex.EncodeToString([]byte{b}) + " "
+	}
+
+	out = strings.TrimRight(out, " ")
+	out = strings.ToUpper(out)
+
+	return out
+}
+
+func (f *TxtFile) ReadAsHexString() (string, error) {
+	data, err := f.Read()
+	if err != nil {
+		return "", err
+	}
+
+	strHex := strBytes(data)
+
+	return strHex, nil
+}
+
+func (f *TxtFile) Hex() error {
+	strHex, err := f.ReadAsHexString()
+	if err != nil {
+		return err
+	}
+
+	txtOutFile := TxtFile(string(*f) + ".hex")
+
+	err = txtOutFile.Write(strHex)
 	if err != nil {
 		return err
 	}
