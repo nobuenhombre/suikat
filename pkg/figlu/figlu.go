@@ -2,13 +2,15 @@ package figlu
 
 import (
 	"github.com/nobuenhombre/suikat/pkg/fico"
+	"github.com/nobuenhombre/suikat/pkg/fina"
 	"github.com/nobuenhombre/suikat/pkg/fitree"
 )
 
 type Path string
 
 // Возвращает только склеенный контент
-func (path *Path) GlueContent(ignoreScanErr bool) (string, error) {
+// onlyExt - если не пустая строка - тогда фильтр по расширению, например ".css"
+func (path *Path) GlueContent(onlyExt string, ignoreScanErr bool) (string, error) {
 	// Сканируем Дерево каталогов
 	list := fitree.TreeNodeListStruct{}
 
@@ -21,14 +23,26 @@ func (path *Path) GlueContent(ignoreScanErr bool) (string, error) {
 
 	for _, dir := range list.List {
 		for _, file := range dir.Files {
-			txtFile := fico.TxtFile(dir.Path + file.Name())
+			allowGlue := true
+			fileName := dir.Path + file.Name()
 
-			fileContent, err := txtFile.Read()
-			if err != nil {
-				return fico.EmptyString, err
+			if len(onlyExt) > 0 {
+				fpi := fina.GetFilePartsInfo(fileName)
+				if fpi.Ext != onlyExt {
+					allowGlue = false
+				}
 			}
 
-			s += fileContent
+			if allowGlue {
+				txtFile := fico.TxtFile(fileName)
+
+				fileContent, err := txtFile.Read()
+				if err != nil {
+					return fico.EmptyString, err
+				}
+
+				s += fileContent
+			}
 		}
 	}
 
@@ -36,8 +50,9 @@ func (path *Path) GlueContent(ignoreScanErr bool) (string, error) {
 }
 
 // Создает файл out-file.ext с содержимым - склеенный контент
-func (path *Path) Glue(outFile fico.TxtFile, ignoreScanErr bool) error {
-	content, err := path.GlueContent(ignoreScanErr)
+// onlyExt - если не пустая строка - тогда фильтр по расширению, например ".css"
+func (path *Path) Glue(outFile fico.TxtFile, onlyExt string, ignoreScanErr bool) error {
+	content, err := path.GlueContent(onlyExt, ignoreScanErr)
 	if err != nil {
 		return err
 	}
@@ -53,11 +68,12 @@ func (path *Path) Glue(outFile fico.TxtFile, ignoreScanErr bool) error {
 type PathList []Path
 
 // Возвращает только склеенный контент
-func (pathList *PathList) GlueContent(ignoreScanErr bool) (string, error) {
+// onlyExt - если не пустая строка - тогда фильтр по расширению, например ".css"
+func (pathList *PathList) GlueContent(onlyExt string, ignoreScanErr bool) (string, error) {
 	s := fico.EmptyString
 
 	for _, path := range *pathList {
-		glueContent, err := path.GlueContent(ignoreScanErr)
+		glueContent, err := path.GlueContent(onlyExt, ignoreScanErr)
 		if err != nil {
 			return s, err
 		}
@@ -69,8 +85,9 @@ func (pathList *PathList) GlueContent(ignoreScanErr bool) (string, error) {
 }
 
 // Создает файл out-file.ext с содержимым - склеенный контент
-func (pathList *PathList) Glue(outFile fico.TxtFile, ignoreScanErr bool) error {
-	content, err := pathList.GlueContent(ignoreScanErr)
+// onlyExt - если не пустая строка - тогда фильтр по расширению, например ".css"
+func (pathList *PathList) Glue(outFile fico.TxtFile, onlyExt string, ignoreScanErr bool) error {
+	content, err := pathList.GlueContent(onlyExt, ignoreScanErr)
 	if err != nil {
 		return err
 	}
