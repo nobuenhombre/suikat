@@ -55,11 +55,14 @@ type PathList []Path
 // Возвращает только склеенный контент
 func (pathList *PathList) GlueContent(ignoreScanErr bool) (string, error) {
 	s := fico.EmptyString
+
 	for _, path := range *pathList {
-		s, err := path.GlueContent(ignoreScanErr)
+		glueContent, err := path.GlueContent(ignoreScanErr)
 		if err != nil {
 			return s, err
 		}
+
+		s += glueContent
 	}
 
 	return s, nil
