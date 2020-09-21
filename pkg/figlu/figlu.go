@@ -35,24 +35,46 @@ func (path *Path) GlueContent(ignoreScanErr bool) (string, error) {
 	return s, nil
 }
 
-// Создает два файла out-file.ext и out-file.ext.gz
-// с содержимым - склеенный контент
-func (path *Path) Glue(outFile string, ignoreScanErr bool) error {
+// Создает файл out-file.ext с содержимым - склеенный контент
+func (path *Path) Glue(outFile fico.TxtFile, ignoreScanErr bool) error {
 	content, err := path.GlueContent(ignoreScanErr)
 	if err != nil {
 		return err
 	}
 
-	out := fico.TxtFile(outFile)
-
-	writeErr := out.Write(content)
+	writeErr := outFile.Write(content)
 	if writeErr != nil {
 		return writeErr
 	}
 
-	writeGZErr := out.WriteGZ(content)
-	if writeGZErr != nil {
-		return writeGZErr
+	return nil
+}
+
+type PathList []Path
+
+// Возвращает только склеенный контент
+func (pathList *PathList) GlueContent(ignoreScanErr bool) (string, error) {
+	s := fico.EmptyString
+	for _, path := range *pathList {
+		s, err := path.GlueContent(ignoreScanErr)
+		if err != nil {
+			return s, err
+		}
+	}
+
+	return s, nil
+}
+
+// Создает файл out-file.ext с содержимым - склеенный контент
+func (pathList *PathList) Glue(outFile fico.TxtFile, ignoreScanErr bool) error {
+	content, err := pathList.GlueContent(ignoreScanErr)
+	if err != nil {
+		return err
+	}
+
+	writeErr := outFile.Write(content)
+	if writeErr != nil {
+		return writeErr
 	}
 
 	return nil

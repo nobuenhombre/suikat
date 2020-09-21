@@ -62,7 +62,7 @@ fmt:
 	./go-imports.sh;
 
 ## lint: Проверка кода линтерами
-lint: lint-standart lint-bugs lint-complexity lint-format lint-performance lint-style lint-unused
+lint: fmt lint-standart lint-bugs lint-complexity lint-format lint-performance lint-style lint-unused
 
 ## lint-standart: Проверка кода стандартным набором линтереров
 lint-standart:
