@@ -5,6 +5,9 @@ import (
 	"compress/gzip"
 	"encoding/base64"
 	"encoding/hex"
+	"fmt"
+	"github.com/nobuenhombre/suikat/pkg/fina"
+	"github.com/nobuenhombre/suikat/pkg/mimes"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -115,7 +118,7 @@ func (f *TxtFile) B64() error {
 	return nil
 }
 
-func strBytes(in string) string {
+func StrBytes(in string) string {
 	out := ""
 	bytes := []byte(in)
 
@@ -135,7 +138,7 @@ func (f *TxtFile) ReadAsHexString() (string, error) {
 		return "", err
 	}
 
-	strHex := strBytes(data)
+	strHex := StrBytes(data)
 
 	return strHex, nil
 }
@@ -154,4 +157,17 @@ func (f *TxtFile) Hex() error {
 	}
 
 	return nil
+}
+
+func (f *TxtFile) DataUri() (string, error) {
+	fpi := fina.GetFilePartsInfo(string(*f))
+
+	mime := mimes.GetByExt(fpi.Ext)
+
+	b64data, err := f.ReadAsB64String()
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("data:%v;base64,%v", mime, b64data), nil
 }
