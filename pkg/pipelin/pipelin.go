@@ -16,17 +16,17 @@ func SyncWork(in, out chan interface{}, myWork Work, wg *sync.WaitGroup) {
 }
 
 func (wp *WorkPipeline) Run() {
+	var wg sync.WaitGroup
+
 	// Выходной поток каждой функции (Work) является входным потоком следующей
 	// in -> A ->[out,in]-> B ->[out,in]-> C ->[out,in]-> D -> out
 	// для 4-х методов  будет 2 (входящий, исходящий) и 3 промежуточных канала
 	// in -> A ->[out,in]-> B ->[out,in]-> C ->[out,in]-> D ->[out,in]-> E -> out
 	// для 5-х методов  будет 2 (входящий, исходящий) и 4 промежуточных канала
-
-	var wg sync.WaitGroup
-
 	// Тут создаем необходимые каналы
 	count := len(*wp) + 1
 	channels := make([]chan interface{}, 0, count)
+
 	for i := 0; i < count; i++ {
 		newChannel := make(chan interface{}, 1)
 		channels = append(channels, newChannel)
@@ -34,6 +34,7 @@ func (wp *WorkPipeline) Run() {
 
 	for index, work := range *wp {
 		wg.Add(1)
+
 		go SyncWork(channels[index], channels[index+1], work, &wg)
 	}
 

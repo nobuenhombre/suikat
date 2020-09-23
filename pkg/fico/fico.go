@@ -6,11 +6,12 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/nobuenhombre/suikat/pkg/fina"
-	"github.com/nobuenhombre/suikat/pkg/mimes"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/nobuenhombre/suikat/pkg/fina"
+	"github.com/nobuenhombre/suikat/pkg/mimes"
 
 	"github.com/mholt/archiver/v3"
 )
@@ -159,7 +160,7 @@ func (f *TxtFile) Hex() error {
 	return nil
 }
 
-func (f *TxtFile) DataUri() (string, error) {
+func (f *TxtFile) DataURI() (string, error) {
 	fpi := fina.GetFilePartsInfo(string(*f))
 
 	mime := mimes.GetByExt(fpi.Ext)
