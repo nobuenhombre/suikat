@@ -8,17 +8,34 @@ import (
 )
 
 const (
-	EmptyString     = ""
-	Space           = " "
-	Underline       = "_"
-	Dot             = "."
-	NewLine         = "\n"
-	CarriageReturn  = "\r"
-	Tab             = "\t"
-	Comma           = ","
-	Semicolon       = ";"
-	HTMLSpaceInUtf8 = "\xc2\xa0"
-	HTMLSpace       = "&nbsp;"
+	EmptyString       = ""
+	Space             = " "
+	Underline         = "_"
+	Dot               = "."
+	NewLine           = "\n"
+	CarriageReturn    = "\r"
+	Tab               = "\t"
+	Comma             = ","
+	Colon             = ":"
+	Semicolon         = ";"
+	Gradus            = "°"
+	SingleQuote       = "'"
+	DoubleQuote       = "\""
+	QuoteLeft         = "«"
+	QuoteRight        = "»"
+	Mult              = "*"
+	Div               = "/"
+	Plus              = "+"
+	Minus             = "-"
+	Equal             = "="
+	Percent           = "%"
+	Number            = "№"
+	Exclamation       = "!"
+	RoundBracketLeft  = "("
+	RoundBracketRight = ")"
+	HTMLSpaceInUtf8   = "\xc2\xa0"
+	HTMLSpace         = "&nbsp;"
+	HTMLMDash         = "&mdash;"
 )
 
 // Сколько Символов в строке
@@ -106,4 +123,86 @@ func IsHTML(s string) bool {
 	strippedLength := StrLen(StripHTML(s))
 
 	return fullLength != strippedLength
+}
+
+func RemoveDuplicatesString(source []string) []string {
+	result := make([]string, 0)
+
+	encountered := make(map[string]bool)
+
+	for v := range source {
+		_, found := encountered[source[v]]
+		if !found {
+			encountered[source[v]] = true
+
+			result = append(result, source[v])
+		}
+	}
+
+	return result
+}
+
+// Нормализуем символы URL
+// надо сказать что здесь нормализуется не полный URL а его финальная часть name
+// http://domain.name/some/url/<name>/
+// соответственно аргумент функции принимает только финальную часть!
+func NormalizeNameURL(name string) string {
+	cleanName := strings.Trim(name, Space)
+	cleanName = strings.ToLower(cleanName)
+	cleanName = NormalizeText(cleanName, Space)
+
+	mathReplaces := map[string]string{
+		Mult:    EmptyString,
+		Div:     EmptyString,
+		Plus:    "_plus_",
+		Minus:   "_minus_",
+		Equal:   EmptyString,
+		Number:  "_num_",
+		Percent: EmptyString,
+		Gradus:  "_gradus_",
+	}
+
+	for math, replace := range mathReplaces {
+		cleanName = strings.ReplaceAll(cleanName, math, replace)
+	}
+
+	quotesReplaces := map[string]string{
+		SingleQuote:       Space,
+		DoubleQuote:       Space,
+		QuoteLeft:         Space,
+		QuoteRight:        Space,
+		RoundBracketLeft:  Space,
+		RoundBracketRight: Space,
+		Comma:             Space,
+		Colon:             Space,
+		Semicolon:         Space,
+		Dot:               Space,
+		Space:             Space,
+		HTMLMDash:         Space,
+		Underline:         Space,
+		Exclamation:       Space,
+	}
+
+	for quote, replace := range quotesReplaces {
+		cleanName = strings.ReplaceAll(cleanName, quote, replace)
+	}
+
+	cleanName = NormalizeText(cleanName, Space)
+	words := Words(cleanName)
+	uniqueWords := RemoveDuplicatesString(words)
+
+	return strings.Join(uniqueWords, Underline)
+}
+
+// Нормализуем фразы алфавитного указателя
+func NormalizeAlphabet(name string) string {
+	cleanName := strings.Trim(name, Space)
+	phrases := strings.Split(cleanName, Comma)
+
+	for i := range phrases {
+		cleanPhrase := strings.Trim(phrases[i], Space)
+		phrases[i] = NormalizeText(cleanPhrase, Space)
+	}
+
+	return strings.Join(phrases, Comma+Space)
 }

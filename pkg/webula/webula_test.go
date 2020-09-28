@@ -240,3 +240,88 @@ func TestIsHTML(t *testing.T) {
 		}
 	}
 }
+
+// RemoveDuplicatesString Test
+//===================================================
+type RemoveDuplicatesStringTest struct {
+	in  []string
+	out []string
+}
+
+var RemoveDuplicatesStringTests = []RemoveDuplicatesStringTest{
+	{
+		in:  []string{"Арбуз", "Дыня", "Фейхоа", "Арбуз", "Персик", "Арбуз", "Фейхоа", "Манго"},
+		out: []string{"Арбуз", "Дыня", "Фейхоа", "Персик", "Манго"},
+	},
+}
+
+func TestRemoveDuplicatesString(t *testing.T) {
+	for i := 0; i < len(RemoveDuplicatesStringTests); i++ {
+		test := &RemoveDuplicatesStringTests[i]
+		out := RemoveDuplicatesString(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"RemoveDuplicatesString(%v), Expected %v, Actual %v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+// NormalizeNameURL Test
+//===================================================
+type NormalizeNameURLTest struct {
+	in  string
+	out string
+}
+
+var NormalizeNameURLTests = []NormalizeNameURLTest{
+	{
+		in: "Расцветали яблони и груши, шли туманы над рекой." +
+			" Выходила (5*3)=15% на_берег Катюша «яблони и груши»: выходила песню заводила!",
+		out: "расцветали_яблони_и_груши_шли_туманы_над_рекой_выходила_53_15_на_берег_катюша_песню_заводила",
+	},
+}
+
+func TestNormalizeNameURL(t *testing.T) {
+	for i := 0; i < len(NormalizeNameURLTests); i++ {
+		test := &NormalizeNameURLTests[i]
+		out := NormalizeNameURL(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"NormalizeNameURL(%v)\n, Expected %v\n, Actual %v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+// NormalizeAlphabet Test
+//===================================================
+type NormalizeAlphabetTest struct {
+	in  string
+	out string
+}
+
+var NormalizeAlphabetTests = []NormalizeAlphabetTest{
+	{
+		in:  "Расцветали яблони и груши, шли туманы над    рекой,   Выходила (5*3)=15% на_берег, Катюша   ,   яблони и груши",
+		out: "Расцветали яблони и груши, шли туманы над рекой, Выходила (5*3)=15% на_берег, Катюша, яблони и груши",
+	},
+}
+
+func TestNormalizeAlphabet(t *testing.T) {
+	for i := 0; i < len(NormalizeAlphabetTests); i++ {
+		test := &NormalizeAlphabetTests[i]
+		out := NormalizeAlphabet(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"NormalizeAlphabet(%v)\n, Expected %v\n, Actual %v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
