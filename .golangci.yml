@@ -17,3 +17,9 @@ issues:
         - gomnd
         - dupl
         - gochecknoglobals
+
+    - path: pkg/hash
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+
