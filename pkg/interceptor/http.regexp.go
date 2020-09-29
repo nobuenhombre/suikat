@@ -5,12 +5,14 @@ import "regexp"
 const (
 	Word   = ":word"
 	Number = ":number"
+	Any    = ":any"
 )
 
 func Predefined() map[string]string {
 	return map[string]string{
 		Word:   "([\\w]+)",
 		Number: "([\\d]+)",
+		Any:    ".*",
 	}
 }
 
