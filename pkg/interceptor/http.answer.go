@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/nobuenhombre/suikat/pkg/mimes"
 )
@@ -16,20 +18,34 @@ type FileData struct {
 	Data []byte
 }
 
+const (
+	BrowserCacheLifeTimeWeek = 604800 // week 7 days
+)
+
 type HTTPAnswer struct {
+	// Configure
+	//--------------------------
+	GZipped              bool
+	BrowserCached        bool
+	ETagUsed             bool
+	GZipLevel            int // gzip.BestCompression
+	BrowserCacheLifeTime int
+
+	// Data
+	//--------------------------
 	ResponseCode int
 	Content      interface{}
 	ContentType  string
-	GZipped      bool
-	GZipLevel    int // gzip.BestCompression
+	ETag         string
 }
 
-func (answer *HTTPAnswer) gzipData(data *[]byte, w http.ResponseWriter) (gzData []byte, err error) {
-	w.Header().Set("Content-Encoding", "gzip")
+func (answer *HTTPAnswer) gzipData(data *[]byte) (gzData []byte, err error) {
+	var (
+		tmp      bytes.Buffer
+		gzWriter *gzip.Writer
+	)
 
-	var tmp bytes.Buffer
-
-	gzWriter, err := gzip.NewWriterLevel(&tmp, answer.GZipLevel)
+	gzWriter, err = gzip.NewWriterLevel(&tmp, answer.GZipLevel)
 	if err != nil {
 		return
 	}
@@ -101,13 +117,70 @@ func (answer *HTTPAnswer) setContentTypeHeaders(w http.ResponseWriter) {
 	w.Header().Add("Content-Type", outContentType)
 }
 
+func (answer *HTTPAnswer) enableBrowserCacheHeaders(w http.ResponseWriter) {
+	if answer.ETagUsed {
+		w.Header().Add(
+			"Cache-Control",
+			fmt.Sprintf("private, max-age=%v, must-revalidate", answer.BrowserCacheLifeTime),
+		)
+	} else {
+		w.Header().Add("Pragma", "public")
+		w.Header().Add(
+			"Cache-Control",
+			fmt.Sprintf("private, max-age=%v", answer.BrowserCacheLifeTime),
+		)
+	}
+
+	lastModifiedTime := time.Now()
+	expiredTime := lastModifiedTime.Add(time.Second * time.Duration(answer.BrowserCacheLifeTime))
+
+	w.Header().Add("Last-Modified", lastModifiedTime.Format(time.RFC1123))
+	w.Header().Add("Expires", expiredTime.Format(time.RFC1123))
+}
+
+func (answer *HTTPAnswer) disableBrowserCacheHeaders(w http.ResponseWriter) {
+	if answer.ETagUsed {
+		w.Header().Add("Cache-Control", "no-cache, must-revalidate")
+	} else {
+		w.Header().Add("Cache-Control", "no-cache")
+	}
+
+	lastModifiedTime := time.Date(1997, 7, 26, 5, 0, 0, 0, time.UTC)
+	w.Header().Add("Expires", lastModifiedTime.Format(time.RFC1123))
+}
+
+func (answer *HTTPAnswer) setBrowserCacheHeaders(w http.ResponseWriter) {
+	if answer.BrowserCached {
+		answer.enableBrowserCacheHeaders(w)
+
+		return
+	}
+
+	answer.disableBrowserCacheHeaders(w)
+}
+
+func (answer *HTTPAnswer) SetETag(w http.ResponseWriter) {
+	w.Header().Add("Etag", answer.ETag)
+}
+
+func (answer *HTTPAnswer) CheckETag(r *http.Request, w http.ResponseWriter) {
+	match := r.Header.Get("If-None-Match")
+	if match == answer.ETag {
+		w.WriteHeader(http.StatusNotModified)
+
+		return
+	}
+}
+
 func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err error) {
 	if len(*data) == 0 {
 		return
 	}
 
 	if answer.GZipped {
-		*data, err = answer.gzipData(data, w)
+		w.Header().Set("Content-Encoding", "gzip")
+
+		*data, err = answer.gzipData(data)
 		if err != nil {
 			return
 		}
@@ -130,7 +203,7 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 	}
 
 	answer.setContentTypeHeaders(w)
-
+	answer.setBrowserCacheHeaders(w)
 	w.WriteHeader(answer.ResponseCode)
 
 	err = answer.sendData(&data, w)
