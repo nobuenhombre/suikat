@@ -5,11 +5,13 @@ import (
 	"strings"
 )
 
+type HandlerFunc func(http.ResponseWriter, *http.Request) error
+
 // Один Роут и методы его сравнения
 type HTTPRoute struct {
 	Method string
 	URI    string
-	F      func(http.ResponseWriter, *http.Request)
+	F      HandlerFunc
 }
 
 func (route *HTTPRoute) MatchMethod(r *http.Request) bool {

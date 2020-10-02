@@ -159,19 +159,6 @@ func (answer *HTTPAnswer) setBrowserCacheHeaders(w http.ResponseWriter) {
 	answer.disableBrowserCacheHeaders(w)
 }
 
-func (answer *HTTPAnswer) SetETag(w http.ResponseWriter) {
-	w.Header().Add("Etag", answer.ETag)
-}
-
-func (answer *HTTPAnswer) CheckETag(r *http.Request, w http.ResponseWriter) {
-	match := r.Header.Get("If-None-Match")
-	if match == answer.ETag {
-		w.WriteHeader(http.StatusNotModified)
-
-		return
-	}
-}
-
 func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err error) {
 	if len(*data) == 0 {
 		return
@@ -194,12 +181,23 @@ func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err err
 	return
 }
 
-func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
+func (answer *HTTPAnswer) Send(w http.ResponseWriter, r *http.Request) error {
+	if answer.ETagUsed {
+		match := r.Header.Get("If-None-Match")
+		if match == answer.ETag {
+			w.WriteHeader(http.StatusNotModified)
+
+			return nil
+		}
+
+		w.Header().Add("Etag", answer.ETag)
+	}
+
 	data, err := answer.getData()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 
-		return
+		return err
 	}
 
 	answer.setContentTypeHeaders(w)
@@ -210,6 +208,8 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 
-		return
+		return err
 	}
+
+	return nil
 }

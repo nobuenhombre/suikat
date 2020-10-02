@@ -15,18 +15,20 @@ type UploadedFile struct {
 	Data []byte
 }
 
-func GetFile(key string, r *http.Request) (*UploadedFile, error) {
-	err := r.ParseMultipartForm(MaxFormSizeMemory)
+func GetFile(key string, r *http.Request) (upFile *UploadedFile, err error) {
+	err = r.ParseMultipartForm(MaxFormSizeMemory)
 	if err != nil {
 		return nil, err
 	}
 
-	file, handler, err := r.FormFile(key)
+	file, fileHeader, err := r.FormFile(key)
 	if err != nil {
 		return nil, err
 	}
 
-	defer file.Close()
+	defer func() {
+		err = file.Close()
+	}()
 
 	fileData, err := ioutil.ReadAll(file)
 	if err != nil {
@@ -34,9 +36,9 @@ func GetFile(key string, r *http.Request) (*UploadedFile, error) {
 	}
 
 	return &UploadedFile{
-		Name: handler.Filename,
-		Size: handler.Size,
-		Mime: fmt.Sprintf("%+v", handler.Header),
+		Name: fileHeader.Filename,
+		Size: fileHeader.Size,
+		Mime: fmt.Sprintf("%+v", fileHeader.Header),
 		Data: fileData,
 	}, nil
 }
