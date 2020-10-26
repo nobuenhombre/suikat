@@ -185,6 +185,8 @@ func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err err
 		if err != nil {
 			return
 		}
+
+		w.Header().Set("Content-Length", strconv.FormatInt(int64(len(*data)), 10))
 	}
 
 	_, err = w.Write(*data)
