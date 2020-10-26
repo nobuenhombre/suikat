@@ -13,9 +13,9 @@ import (
 )
 
 type FileData struct {
-	Name string
-	Size int64
-	Data []byte
+	Name     string
+	Size     int64
+	Data     []byte
 	Download bool
 }
 
@@ -112,6 +112,7 @@ func (answer *HTTPAnswer) setContentTypeHeaders(w http.ResponseWriter) {
 		if v.Download {
 			w.Header().Set("Content-Disposition", "attachment; filename="+v.Name)
 		}
+
 		w.Header().Set("Content-Length", strconv.FormatInt(v.Size, 10))
 	default:
 		// Struct or map
