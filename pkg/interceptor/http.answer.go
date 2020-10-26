@@ -16,10 +16,15 @@ type FileData struct {
 	Name string
 	Size int64
 	Data []byte
+	Download bool
 }
 
 const (
 	BrowserCacheLifeTimeWeek = 604800 // week 7 days
+)
+
+const (
+	EncodingCharsetUTF8 = "utf-8"
 )
 
 type HTTPAnswer struct {
@@ -30,6 +35,7 @@ type HTTPAnswer struct {
 	ETagUsed             bool
 	GZipLevel            int // gzip.BestCompression
 	BrowserCacheLifeTime int
+	Encoding             string
 
 	// Data
 	//--------------------------
@@ -102,8 +108,10 @@ func (answer *HTTPAnswer) setContentTypeHeaders(w http.ResponseWriter) {
 		// ContentType require
 		outContentType = mimes.BinaryData
 
-		//Send the headers
-		w.Header().Set("Content-Disposition", "attachment; filename="+v.Name)
+		// Send the headers
+		if v.Download {
+			w.Header().Set("Content-Disposition", "attachment; filename="+v.Name)
+		}
 		w.Header().Set("Content-Length", strconv.FormatInt(v.Size, 10))
 	default:
 		// Struct or map
@@ -114,7 +122,12 @@ func (answer *HTTPAnswer) setContentTypeHeaders(w http.ResponseWriter) {
 		outContentType = answer.ContentType
 	}
 
-	w.Header().Add("Content-Type", outContentType)
+	outEncoding := ""
+	if len(answer.Encoding) > 0 {
+		outEncoding = fmt.Sprintf("; charset=%v", answer.Encoding)
+	}
+
+	w.Header().Add("Content-Type", fmt.Sprintf("%v%v", outContentType, outEncoding))
 }
 
 func (answer *HTTPAnswer) enableBrowserCacheHeaders(w http.ResponseWriter) {
