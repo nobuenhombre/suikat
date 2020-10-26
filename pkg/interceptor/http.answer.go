@@ -110,10 +110,10 @@ func (answer *HTTPAnswer) setContentTypeHeaders(w http.ResponseWriter) {
 
 		// Send the headers
 		if v.Download {
-			w.Header().Set("Content-Disposition", "attachment; filename="+v.Name)
+			w.Header().Add("Content-Disposition", "attachment; filename="+v.Name)
 		}
 
-		w.Header().Set("Content-Length", strconv.FormatInt(v.Size, 10))
+		w.Header().Add("Content-Length", strconv.FormatInt(v.Size, 10))
 	default:
 		// Struct or map
 		outContentType = mimes.JSON
@@ -179,7 +179,7 @@ func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err err
 	}
 
 	if answer.GZipped {
-		w.Header().Set("Content-Encoding", "gzip")
+		w.Header().Add("Content-Encoding", "gzip")
 
 		*data, err = answer.gzipData(data)
 		if err != nil {
