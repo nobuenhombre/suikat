@@ -216,7 +216,6 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter, r *http.Request) error {
 
 	answer.setContentTypeHeaders(w)
 	answer.setBrowserCacheHeaders(w)
-	w.WriteHeader(answer.ResponseCode)
 
 	err = answer.sendData(&data, w)
 	if err != nil {
@@ -224,6 +223,8 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter, r *http.Request) error {
 
 		return err
 	}
+
+	w.WriteHeader(answer.ResponseCode)
 
 	return nil
 }
