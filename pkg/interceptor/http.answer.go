@@ -45,29 +45,27 @@ type HTTPAnswer struct {
 	ETag         string
 }
 
-func (answer *HTTPAnswer) gzipData(data *[]byte) (gzData []byte, err error) {
-	var (
-		tmp      bytes.Buffer
-		gzWriter *gzip.Writer
-	)
+func (answer *HTTPAnswer) gzipData(data *[]byte) ([]byte, error) {
+	var tmp bytes.Buffer
 
-	gzWriter, err = gzip.NewWriterLevel(&tmp, answer.GZipLevel)
+	gzData := make([]byte, 0)
+
+	gzWriter, err := gzip.NewWriterLevel(&tmp, answer.GZipLevel)
 	if err != nil {
-		return
+		return gzData, err
 	}
-
-	defer func() {
-		err = gzWriter.Close()
-	}()
 
 	_, err = gzWriter.Write(*data)
 	if err != nil {
-		return
+		return gzData, err
 	}
 
-	gzData = tmp.Bytes()
+	err = gzWriter.Close()
+	if err != nil {
+		return gzData, err
+	}
 
-	return
+	return tmp.Bytes(), nil
 }
 
 func (answer *HTTPAnswer) getData() (outBytes []byte, err error) {
@@ -178,18 +176,21 @@ func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err err
 		return
 	}
 
-	if answer.GZipped {
-		w.Header().Add("Content-Encoding", "gzip")
+	var outData []byte
 
-		*data, err = answer.gzipData(data)
+	if answer.GZipped {
+		outData, err = answer.gzipData(data)
 		if err != nil {
 			return
 		}
 
+		w.Header().Add("Content-Encoding", "gzip")
 		w.Header().Set("Content-Length", strconv.FormatInt(int64(len(*data)), 10))
+	} else {
+		outData = *data
 	}
 
-	_, err = w.Write(*data)
+	_, err = w.Write(outData)
 	if err != nil {
 		return
 	}
