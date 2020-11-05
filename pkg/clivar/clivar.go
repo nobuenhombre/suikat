@@ -68,20 +68,20 @@ func Load(structData interface{}) error {
 
 	for fieldName, fieldInfo := range structureFields {
 		ev := CliVar{
-			Key:          fieldInfo.(*CLIFieldInfo).Name,
-			Description:  fieldInfo.(*CLIFieldInfo).Description,
+			Key:          fieldInfo.(*FieldInfo).Name,
+			Description:  fieldInfo.(*FieldInfo).Description,
 			DefaultValue: nil,
 		}
 
 		var err error
 
-		switch fieldInfo.(*CLIFieldInfo).ValueType {
+		switch fieldInfo.(*FieldInfo).ValueType {
 		case "string":
-			ev.DefaultValue = fieldInfo.(*CLIFieldInfo).DefaultValue
+			ev.DefaultValue = fieldInfo.(*FieldInfo).DefaultValue
 			tempMap[fieldName] = ev.GetString()
 
 		case "int":
-			ev.DefaultValue, err = strconv.Atoi(fieldInfo.(*CLIFieldInfo).DefaultValue)
+			ev.DefaultValue, err = strconv.Atoi(fieldInfo.(*FieldInfo).DefaultValue)
 			if err != nil {
 				return err
 			}
@@ -89,7 +89,7 @@ func Load(structData interface{}) error {
 			tempMap[fieldName] = ev.GetInt()
 
 		case "float64":
-			ev.DefaultValue, err = strconv.ParseFloat(fieldInfo.(*CLIFieldInfo).DefaultValue, 64)
+			ev.DefaultValue, err = strconv.ParseFloat(fieldInfo.(*FieldInfo).DefaultValue, 64)
 			if err != nil {
 				return err
 			}
@@ -97,7 +97,7 @@ func Load(structData interface{}) error {
 			tempMap[fieldName] = ev.GetFloat64()
 
 		case "bool":
-			ev.DefaultValue, err = strconv.ParseBool(fieldInfo.(*CLIFieldInfo).DefaultValue)
+			ev.DefaultValue, err = strconv.ParseBool(fieldInfo.(*FieldInfo).DefaultValue)
 			if err != nil {
 				return err
 			}
@@ -106,7 +106,7 @@ func Load(structData interface{}) error {
 
 		default:
 			return &UnknownValueTypeError{
-				ValueType: fieldInfo.(*CLIFieldInfo).ValueType,
+				ValueType: fieldInfo.(*FieldInfo).ValueType,
 			}
 		}
 	}
@@ -116,7 +116,7 @@ func Load(structData interface{}) error {
 	reflectValue := refavour.GetReflectValue(structData)
 
 	for fieldName, fieldInfo := range structureFields {
-		switch fieldInfo.(*CLIFieldInfo).ValueType {
+		switch fieldInfo.(*FieldInfo).ValueType {
 		case "string":
 			reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(*(tempMap[fieldName].(*string))))
 
@@ -131,7 +131,7 @@ func Load(structData interface{}) error {
 
 		default:
 			return &UnknownValueTypeError{
-				ValueType: fieldInfo.(*CLIFieldInfo).ValueType,
+				ValueType: fieldInfo.(*FieldInfo).ValueType,
 			}
 		}
 	}

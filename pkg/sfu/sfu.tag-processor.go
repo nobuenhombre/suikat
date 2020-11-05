@@ -1,23 +1,25 @@
-package csvarser
+package sfu
 
 import (
 	"reflect"
-	"strconv"
 
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
 // Tag Examples
 //==============================================================
-//type SomeCSV struct {
-//	A pgtype.Int4    `order:"0"`
-//	B pgtype.Int8    `order:"1"`
-//	C pgtype.Varchar `order:"2"`
+//type SomeFormData struct {
+//	Path           string      `form:"path"`
+//	Port           int         `form:"port"`
+//	Coefficient    float64     `form:"coefficient"`
+//	MakeSomeAction bool        `form:"msa"`
+//  OtherStruct    OtherStruct `form:"otherStruct"`
 //}
 
 type FieldInfo struct {
 	Type  reflect.Type
-	Order int
+	Name  string
+	Value reflect.Value
 }
 
 type TagInfo struct {
@@ -26,18 +28,16 @@ type TagInfo struct {
 
 func NewTagProcessor() refavour.TagProcessor {
 	return &TagInfo{
-		Tag: "order",
+		Tag: "form",
 	}
 }
 
 func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error) {
-	tagData, tagDataErr := strconv.Atoi(typeField.Tag.Get(tag.Tag))
-	if tagDataErr != nil {
-		return nil, tagDataErr
-	}
+	tagData := typeField.Tag.Get(tag.Tag)
 
 	return &FieldInfo{
 		Type:  valueField.Type(),
-		Order: tagData,
+		Name:  tagData,
+		Value: valueField,
 	}, nil
 }

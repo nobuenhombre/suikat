@@ -73,10 +73,10 @@ func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []stri
 	}
 
 	for fieldName, fieldInfo := range structureFields {
-		exists := len(sliceData) > fieldInfo.(*CSVFieldInfo).Order
+		exists := len(sliceData) > fieldInfo.(*FieldInfo).Order
 		if exists {
-			value := sliceData[fieldInfo.(*CSVFieldInfo).Order]
-			setFieldError := p.setStructureFieldData(structData, fieldName, fieldInfo.(*CSVFieldInfo).Type, value)
+			value := sliceData[fieldInfo.(*FieldInfo).Order]
+			setFieldError := p.setStructureFieldData(structData, fieldName, fieldInfo.(*FieldInfo).Type, value)
 
 			if setFieldError != nil {
 				return setFieldError
@@ -84,8 +84,8 @@ func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []stri
 		} else {
 			return &FieldNotExistsInSliceError{
 				FieldName: fieldName,
-				FieldType: fieldInfo.(*CSVFieldInfo).Type.String(),
-				Index:     fieldInfo.(*CSVFieldInfo).Order,
+				FieldType: fieldInfo.(*FieldInfo).Type.String(),
+				Index:     fieldInfo.(*FieldInfo).Order,
 			}
 		}
 	}

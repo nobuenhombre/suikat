@@ -73,7 +73,7 @@ func Load(structData interface{}) error {
 
 	for fieldName, fieldInfo := range structureFields {
 		ev := EnvVar{
-			Key:          fieldInfo.(*ENVFieldInfo).Name,
+			Key:          fieldInfo.(*FieldInfo).Name,
 			DefaultValue: nil,
 		}
 
@@ -82,13 +82,13 @@ func Load(structData interface{}) error {
 			err   error
 		)
 
-		switch fieldInfo.(*ENVFieldInfo).ValueType {
+		switch fieldInfo.(*FieldInfo).ValueType {
 		case "string":
-			ev.DefaultValue = fieldInfo.(*ENVFieldInfo).DefaultValue
+			ev.DefaultValue = fieldInfo.(*FieldInfo).DefaultValue
 			value = ev.GetString()
 
 		case "int":
-			ev.DefaultValue, err = strconv.Atoi(fieldInfo.(*ENVFieldInfo).DefaultValue)
+			ev.DefaultValue, err = strconv.Atoi(fieldInfo.(*FieldInfo).DefaultValue)
 			if err != nil {
 				return err
 			}
@@ -96,7 +96,7 @@ func Load(structData interface{}) error {
 			value = ev.GetInt()
 
 		case "float64":
-			ev.DefaultValue, err = strconv.ParseFloat(fieldInfo.(*ENVFieldInfo).DefaultValue, 64)
+			ev.DefaultValue, err = strconv.ParseFloat(fieldInfo.(*FieldInfo).DefaultValue, 64)
 			if err != nil {
 				return err
 			}
@@ -104,7 +104,7 @@ func Load(structData interface{}) error {
 			value = ev.GetFloat64()
 
 		case "bool":
-			ev.DefaultValue, err = strconv.ParseBool(fieldInfo.(*ENVFieldInfo).DefaultValue)
+			ev.DefaultValue, err = strconv.ParseBool(fieldInfo.(*FieldInfo).DefaultValue)
 			if err != nil {
 				return err
 			}
@@ -113,7 +113,7 @@ func Load(structData interface{}) error {
 
 		default:
 			return &UnknownValueTypeError{
-				ValueType: fieldInfo.(*ENVFieldInfo).ValueType,
+				ValueType: fieldInfo.(*FieldInfo).ValueType,
 			}
 		}
 

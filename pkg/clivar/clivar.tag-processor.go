@@ -23,7 +23,7 @@ const (
 //	MakeSomeAction bool    `cli:"MSA[Do make some action?]:bool=false"`
 //}
 
-type CLIFieldInfo struct {
+type FieldInfo struct {
 	Type         reflect.Type
 	Name         string
 	ValueType    string
@@ -31,17 +31,17 @@ type CLIFieldInfo struct {
 	Description  string
 }
 
-type CLITag struct {
+type TagInfo struct {
 	Tag string
 }
 
 func NewTagProcessor() refavour.TagProcessor {
-	return &CLITag{
+	return &TagInfo{
 		Tag: "cli",
 	}
 }
 
-func (tag *CLITag) GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error) {
+func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error) {
 	tagData := typeField.Tag.Get(tag.Tag)
 
 	partsTagData := strings.Split(tagData, "=")
@@ -77,7 +77,7 @@ func (tag *CLITag) GetFieldInfo(typeField reflect.StructField, valueField reflec
 	name := partsNameDescription[0]
 	description := strings.TrimRight(partsNameDescription[1], "]")
 
-	return &CLIFieldInfo{
+	return &FieldInfo{
 		Type:         valueField.Type(),
 		Name:         name,
 		ValueType:    valueType,

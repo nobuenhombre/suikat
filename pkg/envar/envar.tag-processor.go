@@ -22,24 +22,24 @@ const (
 //	MakeSomeAction bool    `env:"MSA:bool=false"`
 //}
 
-type ENVFieldInfo struct {
+type FieldInfo struct {
 	Type         reflect.Type
 	Name         string
 	ValueType    string
 	DefaultValue string
 }
 
-type ENVTag struct {
+type TagInfo struct {
 	Tag string
 }
 
 func NewTagProcessor() refavour.TagProcessor {
-	return &ENVTag{
+	return &TagInfo{
 		Tag: "env",
 	}
 }
 
-func (tag *ENVTag) GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error) {
+func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error) {
 	tagData := typeField.Tag.Get(tag.Tag)
 
 	partsTagData := strings.Split(tagData, "=")
@@ -64,7 +64,7 @@ func (tag *ENVTag) GetFieldInfo(typeField reflect.StructField, valueField reflec
 	name := partsNameType[0]
 	valueType := partsNameType[1]
 
-	return &ENVFieldInfo{
+	return &FieldInfo{
 		Type:         valueField.Type(),
 		Name:         name,
 		ValueType:    valueType,
