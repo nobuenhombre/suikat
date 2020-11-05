@@ -88,20 +88,28 @@ func (c *Client) GetBodyFormUrlencoded(
 	inData interface{},
 	addHeader *map[string]string,
 ) (reqBody io.Reader, reqRawBody string, err error) {
-	var encoder = schema.NewEncoder()
+	var (
+		q  url.Values
+		ok bool
+	)
 
-	q := url.Values{}
+	q, ok = inData.(url.Values)
+	if !ok {
+		var encoder = schema.NewEncoder()
 
-	err = encoder.Encode(inData, q)
-	if err != nil {
-		err = &EncoderError{
-			URL:    urlAddr,
-			Method: method,
-			Data:   inData,
-			Parent: err,
+		q = url.Values{}
+
+		err = encoder.Encode(inData, q)
+		if err != nil {
+			err = &EncoderError{
+				URL:    urlAddr,
+				Method: method,
+				Data:   inData,
+				Parent: err,
+			}
+
+			return
 		}
-
-		return
 	}
 
 	reqRawBody = q.Encode()
