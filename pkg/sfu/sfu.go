@@ -62,12 +62,63 @@ func Convert(structData interface{}, parent string, form *url.Values) (err error
 			form.Add(n, v)
 
 		default:
-			if fieldInfo.(*FieldInfo).Value.Kind() == reflect.Struct {
-				err := Convert(fieldInfo.(*FieldInfo).Value.Addr().Interface(), n, form)
+			value := fieldInfo.(*FieldInfo).Value
+			kind := value.Kind()
+			data := value.Addr().Interface()
+
+			switch kind {
+			case reflect.Struct:
+				err := Convert(data, n, form)
 				if err != nil {
 					return err
 				}
-			} else {
+
+			case reflect.Slice:
+				for i := 0; i < value.Len(); i++ {
+					sliceItem := value.Index(i)
+					name := fmt.Sprintf("%v[%v]", n, i)
+					ts := sliceItem.Type().String()
+
+					switch ts {
+					case "string":
+						v := sliceItem.String()
+						form.Add(name, v)
+
+					case "int64":
+						vi := sliceItem.Int()
+						v := fmt.Sprintf("%v", vi)
+						form.Add(name, v)
+
+					case "float64":
+						vf := sliceItem.Float()
+						v := fmt.Sprintf("%v", vf)
+						form.Add(name, v)
+
+					case "bool":
+						vb := sliceItem.Bool()
+						v := fmt.Sprintf("%v", vb)
+						form.Add(name, v)
+
+					default:
+						slKind := sliceItem.Kind()
+						slData := sliceItem.Addr().Interface()
+
+						switch slKind {
+						case reflect.Struct:
+							err := Convert(slData, name, form)
+							if err != nil {
+								return err
+							}
+
+						default:
+							return &UnknownTypeError{
+								Type: ts,
+							}
+						}
+					}
+				}
+
+			default:
 				return &UnknownTypeError{
 					Type: t,
 				}

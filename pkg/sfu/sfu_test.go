@@ -86,6 +86,35 @@ func GetFormC() *url.Values {
 	return form
 }
 
+// FormD
+//-------------------------------
+type Tunnel struct {
+	IPFrom string `form:"ipFrom"`
+	IPTo   string `form:"ipTo"`
+}
+
+type FormD struct {
+	ID      int64    `form:"id"`
+	Name    string   `form:"name"`
+	Robots  []string `form:"robots"`
+	Tunnels []Tunnel `form:"tunnels"`
+}
+
+func GetFormD() *url.Values {
+	form := &url.Values{}
+	form.Add("id", "404")
+	form.Add("name", "Robots")
+	form.Add("robots[0]", "Mail.ru")
+	form.Add("robots[1]", "Yandex-Bot")
+	form.Add("robots[2]", "Google-Bot")
+	form.Add("tunnels[0][ipFrom]", "97.34.177.231")
+	form.Add("tunnels[0][ipTo]", "97.34.199.231")
+	form.Add("tunnels[1][ipFrom]", "227.34.177.231")
+	form.Add("tunnels[1][ipTo]", "327.34.177.231")
+
+	return form
+}
+
 // Tests
 //-------------------------------
 
@@ -108,7 +137,7 @@ var convertTests = []convertTest{
 	},
 	{
 		structData: &FormB{
-			ID:   27,
+			ID:   15,
 			Name: "Riki tiki tavi",
 			Address: Address{
 				PostIndex:   123654,
@@ -141,6 +170,30 @@ var convertTests = []convertTest{
 		},
 		parent: "",
 		form:   GetFormC(),
+		err:    nil,
+	},
+	{
+		structData: &FormD{
+			ID:   404,
+			Name: "Robots",
+			Robots: []string{
+				"Mail.ru",
+				"Yandex-Bot",
+				"Google-Bot",
+			},
+			Tunnels: []Tunnel{
+				{
+					IPFrom: "97.34.177.231",
+					IPTo:   "97.34.199.231",
+				},
+				{
+					IPFrom: "227.34.177.231",
+					IPTo:   "327.34.177.231",
+				},
+			},
+		},
+		parent: "",
+		form:   GetFormD(),
 		err:    nil,
 	},
 }
