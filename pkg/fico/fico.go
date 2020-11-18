@@ -119,16 +119,21 @@ func (f *TxtFile) B64() error {
 	return nil
 }
 
-func StrBytes(in string) string {
+// glue = " "
+// isUpper = true
+func StrBytes(in, glue string, isUpper bool) string {
 	out := ""
 	bytes := []byte(in)
 
 	for _, b := range bytes {
-		out += hex.EncodeToString([]byte{b}) + " "
+		out += hex.EncodeToString([]byte{b}) + glue
 	}
 
-	out = strings.TrimRight(out, " ")
-	out = strings.ToUpper(out)
+	out = strings.TrimRight(out, glue)
+
+	if isUpper {
+		out = strings.ToUpper(out)
+	}
 
 	return out
 }
@@ -139,7 +144,7 @@ func (f *TxtFile) ReadAsHexString() (string, error) {
 		return "", err
 	}
 
-	strHex := StrBytes(data)
+	strHex := StrBytes(data, " ", true)
 
 	return strHex, nil
 }
