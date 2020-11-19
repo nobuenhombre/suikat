@@ -27,10 +27,21 @@ func (fpi *FilePartsInfo) Prefix(prefix string) string {
 // was:  /some/path/file.ext
 // will: /some/path/file<suffix>.ext
 // ---------------------------------
-// prefix: "-demo"
+// suffix: "-demo"
 // will: /some/path/file-demo.ext
 func (fpi *FilePartsInfo) Suffix(suffix string) string {
 	return fpi.Path + fpi.NameWithoutExt + suffix + fpi.Ext
+}
+
+// Return new filename with Prefix and Suffix
+// was:  /some/path/file.ext
+// will: /some/path/<prefix>file<suffix>.ext
+// ---------------------------------
+// prefix: "demo-"
+// suffix: "-omed"
+// will: /some/path/demo-file-omed.ext
+func (fpi *FilePartsInfo) PS(prefix, suffix string) string {
+	return fpi.Path + prefix + fpi.NameWithoutExt + suffix + fpi.Ext
 }
 
 // Return new filename with new extension
@@ -52,6 +63,13 @@ func (fpi *FilePartsInfo) PrefixWithNewExt(prefix, ext string) string {
 // will: /some/path/file<suffix><.newext>
 func (fpi *FilePartsInfo) SuffixWithNewExt(suffix, ext string) string {
 	return fpi.Path + fpi.NameWithoutExt + suffix + ext
+}
+
+// Return new filename with new extension and prefix and suffix
+// was:  /some/path/file.ext
+// will: /some/path/<prefix>file<suffix><.newext>
+func (fpi *FilePartsInfo) PSWithNewExt(prefix, suffix, ext string) string {
+	return fpi.Path + prefix + fpi.NameWithoutExt + suffix + ext
 }
 
 func GetFilePartsInfo(file string) *FilePartsInfo {
