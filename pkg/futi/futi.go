@@ -2,6 +2,7 @@ package futi
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 )
@@ -87,4 +88,60 @@ func CreateTempFile(dir, pattern string, data *[]byte) (string, error) {
 	}
 
 	return tempFile.Name(), nil
+}
+
+type IsNotRegularFileError struct {
+	File string
+}
+
+func (e *IsNotRegularFileError) Error() string {
+	return fmt.Sprintf("%s is not a regular file", e.File)
+}
+
+func Copy(inFile, outFile string) error {
+	sourceFileStat, err := os.Stat(inFile)
+	if err != nil {
+		return err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return &IsNotRegularFileError{
+			File: inFile,
+		}
+	}
+
+	source, err := os.Open(inFile)
+	if err != nil {
+		return err
+	}
+
+	defer source.Close()
+
+	destination, err := os.Create(outFile)
+	if err != nil {
+		return err
+	}
+
+	defer destination.Close()
+
+	_, err = io.Copy(destination, source)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Move(inFile, outFile string) error {
+	err := Copy(inFile, outFile)
+	if err != nil {
+		return err
+	}
+
+	err = os.Remove(inFile)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
