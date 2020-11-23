@@ -99,6 +99,10 @@ func (e *IsNotRegularFileError) Error() string {
 }
 
 func Copy(inFile, outFile string) error {
+	if inFile == outFile {
+		return nil
+	}
+
 	sourceFileStat, err := os.Stat(inFile)
 	if err != nil {
 		return err
@@ -133,6 +137,10 @@ func Copy(inFile, outFile string) error {
 }
 
 func Move(inFile, outFile string) error {
+	if inFile == outFile {
+		return nil
+	}
+
 	err := Copy(inFile, outFile)
 	if err != nil {
 		return err
