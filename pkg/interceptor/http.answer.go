@@ -30,12 +30,13 @@ const (
 type HTTPAnswer struct {
 	// Configure
 	//--------------------------
-	GZipped              bool
-	BrowserCached        bool
-	ETagUsed             bool
-	GZipLevel            int // gzip.BestCompression
-	BrowserCacheLifeTime int
-	Encoding             string
+	GZipped                  bool
+	BrowserCached            bool
+	ETagUsed                 bool
+	GZipLevel                int // gzip.BestCompression
+	BrowserCacheLifeTime     int
+	Encoding                 string
+	AccessControlAllowOrigin string
 
 	// Data
 	//--------------------------
@@ -220,6 +221,10 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter, r *http.Request) error {
 
 	answer.setContentTypeHeaders(w)
 	answer.setBrowserCacheHeaders(w)
+
+	if len(answer.ContentType) > 0 {
+		w.Header().Add("Access-Control-Allow-Origin", answer.AccessControlAllowOrigin)
+	}
 
 	err = answer.sendData(&data, w)
 	if err != nil {
