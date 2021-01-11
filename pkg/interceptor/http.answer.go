@@ -222,7 +222,7 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter, r *http.Request) error {
 	answer.setContentTypeHeaders(w)
 	answer.setBrowserCacheHeaders(w)
 
-	if len(answer.ContentType) > 0 {
+	if len(answer.AccessControlAllowOrigin) > 0 {
 		w.Header().Add("Access-Control-Allow-Origin", answer.AccessControlAllowOrigin)
 	}
 
