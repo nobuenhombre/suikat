@@ -27,16 +27,22 @@ const (
 	EncodingCharsetUTF8 = "utf-8"
 )
 
+type HTTPCORSHeaders struct {
+	AccessControlAllowOrigin  string
+	AccessControlAllowHeaders string
+	AccessControlAllowMethods string
+}
+
 type HTTPAnswer struct {
 	// Configure
 	//--------------------------
-	GZipped                  bool
-	BrowserCached            bool
-	ETagUsed                 bool
-	GZipLevel                int // gzip.BestCompression
-	BrowserCacheLifeTime     int
-	Encoding                 string
-	AccessControlAllowOrigin string
+	GZipped              bool
+	BrowserCached        bool
+	ETagUsed             bool
+	GZipLevel            int // gzip.BestCompression
+	BrowserCacheLifeTime int
+	Encoding             string
+	HTTPCORSHeaders      HTTPCORSHeaders
 
 	// Data
 	//--------------------------
@@ -222,8 +228,16 @@ func (answer *HTTPAnswer) Send(w http.ResponseWriter, r *http.Request) error {
 	answer.setContentTypeHeaders(w)
 	answer.setBrowserCacheHeaders(w)
 
-	if len(answer.AccessControlAllowOrigin) > 0 {
-		w.Header().Add("Access-Control-Allow-Origin", answer.AccessControlAllowOrigin)
+	if len(answer.HTTPCORSHeaders.AccessControlAllowOrigin) > 0 {
+		w.Header().Add("Access-Control-Allow-Origin", answer.HTTPCORSHeaders.AccessControlAllowOrigin)
+	}
+
+	if len(answer.HTTPCORSHeaders.AccessControlAllowHeaders) > 0 {
+		w.Header().Add("Access-Control-Allow-Headers", answer.HTTPCORSHeaders.AccessControlAllowHeaders)
+	}
+
+	if len(answer.HTTPCORSHeaders.AccessControlAllowMethods) > 0 {
+		w.Header().Add("Access-Control-Allow-Methods", answer.HTTPCORSHeaders.AccessControlAllowMethods)
 	}
 
 	err = answer.sendData(&data, w)
