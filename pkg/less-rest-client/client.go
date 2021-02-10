@@ -24,6 +24,7 @@ const (
 	AuthTypeToken
 	AuthTypeBearerToken
 	AuthTypeCookieWithCSRFToken
+	AuthTypeEDS
 )
 
 type Client struct {
@@ -36,6 +37,8 @@ type Client struct {
 	BearerToken string
 	Cookie      string
 	XCSRFToken  string
+	SignKeyID   string
+	SignBody    string
 }
 
 func New(c *Client) LRC {
@@ -266,6 +269,9 @@ func (c *Client) Request(
 	case AuthTypeCookieWithCSRFToken:
 		req.Header.Add("Cookie", c.Cookie)
 		req.Header.Add("X-CSRF-Token", c.XCSRFToken)
+	case AuthTypeEDS:
+		req.Header.Add("Sign-Key-Id", c.SignKeyID)
+		req.Header.Add("Sign-Body", c.SignBody)
 	default:
 		err = &UnknownAuthTypeError{
 			URL:    URL,
