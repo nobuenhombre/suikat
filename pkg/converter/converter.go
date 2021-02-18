@@ -3,6 +3,7 @@ package converter
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 type ParserError struct {
@@ -124,4 +125,18 @@ func StringToFloat64(s string) (float64, error) {
 	}
 
 	return f, nil
+}
+
+func StringToTime(s, format string) (time.Time, error) {
+	t, err := time.Parse(format, s)
+
+	if err != nil {
+		return time.Time{}, &ParserError{
+			ParserType: "time.Time",
+			Value:      s,
+			Parent:     err,
+		}
+	}
+
+	return t, nil
 }
