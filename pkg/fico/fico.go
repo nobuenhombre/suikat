@@ -21,16 +21,25 @@ const ExtGZ = ".gz"
 
 type TxtFile string
 
-func (f *TxtFile) Read() (string, error) {
+func (f *TxtFile) ReadBytes() ([]byte, error) {
 	file, openErr := os.Open(string(*f))
 	if openErr != nil {
-		return EmptyString, openErr
+		return []byte{}, openErr
 	}
 	defer file.Close()
 
 	b, readErr := ioutil.ReadAll(file)
 	if readErr != nil {
-		return EmptyString, readErr
+		return []byte{}, readErr
+	}
+
+	return b, nil
+}
+
+func (f *TxtFile) Read() (string, error) {
+	b, err := f.ReadBytes()
+	if err != nil {
+		return EmptyString, err
 	}
 
 	return string(b), nil
