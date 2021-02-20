@@ -186,3 +186,47 @@ func (f *TxtFile) DataURI() (string, error) {
 
 	return fmt.Sprintf("data:%v;base64,%v", mime, b64data), nil
 }
+
+// Пачка файлов [имя файла]контент
+type TxtFilesPack map[string]string
+
+func (p *TxtFilesPack) Read() error {
+	for fileName := range *p {
+		f := TxtFile(fileName)
+
+		c, err := f.Read()
+		if err != nil {
+			return err
+		}
+
+		(*p)[fileName] = c
+	}
+
+	return nil
+}
+
+func (p *TxtFilesPack) Write() error {
+	for fileName, content := range *p {
+		f := TxtFile(fileName)
+
+		err := f.Write(content)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (p *TxtFilesPack) WriteGZ() error {
+	for fileName, content := range *p {
+		f := TxtFile(fileName)
+
+		err := f.WriteGZ(content)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
