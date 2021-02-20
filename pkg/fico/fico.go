@@ -230,3 +230,14 @@ func (p *TxtFilesPack) WriteGZ() error {
 
 	return nil
 }
+
+func (p *TxtFilesPack) Remove() error {
+	for fileName := range *p {
+		err := os.Remove(fileName)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
