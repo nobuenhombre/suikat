@@ -28,21 +28,30 @@ const (
 )
 
 type Client struct {
-	URL         string
-	ContentType string
-	AuthType    int
-	Username    string
-	Password    string
-	Token       string
-	BearerToken string
-	Cookie      string
-	XCSRFToken  string
-	SignKeyID   string
-	SignBody    string
+	URL               string
+	ContentType       string
+	AuthType          int
+	Username          string
+	Password          string
+	Token             string
+	BearerToken       string
+	Cookie            string
+	XCSRFToken        string
+	SignKeyID         string
+	SignBody          string
+	additionalHeaders map[string]string
 }
 
 func New(c *Client) LRC {
 	return c
+}
+
+func (c *Client) SetAdditionalHeaders(h map[string]string) {
+	c.additionalHeaders = h
+}
+
+func (c *Client) CleanAdditionalHeaders(h map[string]string) {
+	c.additionalHeaders = map[string]string{}
 }
 
 func (c *Client) GetBodyFormMultipartData(
@@ -254,6 +263,10 @@ func (c *Client) Request(
 	}
 
 	for key, value := range addHeader {
+		req.Header.Add(key, value)
+	}
+
+	for key, value := range c.additionalHeaders {
 		req.Header.Add(key, value)
 	}
 
