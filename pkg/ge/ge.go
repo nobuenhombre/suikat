@@ -16,5 +16,9 @@ type IdentityPlaceError struct {
 }
 
 func (e *IdentityPlaceError) Error() string {
-	return fmt.Sprintf("Place [%v], Error [%v]", e.Place, e.Parent.Error())
+	if e.Parent != nil {
+		return fmt.Sprintf("Place [%v], Error [%v]", e.Place, e.Parent.Error())
+	} else {
+		return fmt.Sprintf("Place [%v]", e.Place)
+	}
 }
