@@ -48,6 +48,7 @@ type Worker func(data interface{}) WorkerResult
 type Checker func(wr WorkerResult) (bool, error)
 
 type Config struct {
+	count      int64
 	LimitCount int64
 	Timeout    time.Duration
 }
@@ -59,8 +60,8 @@ func (e *LimitCountExceedError) Error() string {
 	return "Limit Count Exceed"
 }
 
-func (worker Worker) Run(inData interface{}, checker Checker, config Config, count int64) (interface{}, error) {
-	count++
+func (worker Worker) Run(inData interface{}, checker Checker, config Config) (interface{}, error) {
+	config.count++
 
 	wr := worker(inData)
 
@@ -73,11 +74,11 @@ func (worker Worker) Run(inData interface{}, checker Checker, config Config, cou
 		return wr.OutData, nil
 	}
 
-	if count >= config.LimitCount {
+	if config.count >= config.LimitCount {
 		return nil, &LimitCountExceedError{}
 	}
 
 	time.Sleep(config.Timeout)
 
-	return worker.Run(inData, checker, config, count)
+	return worker.Run(inData, checker, config)
 }
