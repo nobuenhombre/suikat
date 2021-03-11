@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CLIVAR - Сахаренные флаги &mdash; SUIKAT 1.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="COLOROG" href="../colorog/index.html" />
+    <link rel="prev" title="CHUNKS - Кусочки" href="../chunks/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> SUIKAT
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../chacha/index.html">CHACHA - Дерево Валидации</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chunks/index.html">CHUNKS - Кусочки</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLIVAR - Сахаренные флаги</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Сахаренные флаги</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../colorog/index.html">COLOROG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interceptor/index.html">INTERCEPTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-config/index.html">JSON-CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../less-rest-client/index.html">LESS-REST-CLIENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mimes/index.html">MIMES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os-detector/index.html">OS-DETECTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../osexec/index.html">OSEXEC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parallelworks/index.html">PARALLELWORKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelin/index.html">PIPELIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../refavour/index.html">REFAVOUR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repeater/index.html">REPEATER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../secreto/index.html">SECRETO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sfu/index.html">SFU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracktime/index.html">TRACKTIME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webula/index.html">WEBULA</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SUIKAT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>CLIVAR - Сахаренные флаги</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/clivar/index.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="clivar">
+<h1>CLIVAR - Сахаренные флаги<a class="headerlink" href="#clivar" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Есть такой пакет в GO - flag. Он позволяет прочитать параметры приложения заданные через командную строку</p>
+<p>Например</p>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  myapp -file<span class="o">=</span>readme.txt -action<span class="o">=</span>transform -out<span class="o">=</span>pdf
+
+  // тут флаги
+  -file<span class="o">=</span>readme.txt
+  -action<span class="o">=</span>transform
+  -out<span class="o">=</span>pdf
+</pre></div>
+</td></tr></table></div>
+<p>Но все время писать разбор входящих параметров через флаги в каждом новом приложении утомительно.
+Да и однообразно, не хочется писать все время одинаковый код отличающийся только буквами.</p>
+<p>И вот они</p>
+<div class="section" id="id1">
+<h2>Сахаренные флаги<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Суть в том чтобы не писать все время однотипный код - флаги описываются в виде тегов структуры
+Т.е. вы задаете структуру поля которой и будут флагами вашего приложения,
+а как парсить эти флаги описано в тегах <code class="docutils literal notranslate"><span class="pre">cli:</span></code></p>
+<p>тег состоит из следующих частей</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">cli</span><span class="p">:</span><span class="s">&quot;&lt;Имя флага&gt;[&lt;Текст подсказки если флаг указан с опечаткой&gt;]:&lt;Тип&gt;=&lt;Значение по умолчанию&gt;&quot;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Вот как выглядит пример приложения с сахаренными флагами</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">package</span> <span class="nx">main</span>
+
+  <span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&quot;fmt&quot;</span>
+    <span class="s">&quot;log&quot;</span>
+
+    <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/clivar&quot;</span>
+  <span class="p">)</span>
+
+  <span class="kd">type</span> <span class="nx">CliConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Path</span>           <span class="kt">string</span>  <span class="s">`cli:&quot;PATH[Путь куда то]:string=/some/default/path&quot;`</span>
+    <span class="nx">Port</span>           <span class="kt">int</span>     <span class="s">`cli:&quot;PORT[Порт портальный]:int=8080&quot;`</span>
+    <span class="nx">Coefficient</span>    <span class="kt">float64</span> <span class="s">`cli:&quot;COEFFICIENT[Коэффициент тунгусский]:float64=75.31&quot;`</span>
+    <span class="nx">MakeSomeAction</span> <span class="kt">bool</span>    <span class="s">`cli:&quot;MSA[Можно мне?]:bool=false&quot;`</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cfg</span> <span class="o">*</span><span class="nx">CliConfig</span><span class="p">)</span> <span class="nx">Load</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">clivar</span><span class="p">.</span><span class="nx">Load</span><span class="p">(</span><span class="nx">cfg</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">cfg</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">CliConfig</span><span class="p">{}</span>
+
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">Load</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;CLI config error [%v]&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%#v&quot;</span><span class="p">,</span> <span class="nx">cfg</span><span class="p">)</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../colorog/index.html" class="btn btn-neutral float-right" title="COLOROG" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../chunks/index.html" class="btn btn-neutral float-left" title="CHUNKS - Кусочки" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Авторские права 2021, Ivan Sukharev (Lucky Star)
+
+    </p>
+  </div>
+    
+    
+    
+    Собрано при помощи <a href="http://sphinx-doc.org/">Sphinx</a> с использованием
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">темы,</a>
+    
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

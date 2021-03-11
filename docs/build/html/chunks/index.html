@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CHUNKS - Кусочки &mdash; SUIKAT 1.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="CLIVAR - Сахаренные флаги" href="../clivar/index.html" />
+    <link rel="prev" title="CHACHA - Дерево Валидации" href="../chacha/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> SUIKAT
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../chacha/index.html">CHACHA - Дерево Валидации</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CHUNKS - Кусочки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clivar/index.html">CLIVAR - Сахаренные флаги</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../colorog/index.html">COLOROG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interceptor/index.html">INTERCEPTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-config/index.html">JSON-CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../less-rest-client/index.html">LESS-REST-CLIENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mimes/index.html">MIMES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os-detector/index.html">OS-DETECTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../osexec/index.html">OSEXEC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parallelworks/index.html">PARALLELWORKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelin/index.html">PIPELIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../refavour/index.html">REFAVOUR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repeater/index.html">REPEATER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../secreto/index.html">SECRETO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sfu/index.html">SFU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracktime/index.html">TRACKTIME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webula/index.html">WEBULA</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SUIKAT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>CHUNKS - Кусочки</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/chunks/index.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="chunks">
+<h1>CHUNKS - Кусочки<a class="headerlink" href="#chunks" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Модуль предоставляет одну единственную функцию, которая делит входящий слайс на кусочки определенной длины</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="nx">Split</span><span class="p">(</span><span class="nx">in</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="nx">limit</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">int64</span>
+</pre></div>
+</td></tr></table></div>
+<p>На входе слайс из <code class="docutils literal notranslate"><span class="pre">int64</span></code> и число элементов в кусочках которые будут на выходе</p>
+<p>Например</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chunks&quot;</span>
+
+  <span class="c1">// На входе</span>
+  <span class="nx">in</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">}</span>
+  <span class="nx">limit</span> <span class="o">:=</span> <span class="mi">4</span>
+
+  <span class="nx">out</span> <span class="o">:=</span> <span class="nx">chunks</span><span class="p">.</span><span class="nx">Split</span><span class="p">(</span><span class="nx">in</span><span class="p">,</span> <span class="nx">limit</span><span class="p">)</span>
+
+  <span class="c1">// На выходе</span>
+  <span class="c1">// out: [][]int64{</span>
+  <span class="c1">//          {1, 3, 5, 7},</span>
+  <span class="c1">//          {9, 0, 2, 4},</span>
+  <span class="c1">//          {6, 8},</span>
+  <span class="c1">//  },</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../clivar/index.html" class="btn btn-neutral float-right" title="CLIVAR - Сахаренные флаги" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../chacha/index.html" class="btn btn-neutral float-left" title="CHACHA - Дерево Валидации" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Авторские права 2021, Ivan Sukharev (Lucky Star)
+
+    </p>
+  </div>
+    
+    
+    
+    Собрано при помощи <a href="http://sphinx-doc.org/">Sphinx</a> с использованием
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">темы,</a>
+    
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
