@@ -17,6 +17,7 @@
    converter/index.rst
    credentials/index.rst
    csvarser/index.rst
+   dates/index.rst
    envar/index.rst
    fico/index.rst
    figlu/index.rst
