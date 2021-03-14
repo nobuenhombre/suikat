@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DATES &mdash; SUIKAT 1.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="ENVAR" href="../envar/index.html" />
+    <link rel="prev" title="CSVARSER - CSV Parser" href="../csvarser/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> SUIKAT
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../chacha/index.html">CHACHA - Дерево Валидации</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chunks/index.html">CHUNKS - Кусочки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clivar/index.html">CLIVAR - Сахаренные флаги</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../colorog/index.html">COLOROG - Цветной Лог</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER - Строка в другие типы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS - Файлы через Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER - CSV Parser</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DATES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interceptor/index.html">INTERCEPTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-config/index.html">JSON-CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../less-rest-client/index.html">LESS-REST-CLIENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mimes/index.html">MIMES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os-detector/index.html">OS-DETECTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../osexec/index.html">OSEXEC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parallelworks/index.html">PARALLELWORKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelin/index.html">PIPELIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../refavour/index.html">REFAVOUR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repeater/index.html">REPEATER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../secreto/index.html">SECRETO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sfu/index.html">SFU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracktime/index.html">TRACKTIME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webula/index.html">WEBULA</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SUIKAT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>DATES</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/dates/index.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dates">
+<h1>DATES<a class="headerlink" href="#dates" title="Ссылка на этот заголовок">¶</a></h1>
+<p>&#64;todo - написать документацию</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../envar/index.html" class="btn btn-neutral float-right" title="ENVAR" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../csvarser/index.html" class="btn btn-neutral float-left" title="CSVARSER - CSV Parser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Авторские права 2021, Ivan Sukharev (Lucky Star)
+
+    </p>
+  </div>
+    
+    
+    
+    Собрано при помощи <a href="http://sphinx-doc.org/">Sphinx</a> с использованием
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">темы,</a>
+    
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
