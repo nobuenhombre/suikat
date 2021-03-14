@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>CSVARSER &mdash; SUIKAT 1.0 Documentation</title>
+  <title>CSVARSER - CSV Parser &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -40,8 +40,8 @@
     
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="MARIA-DB Connector" href="../db/connectors/maria-db/index.html" />
-    <link rel="prev" title="CREDENTIALS" href="../credentials/index.html" /> 
+    <link rel="next" title="DATES" href="../dates/index.html" />
+    <link rel="prev" title="CREDENTIALS - Файлы через Environments" href="../credentials/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,9 +96,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../chunks/index.html">CHUNKS - Кусочки</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../clivar/index.html">CLIVAR - Сахаренные флаги</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../colorog/index.html">COLOROG - Цветной Лог</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CSVARSER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER - Строка в другие типы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS - Файлы через Environments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CSVARSER - CSV Parser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#csv">Определение CSV документа</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Определение парсеров колонок</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Разбор файла CSV</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/maria-db/index.html">MARIA-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR</a></li>
@@ -172,7 +178,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>CSVARSER</li>
+      <li>CSVARSER - CSV Parser</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -191,9 +197,333 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="csvarser">
-<h1>CSVARSER<a class="headerlink" href="#csvarser" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+  <div class="section" id="csvarser-csv-parser">
+<h1>CSVARSER - CSV Parser<a class="headerlink" href="#csvarser-csv-parser" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Моя реализация CSV парсера. Сделано на рефлексии.</p>
+<p>Есть вот какой то CSV файл, с колонками.
+И есть какая то SQL Табличка с ДРУГИМИ колонками.</p>
+<p>Т.е. например в csv в колонке только два значения - „фрукт“, „сиська“
+А в БД мне надо записать false, true</p>
+<p>Или вообще в колонке csv строки такого вида „Цена 1 234.56 (EUR)“
+А в БД надо сохранить только цифру 1234.56</p>
+<p>И хочется сделать это написав не очень много строк,
+но компонент можно сказать в зачаточном состоянии - он работает, но писать относительно много, но меньше чем без него.</p>
+<p>в принципе есть несколько идей для сахарка в коде.</p>
+<p>А пока - что же нам потребуется?</p>
+<div class="section" id="csv">
+<h2>Определение CSV документа<a class="headerlink" href="#csv" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Документ определяется структурой с тегами <cite>order:»0»</cite>, <cite>order:»1»</cite>, <cite>order:»2»</cite>…
+Цифра это номер колонки в CSV.
+Нумерация начинается с 0.</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/jackc/pgtype&quot;</span>
+
+  <span class="o">...</span>
+
+  <span class="kd">type</span> <span class="nx">DocumentNumber</span> <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Varchar</span>
+
+  <span class="c1">// Документ - одна строка из CSV</span>
+  <span class="kd">type</span> <span class="nx">DocumentCSV</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Inn</span>               <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Int8</span>      <span class="s">`order:&quot;0&quot;`</span>
+    <span class="nx">Kpp</span>               <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Int8</span>      <span class="s">`order:&quot;1&quot;`</span>
+    <span class="nx">OrganizationName</span>  <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Varchar</span>   <span class="s">`order:&quot;2&quot;`</span>
+    <span class="nx">DocumentName</span>      <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Varchar</span>   <span class="s">`order:&quot;3&quot;`</span>
+    <span class="nx">DocumentNumber</span>    <span class="nx">DocumentNumber</span>   <span class="s">`order:&quot;4&quot;`</span>
+    <span class="nx">DocumentDate</span>      <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Date</span>      <span class="s">`order:&quot;5&quot;`</span>
+    <span class="nx">Totals</span>            <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Float8</span>    <span class="s">`order:&quot;6&quot;`</span>
+    <span class="nx">Vat</span>               <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Float8</span>    <span class="s">`order:&quot;7&quot;`</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id1">
+<h2>Определение парсеров колонок<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В самом модуле функция парсера колонки определена следующим образом</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">type</span> <span class="nx">ParserFunc</span> <span class="kd">func</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Т.е. чтобы распарсить нужную колонку для нее нужно написать функцию парсер</p>
+<p>Например</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/jackc/pgtype&quot;</span>
+
+  <span class="o">...</span>
+
+  <span class="c1">// Парсим Числовые строки = на выходе [pgtype.Int8]</span>
+  <span class="kd">func</span> <span class="nx">ParseInt8</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">normal</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">ReplaceAll</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot;=&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="nx">normal</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">ReplaceAll</span><span class="p">(</span><span class="nx">normal</span><span class="p">,</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="nx">normal</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Trim</span><span class="p">(</span><span class="nx">normal</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nx">normal</span> <span class="o">==</span> <span class="s">&quot;&quot;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Int8</span><span class="p">{</span>
+        <span class="nx">Status</span><span class="p">:</span> <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Null</span><span class="p">,</span>
+      <span class="p">},</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+
+    <span class="kt">int8</span><span class="p">,</span> <span class="nx">parseErr</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Atoi</span><span class="p">(</span><span class="nx">normal</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">parseErr</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">parseErr</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Int8</span><span class="p">{</span>
+      <span class="nx">Int</span><span class="p">:</span>    <span class="nb">int64</span><span class="p">(</span><span class="kt">int8</span><span class="p">),</span>
+      <span class="nx">Status</span><span class="p">:</span> <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Present</span><span class="p">,</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Парсим Дату</span>
+  <span class="kd">func</span> <span class="nx">ParseDate</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Date</span>
+
+  <span class="o">...</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id2">
+<h2>Разбор файла CSV<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>пример</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="p">(</span>
+        <span class="s">&quot;encoding/csv&quot;</span>
+        <span class="s">&quot;fmt&quot;</span>
+        <span class="s">&quot;github.com/jackc/pgtype&quot;</span>
+        <span class="s">&quot;github.com/jackc/pgx/v4&quot;</span>
+        <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/csvarser&quot;</span>
+        <span class="s">&quot;io&quot;</span>
+  <span class="p">)</span>
+
+  <span class="c1">// Объявляем Документ - одна строка из CSV</span>
+  <span class="kd">type</span> <span class="nx">DocumentCSV</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Inn</span>               <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Int8</span>      <span class="s">`order:&quot;0&quot;`</span>
+    <span class="nx">Kpp</span>               <span class="nx">pgtype</span><span class="p">.</span><span class="nx">Int8</span>      <span class="s">`order:&quot;1&quot;`</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Пишем парсеры колонок</span>
+  <span class="kd">func</span> <span class="nx">ParseInt8</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+  <span class="kd">func</span> <span class="nx">Parse</span><span class="o">...</span>
+
+  <span class="o">...</span>
+
+  <span class="kd">type</span> <span class="nx">CSVFile</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">FileName</span>    <span class="kt">string</span>
+    <span class="nx">Parser</span>      <span class="nx">csvarser</span><span class="p">.</span><span class="nx">CsvParser</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Добавляем функции парсеры по типу колонок</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">CSVFile</span><span class="p">)</span> <span class="nx">InitParsers</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">Init</span><span class="p">()</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;pgtype.Int8&quot;</span><span class="p">,</span> <span class="nx">ParseInt8</span><span class="p">)</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;pgtype.Varchar&quot;</span><span class="p">,</span> <span class="nx">ParseVarchar</span><span class="p">)</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;pgtype.Date&quot;</span><span class="p">,</span> <span class="nx">ParseDate</span><span class="p">)</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;pgtype.Timestamp&quot;</span><span class="p">,</span> <span class="nx">ParseTimestamp</span><span class="p">)</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;pgtype.Float8&quot;</span><span class="p">,</span> <span class="nx">ParseFloat8</span><span class="p">)</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;pgtype.Bool&quot;</span><span class="p">,</span> <span class="nx">ParseBool</span><span class="p">)</span>
+        <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">AddTypeParser</span><span class="p">(</span><span class="s">&quot;diadoc.DocumentNumber&quot;</span><span class="p">,</span> <span class="nx">ParseDocumentNumber</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">CSVFile</span><span class="p">)</span> <span class="nx">Read</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="c1">// читаем содержимое файла</span>
+    <span class="nx">csvFileContent</span> <span class="o">:=</span> <span class="o">...</span>
+
+    <span class="nx">f</span><span class="p">.</span><span class="nx">InitParsers</span><span class="p">()</span>
+
+    <span class="nx">r</span> <span class="o">:=</span> <span class="nx">csv</span><span class="p">.</span><span class="nx">NewReader</span><span class="p">(</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">NewReader</span><span class="p">(</span><span class="nx">csvFileContent</span><span class="p">))</span>
+    <span class="nx">r</span><span class="p">.</span><span class="nx">Comma</span> <span class="p">=</span> <span class="sc">&#39;;&#39;</span>
+    <span class="nx">r</span><span class="p">.</span><span class="nx">Comment</span> <span class="p">=</span> <span class="sc">&#39;#&#39;</span>
+    <span class="nx">lineNumber</span> <span class="o">:=</span> <span class="nb">int64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">{</span>
+      <span class="nx">record</span><span class="p">,</span> <span class="nx">readErr</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Read</span><span class="p">()</span>
+      <span class="k">if</span> <span class="nx">readErr</span> <span class="o">==</span> <span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span> <span class="p">{</span>
+        <span class="k">break</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="nx">readErr</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">readErr</span>
+      <span class="p">}</span>
+
+      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;LINE [%#v] \n&quot;</span><span class="p">,</span> <span class="nx">lineNumber</span><span class="p">)</span>
+      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;RECORD [%#v] \n&quot;</span><span class="p">,</span> <span class="nx">record</span><span class="p">)</span>
+
+      <span class="c1">// Пропускаем заголовок</span>
+      <span class="k">if</span> <span class="nx">lineNumber</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="nx">lineNumber</span><span class="o">++</span>
+
+        <span class="k">continue</span>
+      <span class="p">}</span>
+
+      <span class="nx">doc</span><span class="p">,</span> <span class="nx">docErr</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">GetDocument</span><span class="p">(</span><span class="nx">record</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">docErr</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">docErr</span>
+      <span class="p">}</span>
+
+      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Document: [%#v] \n&quot;</span><span class="p">,</span> <span class="nx">doc</span><span class="p">)</span>
+
+      <span class="o">...</span>
+      <span class="c1">// Тут какая то обработка полученной структуры doc</span>
+      <span class="o">...</span>
+
+      <span class="nx">lineNumber</span><span class="o">++</span>
+    <span class="p">}</span>
+
+  <span class="p">}</span>
+
+  <span class="c1">// Превращаем одну строку CSV в структуру DocumentCSV</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">CSVFile</span><span class="p">)</span> <span class="nx">GetDocument</span><span class="p">(</span><span class="nx">record</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">DocumentCSV</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">doc</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">DocumentCSV</span><span class="p">{}</span>
+
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">Parser</span><span class="p">.</span><span class="nx">FillStructFromSlice</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span> <span class="nx">record</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">doc</span><span class="p">,</span> <span class="kc">nil</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -202,8 +532,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../db/connectors/maria-db/index.html" class="btn btn-neutral float-right" title="MARIA-DB Connector" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../credentials/index.html" class="btn btn-neutral float-left" title="CREDENTIALS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="../dates/index.html" class="btn btn-neutral float-right" title="DATES" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../credentials/index.html" class="btn btn-neutral float-left" title="CREDENTIALS - Файлы через Environments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
     </div>
 
   <hr/>

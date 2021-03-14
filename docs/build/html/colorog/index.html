@@ -40,7 +40,7 @@
     
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="CONVERTER" href="../converter/index.html" />
+    <link rel="next" title="CONVERTER - Строка в другие типы" href="../converter/index.html" />
     <link rel="prev" title="CLIVAR - Сахаренные флаги" href="../clivar/index.html" /> 
 </head>
 
@@ -95,10 +95,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../chacha/index.html">CHACHA - Дерево Валидации</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../chunks/index.html">CHUNKS - Кусочки</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../clivar/index.html">CLIVAR - Сахаренные флаги</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">COLOROG - Цветной Лог</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">COLOROG - Цветной Лог</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Конструктор</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Методы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#colorog-example">Пример</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER - Строка в другие типы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS - Файлы через Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER - CSV Parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/maria-db/index.html">MARIA-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR</a></li>
@@ -193,9 +199,8 @@
             
   <div class="section" id="colorog">
 <h1>COLOROG - Цветной Лог<a class="headerlink" href="#colorog" title="Ссылка на этот заголовок">¶</a></h1>
-<p>захотелось мне как то раз сделать цветной лог
-чтобы время в логе одним цветом
-а строчки тоже разноцветные но не какие угодно, а следующих типов</p>
+<p>Захотелось мне как то раз сделать цветной лог.
+Xто-бы время в логе одним цветом, а строчки тоже разноцветные, но не какие угодно, а следующих типов:</p>
 <ol class="arabic simple">
 <li><p>Успех - Зеленого цвета</p></li>
 <li><p>Информация - Голубого цвета</p></li>
@@ -207,6 +212,178 @@
 <p>и чтобы время можно было не показывать если хочется
 и что-бы формат даты времени можно было настроить
 взял и написал</p>
+<div class="section" id="id1">
+<h2>Конструктор<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="nx">NewColoredLog</span><span class="p">(</span><span class="nx">showTime</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">timeFormat</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">ColoredLog</span>
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple">
+<li><p>showTime - показывать или не показывать время</p></li>
+<li><p>timeFormat - шаблон даты-времени в логе - например «2006-01-02 15:04:05»</p></li>
+</ol>
+<p>пример</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/colorog&quot;</span>
+
+  <span class="o">...</span>
+
+  <span class="c1">// Без даты и времени</span>
+  <span class="nx">colorLog</span> <span class="o">:=</span> <span class="nx">colorog</span><span class="p">.</span><span class="nx">NewColoredLog</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+
+  <span class="c1">// Только дата</span>
+  <span class="nx">colorLog</span> <span class="o">:=</span> <span class="nx">colorog</span><span class="p">.</span><span class="nx">NewColoredLog</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="s">&quot;2006-01-02&quot;</span><span class="p">)</span>
+
+  <span class="c1">// И дата и время</span>
+  <span class="nx">colorLog</span> <span class="o">:=</span> <span class="nx">colorog</span><span class="p">.</span><span class="nx">NewColoredLog</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="s">&quot;2006-01-02 15:04:05&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id2">
+<h2>Методы<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Сообщение об успехе - Зеленым цветом</span>
+  <span class="c1">// - для вывода нескольких переменных без переноса строки</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Success</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="c1">// - для вывода нескольких переменных внутри отформатированного текста</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Successf</span><span class="p">(</span><span class="nx">format</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="c1">// - для вывода нескольких переменных с переносом строки</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Successln</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+
+  <span class="c1">// Сообщение об ошибке которая не приводит к выходу из программы - Желтым цветом</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Error</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Errorf</span><span class="p">(</span><span class="nx">format</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Errorln</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+
+  <span class="c1">// Информационное сообщение - Голубым цветом</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Info</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Infof</span><span class="p">(</span><span class="nx">format</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Infoln</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+
+  <span class="c1">// Простое сообщение - Белым цветом</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Message</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Messagef</span><span class="p">(</span><span class="nx">format</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Messageln</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+
+  <span class="c1">// Сообщение об ошибке которая приводит к выходу из программы - Красным цветом</span>
+  <span class="c1">// кроме сообщения - происходит выход из программы с кодом 1</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Fatal</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Fatalf</span><span class="p">(</span><span class="nx">format</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Fatalln</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+
+  <span class="c1">// Паника - красное на белом фоне</span>
+  <span class="c1">// кроме сообщения - создает панику</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Panic</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Panicf</span><span class="p">(</span><span class="nx">format</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cl</span> <span class="o">*</span><span class="nx">ColoredLog</span><span class="p">)</span> <span class="nx">Panicln</span><span class="p">(</span><span class="nx">v</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="colorog-example">
+<span id="id3"></span><h2>Пример<a class="headerlink" href="#colorog-example" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">package</span> <span class="nx">main</span>
+
+  <span class="kn">import</span> <span class="p">(</span>
+      <span class="s">&quot;flag&quot;</span>
+      <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/colorog&quot;</span>
+      <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/fico&quot;</span>
+  <span class="p">)</span>
+
+  <span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">log</span> <span class="o">:=</span> <span class="nx">colorog</span><span class="p">.</span><span class="nx">NewColoredLog</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Infoln</span><span class="p">(</span><span class="s">&quot;B64&quot;</span><span class="p">)</span>
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Messageln</span><span class="p">(</span><span class="s">&quot;this program read file.txt and create file.txt.b64 with base64 encoded content&quot;</span><span class="p">)</span>
+
+    <span class="nx">fileName</span> <span class="o">:=</span> <span class="nx">flag</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span>
+      <span class="s">&quot;file&quot;</span><span class="p">,</span>
+      <span class="s">&quot;file.txt&quot;</span><span class="p">,</span>
+      <span class="s">&quot;файл для перекодирования в b64&quot;</span><span class="p">)</span>
+
+    <span class="nx">flag</span><span class="p">.</span><span class="nx">Parse</span><span class="p">()</span>
+
+    <span class="nx">txtFile</span> <span class="o">:=</span> <span class="nx">fico</span><span class="p">.</span><span class="nx">TxtFile</span><span class="p">(</span><span class="o">*</span><span class="nx">fileName</span><span class="p">)</span>
+
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">txtFile</span><span class="p">.</span><span class="nx">B64</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;B64 error [%v]&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Success</span><span class="p">(</span><span class="s">&quot;Success&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -215,7 +392,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../converter/index.html" class="btn btn-neutral float-right" title="CONVERTER" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../converter/index.html" class="btn btn-neutral float-right" title="CONVERTER - Строка в другие типы" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="../clivar/index.html" class="btn btn-neutral float-left" title="CLIVAR - Сахаренные флаги" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
     </div>
 
