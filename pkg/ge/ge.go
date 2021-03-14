@@ -22,3 +22,28 @@ func (e *IdentityPlaceError) Error() string {
 
 	return fmt.Sprintf("Place [%v]", e.Place)
 }
+
+type IdentityParams map[string]interface{}
+
+type IdentityError struct {
+	Package string
+	Caller  string
+	Place   string
+	Params  map[string]interface{}
+	Message string
+	Parent  error
+}
+
+func (e *IdentityError) Error() string {
+	if e.Parent != nil {
+		return fmt.Sprintf(
+			"Package[%v].Caller[%v].Place[%v].Params[%#v].Message[%v].Error[%v]",
+			e.Package, e.Caller, e.Place, e.Params, e.Message, e.Parent.Error(),
+		)
+	}
+
+	return fmt.Sprintf(
+		"Package[%v].Caller[%v].Place[%v].Params[%#v].Message[%v]",
+		e.Package, e.Caller, e.Place, e.Params, e.Message,
+	)
+}

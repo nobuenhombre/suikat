@@ -17,6 +17,8 @@
    converter/index.rst
    credentials/index.rst
    csvarser/index.rst
+   db/connectors/maria-db/index.rst
+   db/connectors/postgresql-pgx-db/index.rst
    envar/index.rst
    fico/index.rst
    figlu/index.rst
