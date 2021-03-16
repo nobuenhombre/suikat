@@ -6,17 +6,6 @@ import (
 	"time"
 )
 
-type dateTime struct {
-	Year  int
-	Month time.Month
-	Day   int
-	Hour  int
-	Min   int
-	Sec   int
-	Nsec  int
-	Loc   *time.Location
-}
-
 type inputParams struct {
 	DateA time.Time
 	DateB time.Time

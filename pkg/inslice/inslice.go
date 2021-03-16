@@ -83,3 +83,7 @@ func Float64(a float64, list *[]float64) bool {
 
 	return false
 }
+
+func IsIndexExists(index int, list []interface{}) bool {
+	return index > 0 && index < len(list)
+}
