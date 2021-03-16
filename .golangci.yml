@@ -8,6 +8,14 @@ linters:
     - noctx
     - gofumpt
     - gocritic
+    - paralleltest
+    - wrapcheck
+    - exhaustivestruct
+    - maligned
+    - interfacer
+    - forbidigo
+    - ifshort
+    - wastedassign
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
@@ -27,3 +35,8 @@ issues:
       linters:
         - exhaustive
         - gocognit
+
+# all available settings of specific linters
+linters-settings:
+  cyclop:
+    max-complexity: 30

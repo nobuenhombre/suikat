@@ -18,6 +18,8 @@
    credentials/index.rst
    csvarser/index.rst
    dates/index.rst
+   db/connectors/maria-db/index.rst
+   db/connectors/postgresql-pgx-db/index.rst
    envar/index.rst
    fico/index.rst
    figlu/index.rst
