@@ -95,7 +95,7 @@ func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 		return nil, &ge.IdentityError{
 			Package: ErrorsIdent,
 			Caller:  "New(cfg, log)",
-			Place:   "pgxpool.ParseConfig([%v])",
+			Place:   "pgxpool.ParseConfig(dsn)",
 			Params: ge.IdentityParams{
 				"dsn": dsn,
 			},
@@ -112,7 +112,7 @@ func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 		return nil, &ge.IdentityError{
 			Package: ErrorsIdent,
 			Caller:  "New(cfg, log)",
-			Place:   "pgxpool.ConnectConfig",
+			Place:   "pgxpool.ConnectConfig()",
 			Parent:  err,
 		}
 	}
