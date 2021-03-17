@@ -12,7 +12,7 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-const ErrorsIdent = "PostgresPgxDB"
+const ErrorsIdent = "SUIKAT.PostgresPgxDB"
 
 // StatementCacheMode values
 // prepare - default

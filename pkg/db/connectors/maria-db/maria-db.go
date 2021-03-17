@@ -9,7 +9,7 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-const ErrorsIdent = "MariaDB"
+const ErrorsIdent = "SUIKAT.MariaDB"
 
 // Protocol = UNIXSocket, Address = "/tmp/mysql.sock"
 // Protocol = TCP, Address = "localhost:5555"
