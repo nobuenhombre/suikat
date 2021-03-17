@@ -1,5 +1,7 @@
 package inslice
 
+import "reflect"
+
 func String(a string, list *[]string) bool {
 	if list == nil {
 		return false
@@ -84,6 +86,15 @@ func Float64(a float64, list *[]float64) bool {
 	return false
 }
 
-func IsIndexExists(index int, list []interface{}) bool {
-	return index > 0 && index < len(list)
+func IsIndexExists(index int, list interface{}) bool {
+	s := reflect.ValueOf(list)
+	if s.Kind() != reflect.Slice {
+		return false
+	}
+
+	if s.IsNil() {
+		return false
+	}
+
+	return index > 0 && index < s.Len()
 }
