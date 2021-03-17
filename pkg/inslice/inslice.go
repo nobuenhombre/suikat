@@ -1,6 +1,9 @@
 package inslice
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 func String(a string, list *[]string) bool {
 	if list == nil {
@@ -97,4 +100,12 @@ func IsIndexExists(index int, list interface{}) bool {
 	}
 
 	return index > 0 && index < s.Len()
+}
+
+type IndexNotExistsError struct {
+	Index int
+}
+
+func (e *IndexNotExistsError) Error() string {
+	return fmt.Sprintf("index [%v] not exists", e.Index)
 }
