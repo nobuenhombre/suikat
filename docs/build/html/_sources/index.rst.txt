@@ -39,6 +39,7 @@
    pipelin/index.rst
    refavour/index.rst
    repeater/index.rst
+   replacer/index.rst
    secreto/index.rst
    sfu/index.rst
    tracktime/index.rst
