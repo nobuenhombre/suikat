@@ -18,6 +18,13 @@ type insliceIsIndexExistsTest struct {
 var isIndexExistsTests = []insliceIsIndexExistsTest{
 	{
 		in: inputIsIndexExistsParams{
+			index: 0,
+			list:  []bool{true, false},
+		},
+		out: true,
+	},
+	{
+		in: inputIsIndexExistsParams{
 			index: 5,
 			list:  []int{1, 2, 3, 4, 5, 6},
 		},

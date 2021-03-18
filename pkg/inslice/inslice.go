@@ -99,7 +99,7 @@ func IsIndexExists(index int, list interface{}) bool {
 		return false
 	}
 
-	return index > 0 && index < s.Len()
+	return index >= 0 && index < s.Len()
 }
 
 type IndexNotExistsError struct {
