@@ -6,8 +6,6 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-const ErrorsIdent = "SUIKAT.Replacer"
-
 func ReplaceAll(data *Data, rules *Rules) (*Data, error) {
 	for ruleIndex := range *rules {
 		(*rules)[ruleIndex].Compile()
@@ -16,15 +14,7 @@ func ReplaceAll(data *Data, rules *Rules) (*Data, error) {
 	for dataIndex := range *data {
 		after, err := ApplyRules((*data)[dataIndex].Before, rules)
 		if err != nil {
-			return nil, &ge.IdentityError{
-				Package: ErrorsIdent,
-				Caller:  "ReplaceAll()",
-				Place:   "c.ApplyRules()",
-				Params: map[string]interface{}{
-					"dataIndex": dataIndex,
-				},
-				Parent: err,
-			}
+			return nil, ge.Pin(err, ge.Params{"dataIndex": dataIndex})
 		}
 
 		(*data)[dataIndex].After = after
@@ -38,15 +28,7 @@ func ApplyRules(before string, rules *Rules) (after string, err error) {
 	for ruleIndex, rule := range *rules {
 		after, err = ApplyRule(after, rule)
 		if err != nil {
-			return "", &ge.IdentityError{
-				Package: ErrorsIdent,
-				Caller:  "ApplyRules()",
-				Place:   "c.ApplyRule()",
-				Params: map[string]interface{}{
-					"dataIndex": ruleIndex,
-				},
-				Parent: err,
-			}
+			return "", ge.Pin(err, ge.Params{"dataIndex": ruleIndex})
 		}
 	}
 
@@ -57,11 +39,7 @@ func ApplyRule(before string, rule ReplaceRule) (after string, err error) {
 	switch rule.SourceType {
 	case SourceTypeRegexp:
 		if rule.regExp == nil {
-			return "", &ge.IdentityError{
-				Package: ErrorsIdent,
-				Caller:  "ApplyRule()",
-				Place:   "rule.regExp == nil",
-			}
+			return "", ge.Pin(&ge.RegExpIsNotCompiledError{})
 		}
 
 		after = before
@@ -79,13 +57,6 @@ func ApplyRule(before string, rule ReplaceRule) (after string, err error) {
 		return after, nil
 
 	default:
-		return "", &ge.IdentityError{
-			Package: ErrorsIdent,
-			Caller:  "ApplyRule()",
-			Place:   "Undefined rule.SourceType",
-			Params: map[string]interface{}{
-				"rule.SourceType": rule.SourceType,
-			},
-		}
+		return "", ge.Pin(&ge.UndefinedSwitchCaseError{Var: rule.SourceType})
 	}
 }

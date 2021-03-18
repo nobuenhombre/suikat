@@ -54,9 +54,12 @@ var applyRuleTests = []applyRuleTest{
 		out: outputApplyRuleParams{
 			after: "",
 			err: &ge.IdentityError{
-				Package: ErrorsIdent,
-				Caller:  "ApplyRule()",
-				Place:   "rule.regExp == nil",
+				Parent: &ge.RegExpIsNotCompiledError{},
+				Way: &ge.Way{
+					Package: "github.com/nobuenhombre/suikat/pkg/replacer",
+					Caller:  "ApplyRule()",
+					Line:    42,
+				},
 			},
 		},
 	},

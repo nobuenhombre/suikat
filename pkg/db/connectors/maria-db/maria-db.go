@@ -9,8 +9,6 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-const ErrorsIdent = "SUIKAT.MariaDB"
-
 // Protocol = UNIXSocket, Address = "/tmp/mysql.sock"
 // Protocol = TCP, Address = "localhost:5555"
 const (
@@ -67,25 +65,12 @@ func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return nil, &ge.IdentityError{
-			Package: ErrorsIdent,
-			Caller:  "New(cfg, log)",
-			Place:   "sql.Open(mysql, dsn)",
-			Params: ge.IdentityParams{
-				"dsn": dsn,
-			},
-			Parent: err,
-		}
+		return nil, ge.Pin(err, ge.Params{"dsn": dsn})
 	}
 
 	err = db.Ping()
 	if err != nil {
-		return nil, &ge.IdentityError{
-			Package: ErrorsIdent,
-			Caller:  "New(cfg, log)",
-			Place:   "db.Ping()",
-			Parent:  err,
-		}
+		return nil, ge.Pin(err)
 	}
 
 	return &Conn{

@@ -12,8 +12,6 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-const ErrorsIdent = "SUIKAT.PostgresPgxDB"
-
 // StatementCacheMode values
 // prepare - default
 // describe - use it for PGBouncer connections
@@ -92,15 +90,7 @@ func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 
 	config, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
-		return nil, &ge.IdentityError{
-			Package: ErrorsIdent,
-			Caller:  "New(cfg, log)",
-			Place:   "pgxpool.ParseConfig(dsn)",
-			Params: ge.IdentityParams{
-				"dsn": dsn,
-			},
-			Parent: err,
-		}
+		return nil, ge.Pin(err, ge.Params{"dsn": dsn})
 	}
 
 	// prepared statements for pgbouncer
@@ -109,12 +99,7 @@ func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 
 	connectPool, err := pgxpool.ConnectConfig(context.Background(), config)
 	if err != nil {
-		return nil, &ge.IdentityError{
-			Package: ErrorsIdent,
-			Caller:  "New(cfg, log)",
-			Place:   "pgxpool.ConnectConfig()",
-			Parent:  err,
-		}
+		return nil, ge.Pin(err)
 	}
 
 	return &Conn{

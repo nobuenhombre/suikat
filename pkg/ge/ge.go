@@ -1,49 +1,67 @@
 package ge
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
 
-type NotReleasedError struct {
-	Name string
-}
+	"github.com/nobuenhombre/suikat/pkg/inslice"
+)
 
-func (e *NotReleasedError) Error() string {
-	return fmt.Sprintf("Not Released Method (name = %v)", e.Name)
-}
+func New(message string, params ...Params) error {
+	var p Params
 
-type IdentityPlaceError struct {
-	Place  string
-	Parent error
-}
-
-func (e *IdentityPlaceError) Error() string {
-	if e.Parent != nil {
-		return fmt.Sprintf("Place [%v], Error [%v]", e.Place, e.Parent.Error())
+	if inslice.IsIndexExists(0, params) {
+		p = params[0]
 	}
 
-	return fmt.Sprintf("Place [%v]", e.Place)
+	return &IdentityError{
+		Message: message,
+		Params:  p,
+		Way:     getWay(),
+	}
 }
 
-type IdentityParams map[string]interface{}
+func Pin(parent error, params ...Params) error {
+	var p Params
+
+	if inslice.IsIndexExists(0, params) {
+		p = params[0]
+	}
+
+	return &IdentityError{
+		Parent: parent,
+		Params: p,
+		Way:    getWay(),
+	}
+}
 
 type IdentityError struct {
-	Package string
-	Caller  string
-	Place   string
-	Params  map[string]interface{}
 	Message string
 	Parent  error
+	Params  Params
+	Way     *Way
 }
 
 func (e *IdentityError) Error() string {
-	if e.Parent != nil {
-		return fmt.Sprintf(
-			"Package[%v].Caller[%v].Place[%v].Params[%#v].Message[%v].Error[%v]",
-			e.Package, e.Caller, e.Place, e.Params, e.Message, e.Parent.Error(),
-		)
+	wayStr := ""
+	if e.Way != nil {
+		wayStr = fmt.Sprintf("Way[ %v ], ", e.Way.View())
 	}
 
-	return fmt.Sprintf(
-		"Package[%v].Caller[%v].Place[%v].Params[%#v].Message[%v]",
-		e.Package, e.Caller, e.Place, e.Params, e.Message,
-	)
+	paramsStr := ""
+	if e.Params != nil {
+		paramsStr = fmt.Sprintf("Params[ %v ]", e.Params.View())
+	}
+
+	parentStr := ""
+	if e.Parent != nil {
+		parentStr = fmt.Sprintf("ParentError[ %v ], ", e.Parent.Error())
+	}
+
+	messageStr := ""
+	if len(e.Message) > 0 {
+		messageStr = fmt.Sprintf("Message[ %v ], ", e.Message)
+	}
+
+	return strings.TrimSuffix(fmt.Sprintf("%v%v%v%v", wayStr, paramsStr, parentStr, messageStr), ", ")
 }
