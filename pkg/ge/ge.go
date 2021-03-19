@@ -42,6 +42,10 @@ type IdentityError struct {
 	Way     *Way
 }
 
+func (e *IdentityError) Unwrap(err error) error {
+	return e.Parent
+}
+
 func (e *IdentityError) Error() string {
 	wayStr := ""
 	if e.Way != nil {
