@@ -24,3 +24,13 @@ type UndefinedSwitchCaseError struct {
 func (e *UndefinedSwitchCaseError) Error() string {
 	return fmt.Sprintf("udefined switch case [%v]", e.Var)
 }
+
+type MismatchError struct {
+	ComparedItems string
+	Expected      interface{}
+	Actual        interface{}
+}
+
+func (e *MismatchError) Error() string {
+	return fmt.Sprintf("wrong %v, expected [%v], actual [%v]", e.ComparedItems, e.Expected, e.Actual)
+}
