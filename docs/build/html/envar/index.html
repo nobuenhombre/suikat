@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ENVAR &mdash; SUIKAT 1.0 Documentation</title>
+  <title>ENVAR - Сахаренные переменные окружения &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="FICO" href="../fico/index.html" />
+    <link rel="next" title="FICO - FIles COntent" href="../fico/index.html" />
     <link rel="prev" title="POSTGRESQL-PGX-DB Connector" href="../db/connectors/postgresql-pgx-db/index.html" /> 
 </head>
 
@@ -96,11 +96,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER - Строка в другие типы</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS - Файлы через Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER - CSV Parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES - Даты</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/maria-db/index.html">MARIA-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ENVAR</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ENVAR - Сахаренные переменные окружения</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Сахаренные переменные окружения</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO - FIles COntent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
@@ -169,7 +172,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>ENVAR</li>
+      <li>ENVAR - Сахаренные переменные окружения</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -189,8 +192,83 @@
            <div itemprop="articleBody">
             
   <div class="section" id="envar">
-<h1>ENVAR<a class="headerlink" href="#envar" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+<h1>ENVAR - Сахаренные переменные окружения<a class="headerlink" href="#envar" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Умеет GO читать переменные окружения. Вот так <code class="docutils literal notranslate"><span class="pre">os.LookupEnv(...</span></code></p>
+<p>И можно использовать хоть миллион этих переменных, однако код пухнет.</p>
+<p>поскольку сахаренные флаги уже у меня были, я решил посахарить и переменные окружения.</p>
+<div class="section" id="id1">
+<h2>Сахаренные переменные окружения<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Суть в том, чтобы не писать все время однотипный код, переменные окружения описываются в виде тегов структуры
+Т.е. вы задаете структуру поля которой и будут переменными окружения для вашего приложения,
+а как парсить эти флаги описано в тегах <code class="docutils literal notranslate"><span class="pre">env:</span></code></p>
+<p>тег состоит из следующих частей</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">env</span><span class="p">:</span><span class="s">&quot;&lt;Имя переменной окружения&gt;:&lt;Тип&gt;=&lt;Значение по умолчанию&gt;&quot;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Вот как выглядит пример приложения с сахаренными переменными окружения</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">package</span> <span class="nx">main</span>
+
+  <span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&quot;fmt&quot;</span>
+    <span class="s">&quot;log&quot;</span>
+
+    <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/envar&quot;</span>
+  <span class="p">)</span>
+
+  <span class="kd">type</span> <span class="nx">AppConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Path</span>           <span class="kt">string</span>  <span class="s">`env:&quot;PATH:string=/some/default/path&quot;`</span>
+    <span class="nx">Port</span>           <span class="kt">int</span>     <span class="s">`env:&quot;PORT:int=8080&quot;`</span>
+    <span class="nx">Coefficient</span>    <span class="kt">float64</span> <span class="s">`env:&quot;COEFFICIENT:float64=75.31&quot;`</span>
+    <span class="nx">MakeSomeAction</span> <span class="kt">bool</span>    <span class="s">`env:&quot;MSA:bool=false&quot;`</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">cfg</span> <span class="o">*</span><span class="nx">AppConfig</span><span class="p">)</span> <span class="nx">Load</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">envar</span><span class="p">.</span><span class="nx">Load</span><span class="p">(</span><span class="nx">cfg</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">cfg</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">AppConfig</span><span class="p">{}</span>
+
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">Load</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;ENV config error [%v]&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%#v&quot;</span><span class="p">,</span> <span class="nx">cfg</span><span class="p">)</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>компонент использует рефлексию</p>
+</div>
 </div>
 
 
@@ -201,7 +279,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../fico/index.html" class="btn btn-neutral float-right" title="FICO" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../fico/index.html" class="btn btn-neutral float-right" title="FICO - FIles COntent" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../db/connectors/postgresql-pgx-db/index.html" class="btn btn-neutral float-left" title="POSTGRESQL-PGX-DB Connector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>

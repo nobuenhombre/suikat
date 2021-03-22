@@ -18,6 +18,8 @@ import (
 
 const EmptyString = ""
 const ExtGZ = ".gz"
+const ExtB64 = ".b64"
+const ExtHEX = ".hex"
 
 type TxtFile string
 
@@ -118,7 +120,7 @@ func (f *TxtFile) B64() error {
 		return err
 	}
 
-	txtOutFile := TxtFile(string(*f) + ".b64")
+	txtOutFile := TxtFile(string(*f) + ExtB64)
 
 	err = txtOutFile.Write(strB64)
 	if err != nil {
@@ -164,7 +166,7 @@ func (f *TxtFile) Hex() error {
 		return err
 	}
 
-	txtOutFile := TxtFile(string(*f) + ".hex")
+	txtOutFile := TxtFile(string(*f) + ExtHEX)
 
 	err = txtOutFile.Write(strHex)
 	if err != nil {

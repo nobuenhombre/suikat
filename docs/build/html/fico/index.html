@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FICO &mdash; SUIKAT 1.0 Documentation</title>
+  <title>FICO - FIles COntent &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -38,7 +38,7 @@
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
     <link rel="next" title="FIGLU" href="../figlu/index.html" />
-    <link rel="prev" title="ENVAR" href="../envar/index.html" /> 
+    <link rel="prev" title="ENVAR - Сахаренные переменные окружения" href="../envar/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,11 +96,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER - Строка в другие типы</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS - Файлы через Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER - CSV Parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES - Даты</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/maria-db/index.html">MARIA-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FICO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR - Сахаренные переменные окружения</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FICO - FIles COntent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Методы модуля</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
@@ -169,7 +172,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>FICO</li>
+      <li>FICO - FIles COntent</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,9 +191,111 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="fico">
-<h1>FICO<a class="headerlink" href="#fico" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+  <div class="section" id="fico-files-content">
+<h1>FICO - FIles COntent<a class="headerlink" href="#fico-files-content" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id1">
+<h2>Методы модуля<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Текстовый (бинарный) файл - по сути это его имя - полный путь</span>
+  <span class="kd">type</span> <span class="nx">TxtFile</span> <span class="kt">string</span>
+
+  <span class="c1">// Читает содержимое в виде слайса байтов</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">ReadBytes</span><span class="p">()</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+  <span class="c1">// Читает содержимое в виде строки</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">Read</span><span class="p">()</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+  <span class="c1">// Записывает строку в файл</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">Write</span><span class="p">(</span><span class="nx">content</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span>
+
+  <span class="c1">// Записывает строку в упакованный файл .gz</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">WriteGZ</span><span class="p">(</span><span class="nx">content</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span>
+
+  <span class="c1">// Читает исходный файл и упаковывает его в .gz рядом с исходным файлом</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">GZ</span><span class="p">()</span> <span class="kt">error</span>
+
+  <span class="c1">// Читает исходный файл в виде base64 строки</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">ReadAsB64String</span><span class="p">()</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+  <span class="c1">// Читает исходный файл в виде base64 строки записывает эту строку в файл с расширением .b64 рядом с исходным файлом</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">B64</span><span class="p">()</span> <span class="kt">error</span>
+
+  <span class="c1">// Берет обычную строку - и превращает ее HEX представление с разделителями glue</span>
+  <span class="kd">func</span> <span class="nx">StrBytes</span><span class="p">(</span><span class="nx">in</span><span class="p">,</span> <span class="nx">glue</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">isUpper</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">string</span>
+
+  <span class="c1">// Читает исходный файл и возвращает строку его HEX представления</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">ReadAsHexString</span><span class="p">()</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+  <span class="c1">// Читает исходный файл - превращает ее HEX представление и записывает в файл .hex рядом с исходным файлом</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">Hex</span><span class="p">()</span> <span class="kt">error</span>
+
+  <span class="c1">// Читает исходный файл, получает mime-type, и base64 представление и возвращает строку вида &quot;data:&lt;MIME-TYPE&gt;;base64,&lt;BASE64-DATA&gt;&quot;</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TxtFile</span><span class="p">)</span> <span class="nx">DataURI</span><span class="p">()</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Пачка файлов [имя файла]контент</span>
+  <span class="kd">type</span> <span class="nx">TxtFilesPack</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+
+  <span class="c1">// Читает контент всех файлов в пачке</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="o">*</span><span class="nx">TxtFilesPack</span><span class="p">)</span> <span class="nx">Read</span><span class="p">()</span> <span class="kt">error</span>
+
+  <span class="c1">// Пишет контент в файлы пачки</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="o">*</span><span class="nx">TxtFilesPack</span><span class="p">)</span> <span class="nx">Write</span><span class="p">()</span> <span class="kt">error</span>
+
+  <span class="c1">// Пишет контент пачки в упакованные файлы</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="o">*</span><span class="nx">TxtFilesPack</span><span class="p">)</span> <span class="nx">WriteGZ</span><span class="p">()</span> <span class="kt">error</span>
+
+  <span class="c1">// Удаляет все файлы пачки</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="o">*</span><span class="nx">TxtFilesPack</span><span class="p">)</span> <span class="nx">Remove</span><span class="p">()</span> <span class="kt">error</span>
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -204,7 +309,7 @@
         <a href="../figlu/index.html" class="btn btn-neutral float-right" title="FIGLU" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../envar/index.html" class="btn btn-neutral float-left" title="ENVAR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+        <a href="../envar/index.html" class="btn btn-neutral float-left" title="ENVAR - Сахаренные переменные окружения" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
       
     </div>
   
