@@ -1,0 +1,134 @@
+FINA - File Names
+=================
+
+Набор функций для работы с именами файлов.
+
+
+Представление имени файла в виде структуры
+------------------------------------------
+
+Обычно имя файла представлено строкой ``"/some/path/file.ext"``.
+
+Но иногда нужно получать части файла, такие как
+
+#. Путь
+#. Полное имя с расширением
+#. Только расширение с точкой
+#. Имя без расширения
+
+Для этого я сделал такую структуру.
+
+.. code-block:: go
+  :linenos:
+
+    type FilePartsInfo struct {
+      Path           string // Путь к файлу.
+      Name           string // Полное имя, т.е. имя с расширением.
+      Ext            string // только Расширение с точкой.
+      NameWithoutExt string // Имя без расширения.
+    }
+
+
+И написал функцию которая превращает строку с полным путем и именем файла в вышеуказанную структуру
+
+.. code-block:: go
+  :linenos:
+
+    func GetFilePartsInfo(file string) *FilePartsInfo
+
+
+Модификация имени файла
+-----------------------
+
+Добавить префикс к имени файла
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+На вход передается вышеуказанная структура и префикс (строка).
+Префикс добавляется к имени файла - на выходе строка - полное имя с путем
+
+.. code-block:: go
+  :linenos:
+
+    // Return new filename with Prefix
+    // was:  /some/path/file.ext
+    // will: /some/path/<prefix>file.ext
+    // ---------------------------------
+    // prefix: "demo-"
+    // will: /some/path/demo-file.ext
+
+    func (fpi *FilePartsInfo) Prefix(prefix string) string
+
+
+Добавить суффикс к имени файла
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+На вход передается вышеуказанная структура и Суффикс (строка).
+Суффикс добавляется к имени файла - на выходе строка - полное имя с путем
+
+.. code-block:: go
+  :linenos:
+
+    // Return new filename with Suffix
+    // was:  /some/path/file.ext
+    // will: /some/path/file<suffix>.ext
+    // ---------------------------------
+    // suffix: "-demo"
+    // will: /some/path/file-demo.ext
+
+    func (fpi *FilePartsInfo) Suffix(suffix string) string
+
+
+Добавить префикс и суффикс к имени файла
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+На вход передается вышеуказанная структура и префикс и суффикс.
+префикс и Суффикс добавляется к имени файла - на выходе строка - полное имя с путем
+
+func (fpi *FilePartsInfo) PS(prefix, suffix string) string
+
+// Return new filename with Prefix and Suffix
+// was:  /some/path/file.ext
+// will: /some/path/<prefix>file<suffix>.ext
+// ---------------------------------
+// prefix: "demo-"
+// suffix: "-omed"
+// will: /some/path/demo-file-omed.ext
+
+
+Меняет расширение файла
+
+func (fpi *FilePartsInfo) NewExt(ext string) string
+
+// Return new filename with new extension
+// was:  /some/path/file.ext
+// will: /some/path/file<.newext>
+
+
+
+Новое расширение и добавить префикс
+
+func (fpi *FilePartsInfo) PrefixWithNewExt(prefix, ext string) string
+
+// Return new filename with new extension and prefix
+// was:  /some/path/file.ext
+// will: /some/path/<prefix>file<.newext>
+
+
+Новое расширение и добавить суффикс
+
+func (fpi *FilePartsInfo) SuffixWithNewExt(suffix, ext string) string
+
+// Return new filename with new extension and suffix
+// was:  /some/path/file.ext
+// will: /some/path/file<suffix><.newext>
+
+
+Новое расширение с префиксом и суффиксом
+
+func (fpi *FilePartsInfo) PSWithNewExt(prefix, suffix, ext string) string {
+
+// Return new filename with new extension and prefix and suffix
+// was:  /some/path/file.ext
+// will: /some/path/<prefix>file<suffix><.newext>
+
+
