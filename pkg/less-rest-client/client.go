@@ -353,7 +353,7 @@ func (c *Client) Request(
 			return
 		}
 
-		if rv.Kind() == reflect.Interface {
+		if rv.Kind() == reflect.Map {
 			rv.Set(reflect.ValueOf(resp.Header))
 		}
 
