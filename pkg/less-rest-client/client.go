@@ -169,6 +169,11 @@ func (c *Client) ErrorRawBody(contentType, rawBody string) string {
 	}
 }
 
+type ResponseWithHeaders struct {
+	Headers http.Header
+	OutData interface{}
+}
+
 func (c *Client) Request(
 	method, route string,
 	inData interface{},
@@ -343,18 +348,14 @@ func (c *Client) Request(
 
 	switch outData.(type) {
 	case nil:
-	case *http.Header:
+	case http.Header:
+		rh := reflect.ValueOf(resp.Header)
 		rv := reflect.ValueOf(outData)
-		if rv.Kind() != reflect.Ptr || rv.IsNil() {
-			err = &IsNotPointerError{
-				Name: "outData",
-			}
-
-			return
-		}
 
 		if rv.Kind() == reflect.Map {
-			rv.Set(reflect.ValueOf(resp.Header))
+			for _, k := range rh.MapKeys() {
+				rv.SetMapIndex(k, rh.MapIndex(k))
+			}
 		}
 
 	default:
