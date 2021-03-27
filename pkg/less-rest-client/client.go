@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"github.com/nobuenhombre/suikat/pkg/mimes"
@@ -342,6 +343,20 @@ func (c *Client) Request(
 
 	switch outData.(type) {
 	case nil:
+	case *http.Header:
+		rv := reflect.ValueOf(outData)
+		if rv.Kind() != reflect.Ptr || rv.IsNil() {
+			err = &IsNotPointerError{
+				Name: "outData",
+			}
+
+			return
+		}
+
+		if rv.Kind() == reflect.Interface {
+			rv.Set(reflect.ValueOf(resp.Header))
+		}
+
 	default:
 		err = json.Unmarshal(respBody, outData)
 		if err != nil {

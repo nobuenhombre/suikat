@@ -186,3 +186,14 @@ type BodyFormUrlencodedError struct {
 type BodyJSONError struct {
 	FormDataError
 }
+
+type IsNotPointerError struct {
+	Name string
+}
+
+func (e *IsNotPointerError) Error() string {
+	return fmt.Sprintf(
+		"var [%#v] is not pointer",
+		e.Name,
+	)
+}
