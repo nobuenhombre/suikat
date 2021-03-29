@@ -16,6 +16,15 @@ func FileExists(filename string) bool {
 	return !info.IsDir()
 }
 
+func DirExists(dirname string) bool {
+	info, err := os.Stat(dirname)
+	if os.IsNotExist(err) {
+		return false
+	}
+
+	return info.IsDir()
+}
+
 type DeleteFileError struct {
 	FileName string
 	Parent   error

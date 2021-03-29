@@ -23,6 +23,7 @@
    envar/index.rst
    fico/index.rst
    figlu/index.rst
+   fina/index.rst
    fitree/index.rst
    futi/index.rst
    ge/index.rst

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FUTI &mdash; SUIKAT 1.0 Documentation</title>
+  <title>FUTI - File Utils &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -37,8 +37,8 @@
     
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="GE" href="../ge/index.html" />
-    <link rel="prev" title="FITREE" href="../fitree/index.html" /> 
+    <link rel="next" title="GE - Global Errors" href="../ge/index.html" />
+    <link rel="prev" title="FITREE - Files Tree" href="../fitree/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,10 +101,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR - Сахаренные переменные окружения</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO - FIles COntent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FUTI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU - FIles GLUe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fina/index.html">FINA - File Names</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE - Files Tree</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FUTI - File Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE - Global Errors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
@@ -169,7 +170,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>FUTI</li>
+      <li>FUTI - File Utils</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,9 +189,52 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="futi">
-<h1>FUTI<a class="headerlink" href="#futi" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+  <div class="section" id="futi-file-utils">
+<h1>FUTI - File Utils<a class="headerlink" href="#futi-file-utils" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Функции для частых операций над файлами</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Существует ли файл (именно файл, не каталог)</span>
+  <span class="kd">func</span> <span class="nx">FileExists</span><span class="p">(</span><span class="nx">filename</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span>
+
+  <span class="c1">// Существует ли каталог</span>
+  <span class="kd">func</span> <span class="nx">DirExists</span><span class="p">(</span><span class="nx">dirname</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span>
+
+  <span class="c1">// Удалить файл или каталог</span>
+  <span class="kd">func</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">fileName</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span>
+
+  <span class="c1">// Создать временный файл в каталоге временных файлов если dir=&#39;&#39;</span>
+  <span class="c1">// или в конкретном каталоге dir,</span>
+  <span class="c1">// имя формируется по шаблону pattern - в нем символ * заменяется на случайный набор символов</span>
+  <span class="c1">// - например &quot;in-*.pdf&quot; создаст файл &quot;in-hdy8g8yg3ufc.pdf&quot;</span>
+  <span class="c1">// Записать в него данные data и вернуть имя файла</span>
+  <span class="kd">func</span> <span class="nx">CreateTempFile</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="nx">pattern</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">data</span> <span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+  <span class="c1">// скопировать файл из inFile в outFile</span>
+  <span class="kd">func</span> <span class="nx">Copy</span><span class="p">(</span><span class="nx">inFile</span><span class="p">,</span> <span class="nx">outFile</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span>
+
+  <span class="c1">// переместить файл из inFile в outFile</span>
+  <span class="kd">func</span> <span class="nx">Move</span><span class="p">(</span><span class="nx">inFile</span><span class="p">,</span> <span class="nx">outFile</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 
 
@@ -201,10 +245,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../ge/index.html" class="btn btn-neutral float-right" title="GE" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../ge/index.html" class="btn btn-neutral float-right" title="GE - Global Errors" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../fitree/index.html" class="btn btn-neutral float-left" title="FITREE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+        <a href="../fitree/index.html" class="btn btn-neutral float-left" title="FITREE - Files Tree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
       
     </div>
   

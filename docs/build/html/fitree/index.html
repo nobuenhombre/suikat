@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FITREE &mdash; SUIKAT 1.0 Documentation</title>
+  <title>FITREE - Files Tree &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -37,8 +37,8 @@
     
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="FUTI" href="../futi/index.html" />
-    <link rel="prev" title="FIGLU" href="../figlu/index.html" /> 
+    <link rel="next" title="FUTI - File Utils" href="../futi/index.html" />
+    <link rel="prev" title="FINA - File Names" href="../fina/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,10 +101,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR - Сахаренные переменные окружения</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO - FIles COntent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FITREE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU - FIles GLUe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fina/index.html">FINA - File Names</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FITREE - Files Tree</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Узел</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Список узлов</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI - File Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE - Global Errors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
@@ -169,7 +174,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>FITREE</li>
+      <li>FITREE - Files Tree</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,9 +193,87 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="fitree">
-<h1>FITREE<a class="headerlink" href="#fitree" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+  <div class="section" id="fitree-files-tree">
+<h1>FITREE - Files Tree<a class="headerlink" href="#fitree-files-tree" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Компонент предназначен для работы с файловыми деревьями.</p>
+<p>Для этого я завел две структуры</p>
+<ol class="arabic simple">
+<li><p>Узел или <code class="docutils literal notranslate"><span class="pre">TreeNodeStruct</span></code></p></li>
+<li><p>Список узлов или <code class="docutils literal notranslate"><span class="pre">TreeNodeListStruct</span></code></p></li>
+</ol>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Узел</span>
+  <span class="kd">type</span> <span class="nx">TreeNodeStruct</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Path</span>         <span class="kt">string</span>         <span class="c1">// Путь</span>
+    <span class="nx">Name</span>         <span class="kt">string</span>         <span class="c1">// Имя</span>
+    <span class="nx">Depth</span>        <span class="kt">int</span>            <span class="c1">// Глубина от корня</span>
+    <span class="nx">Files</span>        <span class="p">[]</span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span>  <span class="c1">// Список файлов в данном узле</span>
+    <span class="nx">FilesCount</span>   <span class="kt">int</span>            <span class="c1">// Число файлов</span>
+    <span class="nx">SubDirs</span>      <span class="p">[]</span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span>  <span class="c1">// Список подкаталогов</span>
+    <span class="nx">SubDirsCount</span> <span class="kt">int</span>            <span class="c1">// Число подкаталогов</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Список узлов</span>
+  <span class="kd">type</span> <span class="nx">TreeNodeListStruct</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">List</span>    <span class="p">[]</span><span class="nx">TreeNodeStruct</span>    <span class="c1">// Список узлов TreeNodeStruct</span>
+    <span class="nx">Reverse</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>      <span class="c1">// Обратный индекс для быстрых путешествий по дереву (подробнее см. ниже)</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="id1">
+<h2>Узел<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Узел имеет только один метод - Fill.</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">TreeNodeStruct</span><span class="p">)</span> <span class="nx">Fill</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">depth</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">error</span>
+</pre></div>
+</td></tr></table></div>
+<p>Здесь два входящих параметра</p>
+<ol class="arabic simple">
+<li><p>path - Путь</p></li>
+<li><p>depth - Стартовая Глубина (точка отсчета)</p></li>
+</ol>
+<p>например путь <code class="docutils literal notranslate"><span class="pre">&quot;/home/hello&quot;</span></code>
+и глубина - обозначим ее 0
+после исполнения будет заполнена указанная структура.
+соответственно можно узнать список файлов в данном каталоге, их количество, список вложенных каталогов и их количество.</p>
+</div>
+<div class="section" id="id2">
+<h2>Список узлов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Имеет уже три метода</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Добавляет в список новый Узел</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">Add</span><span class="p">(</span><span class="nx">node</span> <span class="nx">TreeNodeStruct</span><span class="p">)</span>
+
+  <span class="c1">// Получает Узел для указанного пути со стартовой глубиной</span>
+  <span class="c1">// и добавляет Узел в список</span>
+  <span class="c1">// Далее Получает узлы вложенных каталогов и так рекурсивно спускается до самого глубокого каталога.</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">Scan</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">depth</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">ignoreErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">error</span>
+
+  <span class="c1">// Возвращает Узел по его индексу</span>
+  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">GetNode</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">TreeNodeStruct</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -201,10 +284,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../futi/index.html" class="btn btn-neutral float-right" title="FUTI" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../futi/index.html" class="btn btn-neutral float-right" title="FUTI - File Utils" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../figlu/index.html" class="btn btn-neutral float-left" title="FIGLU" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+        <a href="../fina/index.html" class="btn btn-neutral float-left" title="FINA - File Names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
       
     </div>
   

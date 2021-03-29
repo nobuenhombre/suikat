@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GE &mdash; SUIKAT 1.0 Documentation</title>
+  <title>GE - Global Errors &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -38,7 +38,7 @@
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
     <link rel="next" title="HASH" href="../hash/index.html" />
-    <link rel="prev" title="FUTI" href="../futi/index.html" /> 
+    <link rel="prev" title="FUTI - File Utils" href="../futi/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,10 +101,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR - Сахаренные переменные окружения</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO - FIles COntent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">GE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU - FIles GLUe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fina/index.html">FINA - File Names</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE - Files Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI - File Utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GE - Global Errors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Путь к ошибке</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Ошибка</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Примеры использования</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
@@ -169,7 +175,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>GE</li>
+      <li>GE - Global Errors</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,9 +194,118 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ge">
-<h1>GE<a class="headerlink" href="#ge" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+  <div class="section" id="ge-global-errors">
+<h1>GE - Global Errors<a class="headerlink" href="#ge-global-errors" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Ошибки - у меня было несколько модификаций этого модуля.
+Хотелось по ошибке быстро находить место в программе.
+Хотелось чтобы ошибка содержала достаточно информации о том что произошло и с какими данными.</p>
+<p>И вот оно получилось наконец.</p>
+<div class="section" id="id1">
+<h2>Путь к ошибке<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Чтобы понимать, где произошла ошибка - я сделал вот такую структуру</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">type</span> <span class="nx">Way</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Package</span> <span class="kt">string</span> <span class="c1">// Имя Пакета</span>
+    <span class="nx">Caller</span>  <span class="kt">string</span> <span class="c1">// Функция внутри которой произошла ошибка</span>
+    <span class="nx">File</span>    <span class="kt">string</span> <span class="c1">// Имя файла - ибо в пакете может быть несколько файлов</span>
+    <span class="nx">Line</span>    <span class="kt">int</span>    <span class="c1">// Номер строки на которой произошла ошибка</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Теперь нужно заполнить эту структуру.</p>
+<p>для этого я написал внутреннюю функцию модуля - снаружи она недоступна</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="nx">getWay</span><span class="p">()</span> <span class="o">*</span><span class="nx">Way</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id2">
+<h2>Ошибка<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Итак наша ошибка определена как IdentityError</p>
+<p>Хотелось</p>
+<ol class="arabic simple">
+<li><p>Прокидывать родительскую ошибку - для этого завел поле <code class="docutils literal notranslate"><span class="pre">Parent</span> <span class="pre">error</span></code></p></li>
+<li><p>Проверять ошибку методом errors.Is() - для этого завел метод <code class="docutils literal notranslate"><span class="pre">func</span> <span class="pre">(e</span> <span class="pre">*IdentityError)</span> <span class="pre">Unwrap(err</span> <span class="pre">error)</span> <span class="pre">error</span></code></p></li>
+<li><p>Иметь <code class="docutils literal notranslate"><span class="pre">Путь</span> <span class="pre">ошибки</span></code> - Завел поле Way</p></li>
+<li><p>Знать значения переменных которые могли привести к ошибке - завел тип <code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">Params</span> <span class="pre">map[string]interface{}</span></code></p></li>
+</ol>
+<p>И в итоге придумал две функции</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Возвращает новую ошибку IdentityError содержащую текст message и Путь Way</span>
+  <span class="c1">// При желании можно добавить список значений переменных</span>
+  <span class="kd">func</span> <span class="nx">New</span><span class="p">(</span><span class="nx">message</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">params</span> <span class="o">...</span><span class="nx">Params</span><span class="p">)</span> <span class="kt">error</span>
+
+  <span class="c1">// Возвращает новую ошибку IdentityError содержащую ссылку на родительскую ошибку и Путь Way</span>
+  <span class="c1">// При желании можно добавить список значений переменных</span>
+  <span class="kd">func</span> <span class="nx">Pin</span><span class="p">(</span><span class="nx">parent</span> <span class="kt">error</span><span class="p">,</span> <span class="nx">params</span> <span class="o">...</span><span class="nx">Params</span><span class="p">)</span> <span class="kt">error</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id3">
+<h2>Примеры использования<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">err</span> <span class="o">:=</span> <span class="nx">SomeCode</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;some code was error&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">err</span> <span class="o">:=</span> <span class="nx">SomeCode</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;some code was error&quot;</span><span class="p">,</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span> <span class="nx">a</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">:</span> <span class="nx">b</span><span class="p">})</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">err</span> <span class="o">:=</span> <span class="nx">SomeCode</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Pin</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">err</span> <span class="o">:=</span> <span class="nx">SomeCode</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Pin</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">YourCustomError</span><span class="p">{})</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">err</span> <span class="o">:=</span> <span class="nx">SomeCode</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Pin</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span> <span class="nx">a</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">:</span> <span class="nx">b</span><span class="p">})</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="nx">err</span> <span class="o">:=</span> <span class="nx">SomeCode</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Pin</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">YourCustomError</span><span class="p">{},</span> <span class="nx">ge</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">:</span> <span class="nx">a</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">:</span> <span class="nx">b</span><span class="p">})</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -204,7 +319,7 @@
         <a href="../hash/index.html" class="btn btn-neutral float-right" title="HASH" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../futi/index.html" class="btn btn-neutral float-left" title="FUTI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
+        <a href="../futi/index.html" class="btn btn-neutral float-left" title="FUTI - File Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
       
     </div>
   

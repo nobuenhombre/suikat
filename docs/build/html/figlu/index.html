@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FIGLU &mdash; SUIKAT 1.0 Documentation</title>
+  <title>FIGLU - FIles GLUe &mdash; SUIKAT 1.0 Documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
     <link rel="search" title="Поиск" href="../search.html" />
-    <link rel="next" title="FITREE" href="../fitree/index.html" />
+    <link rel="next" title="FINA - File Names" href="../fina/index.html" />
     <link rel="prev" title="FICO - FIles COntent" href="../fico/index.html" /> 
 </head>
 
@@ -101,10 +101,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR - Сахаренные переменные окружения</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO - FIles COntent</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FIGLU</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FIGLU - FIles GLUe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fina/index.html">FINA - File Names</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE - Files Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI - File Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE - Global Errors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
@@ -169,7 +170,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>FIGLU</li>
+      <li>FIGLU - FIles GLUe</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,9 +189,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="figlu">
-<h1>FIGLU<a class="headerlink" href="#figlu" title="Ссылка на этот заголовок">¶</a></h1>
-<p>&#64;todo - написать документацию</p>
+  <div class="section" id="figlu-files-glue">
+<h1>FIGLU - FIles GLUe<a class="headerlink" href="#figlu-files-glue" title="Ссылка на этот заголовок">¶</a></h1>
+<p>функции для склеивания содержимого нескольких файлов в один</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">path</span> <span class="o">*</span><span class="nx">Path</span><span class="p">)</span> <span class="nx">GlueContent</span><span class="p">(</span><span class="nx">onlyExt</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">ignoreScanErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>сканирует путь, получает список файлов
+если указано расширение, т.е. len(onlyExt) &gt; 0 то читаются только файлы с указанным расширением
+их контент в виде строк склеивается в одну строку которую и возвращает данная функция.
+для одного пути с одним корнем.</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">path</span> <span class="o">*</span><span class="nx">Path</span><span class="p">)</span> <span class="nx">Glue</span><span class="p">(</span><span class="nx">outFile</span> <span class="nx">fico</span><span class="p">.</span><span class="nx">TxtFile</span><span class="p">,</span> <span class="nx">onlyExt</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">ignoreScanErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">error</span>
+</pre></div>
+</td></tr></table></div>
+<p>сканирует путь, получает список файлов
+если указано расширение, т.е. len(onlyExt) &gt; 0 то читаются только файлы с указанным расширением
+их контент в виде строк склеивается в одну строку которая записывается в файл outFile.</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">pathList</span> <span class="o">*</span><span class="nx">PathList</span><span class="p">)</span> <span class="nx">GlueContent</span><span class="p">(</span><span class="nx">onlyExt</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">ignoreScanErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>обходит список путей pathList в цикле и делает для каждого пути GlueContent.
+а потом все результаты склеивает и возвращает строкой. Для путей с разными корнями.</p>
+<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">pathList</span> <span class="o">*</span><span class="nx">PathList</span><span class="p">)</span> <span class="nx">Glue</span><span class="p">(</span><span class="nx">outFile</span> <span class="nx">fico</span><span class="p">.</span><span class="nx">TxtFile</span><span class="p">,</span> <span class="nx">onlyExt</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">ignoreScanErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">error</span>
+</pre></div>
+</td></tr></table></div>
+<p>обходит список путей pathList в цикле и делает для каждого пути GlueContent.
+а потом все результаты склеивает и возвращает строку которая записывается в файл outFile.</p>
 </div>
 
 
@@ -201,7 +225,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../fitree/index.html" class="btn btn-neutral float-right" title="FITREE" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../fina/index.html" class="btn btn-neutral float-right" title="FINA - File Names" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../fico/index.html" class="btn btn-neutral float-left" title="FICO - FIles COntent" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
