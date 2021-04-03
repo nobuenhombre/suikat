@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -61,6 +62,17 @@ func (f *TxtFile) Write(content string) error {
 	}
 
 	return nil
+}
+
+func (f *TxtFile) WriteJSON(content interface{}) error {
+	outBytes, err := json.Marshal(content)
+	if err != nil {
+		return err
+	}
+
+	fileContent := string(outBytes)
+
+	return f.Write(fileContent)
 }
 
 func (f *TxtFile) WriteGZ(content string) error {
