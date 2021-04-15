@@ -32,6 +32,18 @@ const (
 	MonthInYear     = 12
 )
 
+func GetMoscowLocation() *time.Location {
+	location, _ := time.LoadLocation("Europe/Moscow")
+
+	return location
+}
+
+func GetSamaraLocation() *time.Location {
+	location, _ := time.LoadLocation("Europe/Samara")
+
+	return location
+}
+
 func (dd *DateTimeDiff) InSeconds() int64 {
 	out := int64(0)
 	out += int64(dd.Sec)
