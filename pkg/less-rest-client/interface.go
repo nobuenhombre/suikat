@@ -42,4 +42,6 @@ type LRC interface {
 		outData interface{},
 		expectedStatusCode int,
 	) (statusCode int, respBody []byte, err error)
+
+	GetLastRequestDebugInfo() (string, error)
 }

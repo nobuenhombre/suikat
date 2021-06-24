@@ -14,6 +14,8 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/nobuenhombre/suikat/pkg/ge"
+
 	"github.com/nobuenhombre/suikat/pkg/mimes"
 
 	"github.com/gorilla/schema"
@@ -28,6 +30,14 @@ const (
 	AuthTypeEDS
 )
 
+type DebugInfo struct {
+	URL          string
+	Method       string
+	Headers      http.Header
+	RequestBody  string
+	ResponseBody string
+}
+
 type Client struct {
 	URL               string
 	ContentType       string
@@ -41,6 +51,7 @@ type Client struct {
 	SignKeyID         string
 	SignBody          string
 	additionalHeaders map[string]string
+	debugInfo         *DebugInfo
 }
 
 func New(c *Client) LRC {
@@ -185,9 +196,14 @@ func (c *Client) Request(
 		reqRawBody string
 	)
 
+	c.debugInfo = &DebugInfo{}
+
 	addHeader := make(map[string]string)
 
 	URL := c.URL + route
+
+	c.debugInfo.URL = URL
+	c.debugInfo.Method = method
 
 	switch inData.(type) {
 	case nil:
@@ -301,6 +317,9 @@ func (c *Client) Request(
 		return
 	}
 
+	c.debugInfo.Headers = req.Header
+	c.debugInfo.RequestBody = reqRawBody
+
 	client := &http.Client{}
 
 	resp, err := client.Do(req)
@@ -332,6 +351,7 @@ func (c *Client) Request(
 	}
 
 	respRawBody := string(respBody)
+	c.debugInfo.ResponseBody = respRawBody
 
 	if statusCode != expectedStatusCode {
 		err = &WrongStatusCodeError{
@@ -373,6 +393,15 @@ func (c *Client) Request(
 	}
 
 	return
+}
+
+func (c *Client) GetLastRequestDebugInfo() (string, error) {
+	jsonBytes, err := json.Marshal(c.debugInfo)
+	if err != nil {
+		return "", ge.Pin(err, ge.Params{"debugInfo": c.debugInfo})
+	}
+
+	return string(jsonBytes), nil
 }
 
 func (c *Client) POST(
