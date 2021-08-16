@@ -55,6 +55,7 @@ deps:
 	rm -f go.sum
 	go mod init $(PROJECT_NAME)
 	go get -u ./...
+	go mod tidy
 
 ## fmt: Автоформатирование
 fmt:

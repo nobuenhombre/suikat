@@ -58,6 +58,7 @@ var applyRuleTests = []applyRuleTest{
 				Way: &ge.Way{
 					Package: "github.com/nobuenhombre/suikat/pkg/replacer",
 					Caller:  "ApplyRule()",
+					File:    "replacer.go",
 					Line:    42,
 				},
 			},
