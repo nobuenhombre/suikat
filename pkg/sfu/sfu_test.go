@@ -1,9 +1,11 @@
 package sfu
 
 import (
+	"github.com/nobuenhombre/suikat/pkg/refavour"
 	"net/url"
 	"reflect"
 	"testing"
+	"time"
 )
 
 // Prepared Data
@@ -89,15 +91,19 @@ func GetFormC() *url.Values {
 // FormD
 //-------------------------------
 type Tunnel struct {
-	IPFrom string `form:"ipFrom"`
-	IPTo   string `form:"ipTo"`
+	IPFrom  string `form:"ipFrom"`
+	IPTo    string `form:"ipTo"`
+	Encoded bool   `form:"encoded"`
 }
 
 type FormD struct {
-	ID      int64    `form:"id"`
-	Name    string   `form:"name"`
-	Robots  []string `form:"robots"`
-	Tunnels []Tunnel `form:"tunnels"`
+	ID       int64     `form:"id"`
+	Name     string    `form:"name"`
+	Robots   []string  `form:"robots"`
+	Timeouts []int64   `form:"timeouts"`
+	Sizes    []float64 `form:"sizes"`
+	Allows   []bool    `form:"allows"`
+	Tunnels  []Tunnel  `form:"tunnels"`
 }
 
 func GetFormD() *url.Values {
@@ -107,12 +113,59 @@ func GetFormD() *url.Values {
 	form.Add("robots[0]", "Mail.ru")
 	form.Add("robots[1]", "Yandex-Bot")
 	form.Add("robots[2]", "Google-Bot")
+	form.Add("timeouts[0]", "234")
+	form.Add("timeouts[1]", "567")
+	form.Add("sizes[0]", "12.3")
+	form.Add("sizes[1]", "45.6")
+	form.Add("sizes[2]", "78.9")
+	form.Add("allows[0]", "true")
+	form.Add("allows[1]", "false")
+	form.Add("allows[2]", "false")
+	form.Add("allows[3]", "true")
 	form.Add("tunnels[0][ipFrom]", "97.34.177.231")
 	form.Add("tunnels[0][ipTo]", "97.34.199.231")
+	form.Add("tunnels[0][encoded]", "true")
 	form.Add("tunnels[1][ipFrom]", "227.34.177.231")
 	form.Add("tunnels[1][ipTo]", "327.34.177.231")
+	form.Add("tunnels[1][encoded]", "false")
 
 	return form
+}
+
+type FormErrA struct {
+	Unknown time.Time `form:"unknown"`
+}
+
+func GetFormErrA() *url.Values {
+	return &url.Values{}
+}
+
+type FormErrB struct {
+	Unknown byte `form:"unknown"`
+}
+
+func GetFormErrB() *url.Values {
+	return &url.Values{}
+}
+
+type FormErrC struct {
+	Unknown []byte `form:"unknown"`
+}
+
+func GetFormErrC() *url.Values {
+	return &url.Values{}
+}
+
+type FormErrD struct {
+	Unknown []FormErrA `form:"unknown"`
+}
+
+func GetFormErrD() *url.Values {
+	return &url.Values{}
+}
+
+func GetFormErrF() *url.Values {
+	return &url.Values{}
 }
 
 // Tests
@@ -181,20 +234,92 @@ var convertTests = []convertTest{
 				"Yandex-Bot",
 				"Google-Bot",
 			},
+			Timeouts: []int64{
+				234,
+				567,
+			},
+			Sizes: []float64{
+				12.3,
+				45.6,
+				78.9,
+			},
+			Allows: []bool{
+				true,
+				false,
+				false,
+				true,
+			},
 			Tunnels: []Tunnel{
 				{
-					IPFrom: "97.34.177.231",
-					IPTo:   "97.34.199.231",
+					IPFrom:  "97.34.177.231",
+					IPTo:    "97.34.199.231",
+					Encoded: true,
 				},
 				{
-					IPFrom: "227.34.177.231",
-					IPTo:   "327.34.177.231",
+					IPFrom:  "227.34.177.231",
+					IPTo:    "327.34.177.231",
+					Encoded: false,
 				},
 			},
 		},
 		parent: "",
 		form:   GetFormD(),
 		err:    nil,
+	},
+	{
+		structData: &FormErrA{
+			Unknown: time.Now(),
+		},
+		parent: "",
+		form:   GetFormErrA(),
+		err: &PrivateStructFieldError{
+			Name: "time.Time",
+		},
+	},
+	{
+		structData: &FormErrB{
+			Unknown: 15,
+		},
+		parent: "",
+		form:   GetFormErrB(),
+		err:    &UnknownTypeError{Type: "uint8"},
+	},
+	{
+		structData: &FormErrC{
+			Unknown: []byte{1, 2, 3},
+		},
+		parent: "",
+		form:   GetFormErrC(),
+		err:    &UnknownTypeError{Type: "uint8"},
+	},
+	{
+		structData: &FormErrD{
+			Unknown: []FormErrA{
+				{
+					Unknown: time.Now(),
+				},
+			},
+		},
+		parent: "",
+		form:   GetFormErrD(),
+		err: &PrivateStructFieldError{
+			Name: "time.Time",
+		},
+	},
+	{
+		structData: 123,
+		parent:     "",
+		form:       GetFormErrF(),
+		err:        &refavour.KindNotMatchedError{Expected: "struct", Actual: "int"},
+	},
+	{
+		structData: FormA{
+			ID:   12,
+			Name: "Hello World 12",
+		},
+		parent: "",
+		form:   GetFormErrF(),
+		err:    &refavour.CantBeSetError{},
 	},
 }
 

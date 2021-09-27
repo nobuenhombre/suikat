@@ -12,8 +12,9 @@ type inputParams struct {
 }
 
 type datesDiffTest struct {
-	in  inputParams
-	out *DateTimeDiff
+	in    inputParams
+	out   *DateTimeDiff
+	inSec int64
 }
 
 var datesDiffTests = []datesDiffTest{
@@ -73,6 +74,48 @@ var datesDiffTests = []datesDiffTest{
 			Sec:   0,
 		},
 	},
+	{
+		in: inputParams{
+			DateA: time.Date(2016, 2, 11, 0, 0, 0, 0, time.UTC),
+			DateB: time.Date(2016, 1, 12, 0, 0, 0, 0, time.UTC),
+		},
+		out: &DateTimeDiff{
+			Year:  0,
+			Month: 0,
+			Day:   30,
+			Hour:  0,
+			Min:   0,
+			Sec:   0,
+		},
+	},
+	{
+		in: inputParams{
+			DateA: time.Date(2016, 2, 11, 0, 0, 0, 0, time.UTC),
+			DateB: time.Date(2016, 1, 12, 0, 0, 0, 0, GetMoscowLocation()),
+		},
+		out: &DateTimeDiff{
+			Year:  0,
+			Month: 0,
+			Day:   30,
+			Hour:  3,
+			Min:   0,
+			Sec:   0,
+		},
+	},
+	{
+		in: inputParams{
+			DateA: time.Date(2016, 2, 11, 0, 0, 0, 0, time.UTC),
+			DateB: time.Date(2016, 1, 12, 0, 7, 5, 0, GetSamaraLocation()),
+		},
+		out: &DateTimeDiff{
+			Year:  0,
+			Month: 0,
+			Day:   30,
+			Hour:  3,
+			Min:   52,
+			Sec:   55,
+		},
+	},
 }
 
 func TestDiff(t *testing.T) {
@@ -110,5 +153,168 @@ func TestGetUTC(t *testing.T) {
 			"Expected %#v,\n Actual %#v",
 			nowUTC2UTCLocale, nowUTCLocale,
 		)
+	}
+}
+
+type convertDateTest struct {
+	in  time.Time
+	out time.Time
+}
+
+var beginOfDayTests = []convertDateTest{
+	{
+		in:  time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		out: time.Date(2015, 5, 1, 0, 0, 0, 0, time.UTC),
+	},
+}
+
+func TestBeginOfDay(t *testing.T) {
+	for i := 0; i < len(beginOfDayTests); i++ {
+		test := &beginOfDayTests[i]
+		out := BeginOfDay(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"BeginOfDay(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+var beginOfPrevDayTests = []convertDateTest{
+	{
+		in:  time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		out: time.Date(2015, 4, 30, 0, 0, 0, 0, time.UTC),
+	},
+}
+
+func TestBeginOfPrevDay(t *testing.T) {
+	for i := 0; i < len(beginOfPrevDayTests); i++ {
+		test := &beginOfPrevDayTests[i]
+		out := BeginOfPrevDay(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"BeginOfPrevDay(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+var beginOfNextDayTests = []convertDateTest{
+	{
+		in:  time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		out: time.Date(2015, 5, 2, 0, 0, 0, 0, time.UTC),
+	},
+}
+
+func TestBeginOfNextDay(t *testing.T) {
+	for i := 0; i < len(beginOfNextDayTests); i++ {
+		test := &beginOfNextDayTests[i]
+		out := BeginOfNextDay(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"BeginOfNextDay(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+var beginOfPrevWeekTests = []convertDateTest{
+	{
+		in:  time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		out: time.Date(2015, 4, 24, 0, 0, 0, 0, time.UTC),
+	},
+}
+
+func TestBeginOfPrevWeek(t *testing.T) {
+	for i := 0; i < len(beginOfPrevWeekTests); i++ {
+		test := &beginOfPrevWeekTests[i]
+		out := BeginOfPrevWeek(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"BeginOfPrevWeek(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+var beginOfNextWeekTests = []convertDateTest{
+	{
+		in:  time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		out: time.Date(2015, 5, 8, 0, 0, 0, 0, time.UTC),
+	},
+}
+
+func TestBeginOfNextWeek(t *testing.T) {
+	for i := 0; i < len(beginOfNextWeekTests); i++ {
+		test := &beginOfNextWeekTests[i]
+		out := BeginOfNextWeek(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"BeginOfNextWeek(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+type shiftDateTest struct {
+	in      time.Time
+	period  int64
+	measure time.Duration
+	out     time.Time
+}
+
+var beforePeriodTests = []shiftDateTest{
+	{
+		in:      time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		period:  10,
+		measure: time.Minute,
+		out:     time.Date(2015, 5, 1, 16, 35, 12, 87, time.UTC),
+	},
+}
+
+func TestBeforePeriod(t *testing.T) {
+	for i := 0; i < len(beforePeriodTests); i++ {
+		test := &beforePeriodTests[i]
+		out := BeforePeriod(test.in, test.period, test.measure)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"BeforePeriod(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}
+
+var afterPeriodTests = []shiftDateTest{
+	{
+		in:      time.Date(2015, 5, 1, 16, 45, 12, 87, time.UTC),
+		period:  10,
+		measure: time.Minute,
+		out:     time.Date(2015, 5, 1, 16, 55, 12, 87, time.UTC),
+	},
+}
+
+func TestAfterPeriod(t *testing.T) {
+	for i := 0; i < len(afterPeriodTests); i++ {
+		test := &afterPeriodTests[i]
+		out := AfterPeriod(test.in, test.period, test.measure)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"AfterPeriod(%#v), Expected %#v, Actual %#v",
+				test.in, test.out, out,
+			)
+		}
 	}
 }

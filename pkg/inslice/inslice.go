@@ -91,15 +91,23 @@ func Float64(a float64, list *[]float64) bool {
 
 func IsIndexExists(index int, list interface{}) bool {
 	s := reflect.ValueOf(list)
+
 	if s.Kind() != reflect.Slice {
 		return false
 	}
 
-	if s.IsNil() {
-		return false
+	return index >= 0 && index < s.Len()
+}
+
+func CheckIndex(index int, list interface{}) error {
+	exists := IsIndexExists(index, list)
+	if !exists {
+		return &IndexNotExistsError{
+			Index: index,
+		}
 	}
 
-	return index >= 0 && index < s.Len()
+	return nil
 }
 
 type IndexNotExistsError struct {

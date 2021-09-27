@@ -325,3 +325,31 @@ func TestNormalizeAlphabet(t *testing.T) {
 		}
 	}
 }
+
+// TranslitRusLat Test
+//===================================================
+type TranslitRusLatTest struct {
+	in  string
+	out string
+}
+
+var TranslitRusLatTests = []TranslitRusLatTest{
+	{
+		in:  "Привет Ромашки, Кидайте деньги. Читайте книжки. Дурной мальчишка. Ушёл. Такая фишка. Нелепый мальчишка.",
+		out: "Privet Romashki, Kidayte dengi. CHitayte knizhki. Durnoy malchishka. Ushyol. Takaya fishka. Nelepyy malchishka.",
+	},
+}
+
+func TestTranslitRusLat(t *testing.T) {
+	for i := 0; i < len(TranslitRusLatTests); i++ {
+		test := &TranslitRusLatTests[i]
+		out := TranslitRusLat(test.in)
+
+		if !reflect.DeepEqual(out, test.out) {
+			t.Errorf(
+				"TranslitRusLat(%v)\n, Expected %v\n, Actual %v",
+				test.in, test.out, out,
+			)
+		}
+	}
+}

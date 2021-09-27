@@ -41,33 +41,42 @@ func Convert(structData interface{}, parent string, form *url.Values) (err error
 			n = fmt.Sprintf("%v[%v]", parent, fieldInfo.(*FieldInfo).Name)
 		}
 
+		value := fieldInfo.(*FieldInfo).Value
+
+		if !value.CanInterface() {
+			structValue := refavour.GetReflectValue(structData)
+			return &PrivateStructFieldError{
+				Name: structValue.Type().String(),
+			}
+		}
+
 		switch t {
 		case "string":
-			v := fieldInfo.(*FieldInfo).Value.String()
+			v := value.String()
 			form.Add(n, v)
 
 		case "int64":
-			vi := fieldInfo.(*FieldInfo).Value.Int()
+			vi := value.Int()
 			v := fmt.Sprintf("%v", vi)
 			form.Add(n, v)
 
 		case "float64":
-			vf := fieldInfo.(*FieldInfo).Value.Float()
+			vf := value.Float()
 			v := fmt.Sprintf("%v", vf)
 			form.Add(n, v)
 
 		case "bool":
-			vb := fieldInfo.(*FieldInfo).Value.Bool()
+			vb := value.Bool()
 			v := fmt.Sprintf("%v", vb)
 			form.Add(n, v)
 
 		default:
-			value := fieldInfo.(*FieldInfo).Value
 			kind := value.Kind()
-			data := value.Addr().Interface()
 
 			switch kind {
 			case reflect.Struct:
+				data := value.Addr().Interface()
+
 				err := Convert(data, n, form)
 				if err != nil {
 					return err
@@ -101,10 +110,11 @@ func Convert(structData interface{}, parent string, form *url.Values) (err error
 
 					default:
 						slKind := sliceItem.Kind()
-						slData := sliceItem.Addr().Interface()
 
 						switch slKind {
 						case reflect.Struct:
+							slData := sliceItem.Addr().Interface()
+
 							err := Convert(slData, name, form)
 							if err != nil {
 								return err

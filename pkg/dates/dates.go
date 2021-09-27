@@ -5,8 +5,11 @@ import "time"
 const (
 	DateFormatDashYYYYMMDD           = "2006-01-02"
 	DateFormatPointDDMMYYYY          = "02.01.2006"
+	DateFormatDashDDMMYYYY           = "02-01-2006"
 	DateTimeFormatDashYYYYMMDDHHmmss = "2006-01-02 15:04:05"
 	DateTimeFormat1C                 = "2006-01-02T15:04:05"
+	DateTimeFormatQiwi               = "02012006 15:04:05"
+	DateFormatYYYYMMDD               = "20060102"
 )
 
 const (
@@ -32,6 +35,15 @@ const (
 	MonthInYear     = 12
 )
 
+// Timezones
+// -------------------------------------------------------------------------------
+// Для того что-бы тайм-зоны работали, необходимо скачать файл zoneinfo.zip
+// и поместить путь к файлу в переменную окружения ZONEINFO
+// -------------------------------------------------------------------------------
+// ADD https://github.com/golang/go/raw/master/lib/time/zoneinfo.zip /zoneinfo.zip
+// ENV ZONEINFO /zoneinfo.zip
+// -------------------------------------------------------------------------------
+
 func GetMoscowLocation() *time.Location {
 	location, _ := time.LoadLocation("Europe/Moscow")
 
@@ -42,16 +54,6 @@ func GetSamaraLocation() *time.Location {
 	location, _ := time.LoadLocation("Europe/Samara")
 
 	return location
-}
-
-func (dd *DateTimeDiff) InSeconds() int64 {
-	out := int64(0)
-	out += int64(dd.Sec)
-	out += int64(dd.Min * SecondsInMinute)
-	out += int64(dd.Hour * MinutesInHour * SecondsInMinute)
-	out += int64(dd.Day * HourInDay * MinutesInHour * SecondsInMinute)
-
-	return out
 }
 
 func Diff(a, b time.Time) *DateTimeDiff {

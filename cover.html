@@ -1,117 +1,510 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-        body {
-            background: black;
-            color: rgb(80, 80, 80);
-        }
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>chunks: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
 
-        body, pre, #legend span {
-            font-family: Menlo, monospace;
-            font-weight: bold;
-        }
-
-        #topbar {
-            background: black;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 42px;
-            border-bottom: 1px solid rgb(80, 80, 80);
-        }
-
-        #content {
-            margin-top: 50px;
-        }
-
-        #nav, #legend {
-            float: left;
-            margin-left: 10px;
-        }
-
-        #legend {
-            margin-top: 12px;
-        }
-
-        #nav {
-            margin-top: 10px;
-        }
-
-        #legend span {
-            margin: 0 5px;
-        }
-
-        .cov0 {
-            color: rgb(192, 0, 0)
-        }
-
-        .cov1 {
-            color: rgb(128, 128, 128)
-        }
-
-        .cov2 {
-            color: rgb(116, 140, 131)
-        }
-
-        .cov3 {
-            color: rgb(104, 152, 134)
-        }
-
-        .cov4 {
-            color: rgb(92, 164, 137)
-        }
-
-        .cov5 {
-            color: rgb(80, 176, 140)
-        }
-
-        .cov6 {
-            color: rgb(68, 188, 143)
-        }
-
-        .cov7 {
-            color: rgb(56, 200, 146)
-        }
-
-        .cov8 {
-            color: rgb(44, 212, 149)
-        }
-
-        .cov9 {
-            color: rgb(32, 224, 152)
-        }
-
-        .cov10 {
-            color: rgb(20, 236, 155)
-        }
-
-    </style>
-</head>
-<body>
-<div id="topbar">
-    <div id="nav">
-        <select id="files">
-
-            <option value="file0">github.com/nobuenhombre/suikat/pkg/inslice/inslice.go (100.0%)</option>
-
-            <option value="file1">github.com/nobuenhombre/suikat/pkg/webula/webula.go (100.0%)</option>
-
-        </select>
-    </div>
-    <div id="legend">
-        <span>not tracked</span>
-
-        <span class="cov0">not covered</span>
-        <span class="cov8">covered</span>
-
-    </div>
-</div>
-<div id="content">
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/nobuenhombre/suikat/pkg/chunks/chunks.go (100.0%)</option>
+				
+				<option value="file1">github.com/nobuenhombre/suikat/pkg/dates/dates.go (100.0%)</option>
+				
+				<option value="file2">github.com/nobuenhombre/suikat/pkg/ge/ge.deprecated.go (0.0%)</option>
+				
+				<option value="file3">github.com/nobuenhombre/suikat/pkg/ge/ge.go (13.6%)</option>
+				
+				<option value="file4">github.com/nobuenhombre/suikat/pkg/ge/params.go (0.0%)</option>
+				
+				<option value="file5">github.com/nobuenhombre/suikat/pkg/ge/specific.go (0.0%)</option>
+				
+				<option value="file6">github.com/nobuenhombre/suikat/pkg/ge/way.go (81.5%)</option>
+				
+				<option value="file7">github.com/nobuenhombre/suikat/pkg/inslice/inslice.go (100.0%)</option>
+				
+				<option value="file8">github.com/nobuenhombre/suikat/pkg/replacer/data.go (100.0%)</option>
+				
+				<option value="file9">github.com/nobuenhombre/suikat/pkg/replacer/replacer.go (88.0%)</option>
+				
+				<option value="file10">github.com/nobuenhombre/suikat/pkg/sfu/sfu.errors.go (0.0%)</option>
+				
+				<option value="file11">github.com/nobuenhombre/suikat/pkg/sfu/sfu.go (98.4%)</option>
+				
+				<option value="file12">github.com/nobuenhombre/suikat/pkg/sfu/sfu.tag-processor.go (100.0%)</option>
+				
+				<option value="file13">github.com/nobuenhombre/suikat/pkg/webula/webula.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package inslice
+		<pre class="file" id="file0" style="display: none">package chunks
+
+func Split(in []int64, limit int) [][]int64 <span class="cov8" title="1">{
+        var chunk []int64
+
+        chunks := make([][]int64, 0, len(in)/limit+1)
+
+        for len(in) &gt;= limit </span><span class="cov8" title="1">{
+                chunk, in = in[:limit], in[limit:]
+                chunks = append(chunks, chunk)
+        }</span>
+
+        <span class="cov8" title="1">if len(in) &gt; 0 </span><span class="cov8" title="1">{
+                chunks = append(chunks, in)
+        }</span>
+
+        <span class="cov8" title="1">return chunks</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package dates
+
+import "time"
+
+const (
+        DateFormatDashYYYYMMDD           = "2006-01-02"
+        DateFormatPointDDMMYYYY          = "02.01.2006"
+        DateTimeFormatDashYYYYMMDDHHmmss = "2006-01-02 15:04:05"
+        DateTimeFormat1C                 = "2006-01-02T15:04:05"
+)
+
+const (
+        WeekDays  = 7
+        MonthDays = 31
+        YearDays  = 365
+)
+
+type DateTimeDiff struct {
+        Year  int
+        Month int
+        Day   int
+        Hour  int
+        Min   int
+        Sec   int
+}
+
+const (
+        SecondsInMinute = 60
+        MinutesInHour   = 60
+        HourInDay       = 24
+        daysInMonth     = 32
+        MonthInYear     = 12
+)
+
+// Timezones
+// -------------------------------------------------------------------------------
+// Для того что-бы тайм-зоны работали, необходимо скачать файл zoneinfo.zip
+// и поместить путь к файлу в переменную окружения ZONEINFO
+// -------------------------------------------------------------------------------
+// ADD https://github.com/golang/go/raw/master/lib/time/zoneinfo.zip /zoneinfo.zip
+// ENV ZONEINFO /zoneinfo.zip
+// -------------------------------------------------------------------------------
+
+func GetMoscowLocation() *time.Location <span class="cov8" title="1">{
+        location, _ := time.LoadLocation("Europe/Moscow")
+
+        return location
+}</span>
+
+func GetSamaraLocation() *time.Location <span class="cov8" title="1">{
+        location, _ := time.LoadLocation("Europe/Samara")
+
+        return location
+}</span>
+
+func Diff(a, b time.Time) *DateTimeDiff <span class="cov8" title="1">{
+        if a.Location() != b.Location() </span><span class="cov8" title="1">{
+                b = b.In(a.Location())
+        }</span>
+
+        <span class="cov8" title="1">if a.After(b) </span><span class="cov8" title="1">{
+                a, b = b, a
+        }</span>
+
+        <span class="cov8" title="1">y1, M1, d1 := a.Date()
+        y2, M2, d2 := b.Date()
+
+        h1, m1, s1 := a.Clock()
+        h2, m2, s2 := b.Clock()
+
+        year := y2 - y1
+        month := int(M2 - M1)
+        day := d2 - d1
+        hour := h2 - h1
+        min := m2 - m1
+        sec := s2 - s1
+
+        // Normalize negative values
+        if sec &lt; 0 </span><span class="cov8" title="1">{
+                sec += SecondsInMinute
+                min--
+        }</span>
+
+        <span class="cov8" title="1">if min &lt; 0 </span><span class="cov8" title="1">{
+                min += MinutesInHour
+                hour--
+        }</span>
+
+        <span class="cov8" title="1">if hour &lt; 0 </span><span class="cov8" title="1">{
+                hour += HourInDay
+                day--
+        }</span>
+
+        <span class="cov8" title="1">if day &lt; 0 </span><span class="cov8" title="1">{
+                // days in month:
+                t := time.Date(y1, M1, daysInMonth, 0, 0, 0, 0, time.UTC)
+                day += daysInMonth - t.Day()
+                month--
+        }</span>
+
+        <span class="cov8" title="1">if month &lt; 0 </span><span class="cov8" title="1">{
+                month += MonthInYear
+                year--
+        }</span>
+
+        <span class="cov8" title="1">return &amp;DateTimeDiff{
+                Year:  year,
+                Month: month,
+                Day:   day,
+                Hour:  hour,
+                Min:   min,
+                Sec:   sec,
+        }</span>
+}
+
+func BeginOfDay(t time.Time) time.Time <span class="cov8" title="1">{
+        year, month, day := t.Date()
+
+        return time.Date(year, month, day, 0, 0, 0, 0, t.Location())
+}</span>
+
+func BeginOfPrevDay(t time.Time) time.Time <span class="cov8" title="1">{
+        prevDay := t.AddDate(0, 0, -1)
+
+        return BeginOfDay(prevDay)
+}</span>
+
+func BeginOfNextDay(t time.Time) time.Time <span class="cov8" title="1">{
+        nextDay := t.AddDate(0, 0, 1)
+
+        return BeginOfDay(nextDay)
+}</span>
+
+func BeginOfPrevWeek(t time.Time) time.Time <span class="cov8" title="1">{
+        prevDay := t.AddDate(0, 0, -7)
+
+        return BeginOfDay(prevDay)
+}</span>
+
+func BeginOfNextWeek(t time.Time) time.Time <span class="cov8" title="1">{
+        nextDay := t.AddDate(0, 0, 7)
+
+        return BeginOfDay(nextDay)
+}</span>
+
+func BeforePeriod(t time.Time, period int64, measure time.Duration) time.Time <span class="cov8" title="1">{
+        return t.Add(time.Duration(-1*period) * measure)
+}</span>
+
+func AfterPeriod(t time.Time, period int64, measure time.Duration) time.Time <span class="cov8" title="1">{
+        return t.Add(time.Duration(period) * measure)
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package ge
+
+import "fmt"
+
+type IdentityPlaceError struct {
+        Place  string
+        Parent error
+}
+
+func (e *IdentityPlaceError) Error() string <span class="cov0" title="0">{
+        if e.Parent != nil </span><span class="cov0" title="0">{
+                return fmt.Sprintf("Place [%v], Error [%v]", e.Place, e.Parent.Error())
+        }</span>
+
+        <span class="cov0" title="0">return fmt.Sprintf("Place [%v]", e.Place)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package ge
+
+import (
+        "fmt"
+        "strings"
+
+        "github.com/nobuenhombre/suikat/pkg/inslice"
+)
+
+func New(message string, params ...Params) error <span class="cov8" title="1">{
+        var p Params
+
+        if inslice.IsIndexExists(0, params) </span><span class="cov0" title="0">{
+                p = params[0]
+        }</span>
+
+        <span class="cov8" title="1">return &amp;IdentityError{
+                Message: message,
+                Params:  p,
+                Way:     getWay(),
+        }</span>
+}
+
+func Pin(parent error, params ...Params) error <span class="cov0" title="0">{
+        var p Params
+
+        if inslice.IsIndexExists(0, params) </span><span class="cov0" title="0">{
+                p = params[0]
+        }</span>
+
+        <span class="cov0" title="0">return &amp;IdentityError{
+                Parent: parent,
+                Params: p,
+                Way:    getWay(),
+        }</span>
+}
+
+type IdentityError struct {
+        Message string
+        Parent  error
+        Params  Params
+        Way     *Way
+}
+
+func (e *IdentityError) Unwrap(err error) error <span class="cov0" title="0">{
+        return e.Parent
+}</span>
+
+func (e *IdentityError) Error() string <span class="cov0" title="0">{
+        wayStr := ""
+        if e.Way != nil </span><span class="cov0" title="0">{
+                wayStr = fmt.Sprintf("Way[ %v ], ", e.Way.View())
+        }</span>
+
+        <span class="cov0" title="0">paramsStr := ""
+        if e.Params != nil </span><span class="cov0" title="0">{
+                paramsStr = fmt.Sprintf("Params[ %v ]", e.Params.View())
+        }</span>
+
+        <span class="cov0" title="0">parentStr := ""
+        if e.Parent != nil </span><span class="cov0" title="0">{
+                parentStr = fmt.Sprintf("ParentError[ %v ], ", e.Parent.Error())
+        }</span>
+
+        <span class="cov0" title="0">messageStr := ""
+        if len(e.Message) &gt; 0 </span><span class="cov0" title="0">{
+                messageStr = fmt.Sprintf("Message[ %v ], ", e.Message)
+        }</span>
+
+        <span class="cov0" title="0">return strings.TrimSuffix(fmt.Sprintf("%v%v%v%v", wayStr, paramsStr, parentStr, messageStr), ", ")</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package ge
+
+import (
+        "fmt"
+        "strings"
+)
+
+type Params map[string]interface{}
+
+func (p Params) View() string <span class="cov0" title="0">{
+        result := ""
+        for key, value := range p </span><span class="cov0" title="0">{
+                result += fmt.Sprintf("(%v = %v), ", key, value)
+        }</span>
+
+        <span class="cov0" title="0">return strings.TrimSuffix(result, ", ")</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package ge
+
+import "fmt"
+
+type NotReleasedError struct {
+        Name string
+}
+
+func (e *NotReleasedError) Error() string <span class="cov0" title="0">{
+        return fmt.Sprintf("not released method (name = %v)", e.Name)
+}</span>
+
+type RegExpIsNotCompiledError struct {
+}
+
+func (e *RegExpIsNotCompiledError) Error() string <span class="cov0" title="0">{
+        return "regexp is not compiled"
+}</span>
+
+type UndefinedSwitchCaseError struct {
+        Var interface{}
+}
+
+func (e *UndefinedSwitchCaseError) Error() string <span class="cov0" title="0">{
+        return fmt.Sprintf("udefined switch case [%v]", e.Var)
+}</span>
+
+type MismatchError struct {
+        ComparedItems string
+        Expected      interface{}
+        Actual        interface{}
+}
+
+func (e *MismatchError) Error() string <span class="cov0" title="0">{
+        return fmt.Sprintf("wrong %v, expected [%v], actual [%v]", e.ComparedItems, e.Expected, e.Actual)
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package ge
+
+import (
+        "fmt"
+        "path/filepath"
+        "runtime"
+        "strings"
+)
+
+type Way struct {
+        Package string
+        Caller  string
+        File    string
+        Line    int
+}
+
+func (w *Way) View() string <span class="cov0" title="0">{
+        return fmt.Sprintf("%v : %v, file %v line %v", w.Package, w.Caller, w.File, w.Line)
+}</span>
+
+const (
+        skipCallers        = 2
+        funcNameWithoutObj = 2
+        funcNameWithObj    = 3
+)
+
+func getPathPlace(funcName string) (path, place string) <span class="cov8" title="1">{
+        lastSlash := strings.LastIndexByte(funcName, '/')
+
+        path = ""
+        place = funcName
+
+        if lastSlash &gt; -1 </span><span class="cov8" title="1">{
+                path = funcName[:lastSlash]
+                place = funcName[lastSlash+1:]
+        }</span>
+
+        <span class="cov8" title="1">return</span>
+}
+
+func getPkgObjCaller(place string) (pkg, obj, caller string) <span class="cov8" title="1">{
+        list := strings.Split(place, ".")
+
+        switch len(list) </span>{
+        case funcNameWithoutObj:<span class="cov8" title="1">
+                pkg = list[0]
+                obj = ""
+                caller = list[1]</span>
+
+        case funcNameWithObj:<span class="cov8" title="1">
+                pkg = list[0]
+                obj = list[1] + "."
+                caller = list[2]</span>
+
+        default:<span class="cov0" title="0">
+                pkg = list[0]
+                obj = ""
+                caller = ""</span>
+        }
+
+        <span class="cov8" title="1">return</span>
+}
+
+func getWay() *Way <span class="cov8" title="1">{
+        pc, file, line, ok := runtime.Caller(skipCallers)
+        if !ok </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">funcName := runtime.FuncForPC(pc).Name()
+        path, place := getPathPlace(funcName)
+        pkg, obj, caller := getPkgObjCaller(place)
+
+        return &amp;Way{
+                Package: fmt.Sprintf("%v/%v", path, pkg),
+                Caller:  fmt.Sprintf("%v%v()", obj, caller),
+                File:    filepath.Base(file),
+                Line:    line,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package inslice
+
+import (
+        "fmt"
+        "reflect"
+)
 
 func String(a string, list *[]string) bool <span class="cov8" title="1">{
         if list == nil </span><span class="cov8" title="1">{
@@ -196,9 +589,344 @@ func Float64(a float64, list *[]float64) bool <span class="cov8" title="1">{
 
         <span class="cov8" title="1">return false</span>
 }
-</pre>
 
-    <pre class="file" id="file1" style="display: none">package webula
+func IsIndexExists(index int, list interface{}) bool <span class="cov8" title="1">{
+        s := reflect.ValueOf(list)
+
+        if s.Kind() != reflect.Slice </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">return index &gt;= 0 &amp;&amp; index &lt; s.Len()</span>
+}
+
+func CheckIndex(index int, list interface{}) error <span class="cov8" title="1">{
+        exists := IsIndexExists(index, list)
+        if !exists </span><span class="cov8" title="1">{
+                return &amp;IndexNotExistsError{
+                        Index: index,
+                }
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+type IndexNotExistsError struct {
+        Index int
+}
+
+func (e *IndexNotExistsError) Error() string <span class="cov8" title="1">{
+        return fmt.Sprintf("index [%v] not exists", e.Index)
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package replacer
+
+import "regexp"
+
+const (
+        SourceTypeRegexp = "regexp"
+        SourceTypeString = "string"
+)
+
+type ReplaceRule struct {
+        SourceType  string `json:"SourceType"`
+        Source      string `json:"Source"`
+        Replacement string `json:"Replacement"`
+
+        regExp *regexp.Regexp
+}
+
+func (rr *ReplaceRule) Compile() <span class="cov8" title="1">{
+        if rr.SourceType == SourceTypeRegexp </span><span class="cov8" title="1">{
+                rr.regExp = regexp.MustCompile(rr.Source)
+        }</span>
+}
+
+type ReplaceData struct {
+        ID     int64
+        Before string
+        After  string
+}
+
+type Rules []ReplaceRule
+
+type Data []ReplaceData
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package replacer
+
+import (
+        "strings"
+
+        "github.com/nobuenhombre/suikat/pkg/ge"
+)
+
+func ReplaceAll(data *Data, rules *Rules) (*Data, error) <span class="cov8" title="1">{
+        for ruleIndex := range *rules </span><span class="cov8" title="1">{
+                (*rules)[ruleIndex].Compile()
+        }</span>
+
+        <span class="cov8" title="1">for dataIndex := range *data </span><span class="cov8" title="1">{
+                after, err := ApplyRules((*data)[dataIndex].Before, rules)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, ge.Pin(err, ge.Params{"dataIndex": dataIndex})
+                }</span>
+
+                <span class="cov8" title="1">(*data)[dataIndex].After = after</span>
+        }
+
+        <span class="cov8" title="1">return data, nil</span>
+}
+
+func ApplyRules(before string, rules *Rules) (after string, err error) <span class="cov8" title="1">{
+        after = before
+        for ruleIndex, rule := range *rules </span><span class="cov8" title="1">{
+                after, err = ApplyRule(after, rule)
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", ge.Pin(err, ge.Params{"dataIndex": ruleIndex})
+                }</span>
+        }
+
+        <span class="cov8" title="1">return after, nil</span>
+}
+
+func ApplyRule(before string, rule ReplaceRule) (after string, err error) <span class="cov8" title="1">{
+        switch rule.SourceType </span>{
+        case SourceTypeRegexp:<span class="cov8" title="1">
+                if rule.regExp == nil </span><span class="cov8" title="1">{
+                        return "", ge.Pin(&amp;ge.RegExpIsNotCompiledError{})
+                }</span>
+
+                <span class="cov8" title="1">after = before
+
+                foundMatches := rule.regExp.FindAllString(before, -1)
+                for _, match := range foundMatches </span><span class="cov8" title="1">{
+                        after = strings.ReplaceAll(after, match, rule.Replacement)
+                }</span>
+
+                <span class="cov8" title="1">return after, nil</span>
+
+        case SourceTypeString:<span class="cov8" title="1">
+                after = strings.ReplaceAll(before, rule.Source, rule.Replacement)
+
+                return after, nil</span>
+
+        default:<span class="cov0" title="0">
+                return "", ge.Pin(&amp;ge.UndefinedSwitchCaseError{Var: rule.SourceType})</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package sfu
+
+import "fmt"
+
+type UnknownTypeError struct {
+        Type string
+}
+
+func (e *UnknownTypeError) Error() string <span class="cov0" title="0">{
+        return fmt.Sprintf("unknown type error (type = %v)", e.Type)
+}</span>
+
+type PrivateStructFieldError struct {
+        Name string
+}
+
+func (e *PrivateStructFieldError) Error() string <span class="cov0" title="0">{
+        return fmt.Sprintf("private field of struct (%v)", e.Name)
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package sfu
+
+//-----------------------------------
+//
+// Convert struct to form url encoded
+// to use with less-rest-client
+//
+//-----------------------------------
+
+import (
+        "fmt"
+        "net/url"
+        "reflect"
+
+        "github.com/nobuenhombre/suikat/pkg/refavour"
+)
+
+func Convert(structData interface{}, parent string, form *url.Values) (err error) <span class="cov8" title="1">{
+        tagProcessor := NewTagProcessor()
+
+        structError := refavour.CheckStructure(structData)
+        if structError != nil </span><span class="cov8" title="1">{
+                return structError
+        }</span>
+
+        <span class="cov8" title="1">canBeChangedError := refavour.CheckCanBeChanged(structData)
+        if canBeChangedError != nil </span><span class="cov8" title="1">{
+                return canBeChangedError
+        }</span>
+
+        <span class="cov8" title="1">structureFields, getStructErr := refavour.GetStructureFieldsTypes(structData, tagProcessor)
+        if getStructErr != nil </span><span class="cov0" title="0">{
+                return getStructErr
+        }</span>
+
+        <span class="cov8" title="1">for _, fieldInfo := range structureFields </span><span class="cov8" title="1">{
+                t := fieldInfo.(*FieldInfo).Type.String()
+
+                n := fieldInfo.(*FieldInfo).Name
+                if len(parent) != 0 </span><span class="cov8" title="1">{
+                        n = fmt.Sprintf("%v[%v]", parent, fieldInfo.(*FieldInfo).Name)
+                }</span>
+
+                <span class="cov8" title="1">value := fieldInfo.(*FieldInfo).Value
+
+                if !value.CanInterface() </span><span class="cov8" title="1">{
+                        structValue := refavour.GetReflectValue(structData)
+                        return &amp;PrivateStructFieldError{
+                                Name: structValue.Type().String(),
+                        }
+                }</span>
+
+                <span class="cov8" title="1">switch t </span>{
+                case "string":<span class="cov8" title="1">
+                        v := value.String()
+                        form.Add(n, v)</span>
+
+                case "int64":<span class="cov8" title="1">
+                        vi := value.Int()
+                        v := fmt.Sprintf("%v", vi)
+                        form.Add(n, v)</span>
+
+                case "float64":<span class="cov8" title="1">
+                        vf := value.Float()
+                        v := fmt.Sprintf("%v", vf)
+                        form.Add(n, v)</span>
+
+                case "bool":<span class="cov8" title="1">
+                        vb := value.Bool()
+                        v := fmt.Sprintf("%v", vb)
+                        form.Add(n, v)</span>
+
+                default:<span class="cov8" title="1">
+                        kind := value.Kind()
+
+                        switch kind </span>{
+                        case reflect.Struct:<span class="cov8" title="1">
+                                data := value.Addr().Interface()
+
+                                err := Convert(data, n, form)
+                                if err != nil </span><span class="cov8" title="1">{
+                                        return err
+                                }</span>
+
+                        case reflect.Slice:<span class="cov8" title="1">
+                                for i := 0; i &lt; value.Len(); i++ </span><span class="cov8" title="1">{
+                                        sliceItem := value.Index(i)
+                                        name := fmt.Sprintf("%v[%v]", n, i)
+                                        ts := sliceItem.Type().String()
+
+                                        switch ts </span>{
+                                        case "string":<span class="cov8" title="1">
+                                                v := sliceItem.String()
+                                                form.Add(name, v)</span>
+
+                                        case "int64":<span class="cov8" title="1">
+                                                vi := sliceItem.Int()
+                                                v := fmt.Sprintf("%v", vi)
+                                                form.Add(name, v)</span>
+
+                                        case "float64":<span class="cov8" title="1">
+                                                vf := sliceItem.Float()
+                                                v := fmt.Sprintf("%v", vf)
+                                                form.Add(name, v)</span>
+
+                                        case "bool":<span class="cov8" title="1">
+                                                vb := sliceItem.Bool()
+                                                v := fmt.Sprintf("%v", vb)
+                                                form.Add(name, v)</span>
+
+                                        default:<span class="cov8" title="1">
+                                                slKind := sliceItem.Kind()
+
+                                                switch slKind </span>{
+                                                case reflect.Struct:<span class="cov8" title="1">
+                                                        slData := sliceItem.Addr().Interface()
+
+                                                        err := Convert(slData, name, form)
+                                                        if err != nil </span><span class="cov8" title="1">{
+                                                                return err
+                                                        }</span>
+
+                                                default:<span class="cov8" title="1">
+                                                        return &amp;UnknownTypeError{
+                                                                Type: ts,
+                                                        }</span>
+                                                }
+                                        }
+                                }
+
+                        default:<span class="cov8" title="1">
+                                return &amp;UnknownTypeError{
+                                        Type: t,
+                                }</span>
+                        }
+                }
+        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package sfu
+
+import (
+        "reflect"
+
+        "github.com/nobuenhombre/suikat/pkg/refavour"
+)
+
+// Tag Examples
+//==============================================================
+//type SomeFormData struct {
+//        Path           string      `form:"path"`
+//        Port           int         `form:"port"`
+//        Coefficient    float64     `form:"coefficient"`
+//        MakeSomeAction bool        `form:"msa"`
+//  OtherStruct    OtherStruct `form:"otherStruct"`
+//}
+
+type FieldInfo struct {
+        Type  reflect.Type
+        Name  string
+        Value reflect.Value
+}
+
+type TagInfo struct {
+        Tag string
+}
+
+func NewTagProcessor() refavour.TagProcessor <span class="cov8" title="1">{
+        return &amp;TagInfo{
+                Tag: "form",
+        }
+}</span>
+
+func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error) <span class="cov8" title="1">{
+        tagData := typeField.Tag.Get(tag.Tag)
+
+        return &amp;FieldInfo{
+                Type:  valueField.Type(),
+                Name:  tagData,
+                Value: valueField,
+        }, nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package webula
 
 import (
         "strings"
@@ -208,17 +936,34 @@ import (
 )
 
 const (
-        EmptyString     = ""
-        Space           = " "
-        Underline       = "_"
-        Dot             = "."
-        NewLine         = "\n"
-        CarriageReturn  = "\r"
-        Tab             = "\t"
-        Comma           = ","
-        Semicolon       = ";"
-        HTMLSpaceInUtf8 = "\xc2\xa0"
-        HTMLSpace       = "&amp;nbsp;"
+        EmptyString       = ""
+        Space             = " "
+        Underline         = "_"
+        Dot               = "."
+        NewLine           = "\n"
+        CarriageReturn    = "\r"
+        Tab               = "\t"
+        Comma             = ","
+        Colon             = ":"
+        Semicolon         = ";"
+        Gradus            = "°"
+        SingleQuote       = "'"
+        DoubleQuote       = "\""
+        QuoteLeft         = "«"
+        QuoteRight        = "»"
+        Mult              = "*"
+        Div               = "/"
+        Plus              = "+"
+        Minus             = "-"
+        Equal             = "="
+        Percent           = "%"
+        Number            = "№"
+        Exclamation       = "!"
+        RoundBracketLeft  = "("
+        RoundBracketRight = ")"
+        HTMLSpaceInUtf8   = "\xc2\xa0"
+        HTMLSpace         = "&amp;nbsp;"
+        HTMLMDash         = "&amp;mdash;"
 )
 
 // Сколько Символов в строке
@@ -229,6 +974,7 @@ func StrLen(s string) int <span class="cov8" title="1">{
 // Очистить строку от Html
 func StripHTML(s string) string <span class="cov8" title="1">{
         strippedBytes := bluemonday.StrictPolicy().SanitizeBytes([]byte(s))
+
         return string(strippedBytes)
 }</span>
 
@@ -252,17 +998,19 @@ func Trim(s []string, trimmers []string) []string <span class="cov8" title="1">{
 
                 for </span><span class="cov8" title="1">{
                         lenBefore := len(trimmed)
+
                         for _, trimmer := range trimmers </span><span class="cov8" title="1">{
                                 trimmed = strings.Trim(trimmed, trimmer)
                         }</span>
+
                         <span class="cov8" title="1">lenAfter := len(trimmed)
+
                         if lenAfter == lenBefore </span><span class="cov8" title="1">{
                                 break</span>
                         }
                 }
 
-                <span class="cov8" title="1">if utf8.RuneCountInString(trimmed) &gt; 0 </span><span class="cov8"
-                                                                                                    title="1">{
+                <span class="cov8" title="1">if utf8.RuneCountInString(trimmed) &gt; 0 </span><span class="cov8" title="1">{
                         result = append(result, trimmed)
                 }</span>
         }
@@ -304,38 +1052,196 @@ func IsHTML(s string) bool <span class="cov8" title="1">{
 
         return fullLength != strippedLength
 }</span>
+
+func RemoveDuplicatesString(source []string) []string <span class="cov8" title="1">{
+        result := make([]string, 0)
+
+        encountered := make(map[string]bool)
+
+        for v := range source </span><span class="cov8" title="1">{
+                _, found := encountered[source[v]]
+                if !found </span><span class="cov8" title="1">{
+                        encountered[source[v]] = true
+
+                        result = append(result, source[v])
+                }</span>
+        }
+
+        <span class="cov8" title="1">return result</span>
+}
+
+// Нормализуем символы URL
+// надо сказать что здесь нормализуется не полный URL а его финальная часть name
+// http://domain.name/some/url/&lt;name&gt;/
+// соответственно аргумент функции принимает только финальную часть!
+func NormalizeNameURL(name string) string <span class="cov8" title="1">{
+        cleanName := strings.Trim(name, Space)
+        cleanName = strings.ToLower(cleanName)
+        cleanName = NormalizeText(cleanName, Space)
+
+        mathReplaces := map[string]string{
+                Mult:    EmptyString,
+                Div:     EmptyString,
+                Plus:    "_plus_",
+                Minus:   "_minus_",
+                Equal:   EmptyString,
+                Number:  "_num_",
+                Percent: EmptyString,
+                Gradus:  "_gradus_",
+        }
+
+        for math, replace := range mathReplaces </span><span class="cov8" title="1">{
+                cleanName = strings.ReplaceAll(cleanName, math, replace)
+        }</span>
+
+        <span class="cov8" title="1">quotesReplaces := map[string]string{
+                SingleQuote:       Space,
+                DoubleQuote:       Space,
+                QuoteLeft:         Space,
+                QuoteRight:        Space,
+                RoundBracketLeft:  Space,
+                RoundBracketRight: Space,
+                Comma:             Space,
+                Colon:             Space,
+                Semicolon:         Space,
+                Dot:               Space,
+                Space:             Space,
+                HTMLMDash:         Space,
+                Underline:         Space,
+                Exclamation:       Space,
+        }
+
+        for quote, replace := range quotesReplaces </span><span class="cov8" title="1">{
+                cleanName = strings.ReplaceAll(cleanName, quote, replace)
+        }</span>
+
+        <span class="cov8" title="1">cleanName = NormalizeText(cleanName, Space)
+        words := Words(cleanName)
+        uniqueWords := RemoveDuplicatesString(words)
+
+        return strings.Join(uniqueWords, Underline)</span>
+}
+
+// Нормализуем фразы алфавитного указателя
+func NormalizeAlphabet(name string) string <span class="cov8" title="1">{
+        cleanName := strings.Trim(name, Space)
+        phrases := strings.Split(cleanName, Comma)
+
+        for i := range phrases </span><span class="cov8" title="1">{
+                cleanPhrase := strings.Trim(phrases[i], Space)
+                phrases[i] = NormalizeText(cleanPhrase, Space)
+        }</span>
+
+        <span class="cov8" title="1">return strings.Join(phrases, Comma+Space)</span>
+}
+
+func TranslitRusLat(in string) string <span class="cov8" title="1">{
+        out := in
+
+        translitReplaces := map[string]string{
+                "А": "A",
+                "Б": "B",
+                "В": "V",
+                "Г": "G",
+                "Д": "D",
+                "Е": "E",
+                "Ё": "YO",
+                "Ж": "ZH",
+                "З": "Z",
+                "И": "I",
+                "Й": "Y",
+                "К": "K",
+                "Л": "L",
+                "М": "M",
+                "Н": "N",
+                "О": "O",
+                "П": "P",
+                "Р": "R",
+                "С": "S",
+                "Т": "T",
+                "У": "U",
+                "Ф": "F",
+                "Х": "H",
+                "Ц": "C",
+                "Ч": "CH",
+                "Ш": "SH",
+                "Щ": "SCH",
+                "Ъ": "",
+                "Ы": "Y",
+                "Ь": "",
+                "Э": "E",
+                "Ю": "YU",
+                "Я": "YA",
+                "а": "a",
+                "б": "b",
+                "в": "v",
+                "г": "g",
+                "д": "d",
+                "е": "e",
+                "ё": "yo",
+                "ж": "zh",
+                "з": "z",
+                "и": "i",
+                "й": "y",
+                "к": "k",
+                "л": "l",
+                "м": "m",
+                "н": "n",
+                "о": "o",
+                "п": "p",
+                "р": "r",
+                "с": "s",
+                "т": "t",
+                "у": "u",
+                "ф": "f",
+                "х": "h",
+                "ц": "c",
+                "ч": "ch",
+                "ш": "sh",
+                "щ": "sch",
+                "ъ": "",
+                "ы": "y",
+                "ь": "",
+                "э": "e",
+                "ю": "yu",
+                "я": "ya",
+        }
+
+        for rus, lat := range translitReplaces </span><span class="cov8" title="1">{
+                out = strings.ReplaceAll(out, rus, lat)
+        }</span>
+
+        <span class="cov8" title="1">return out</span>
+}
 </pre>
-
-</div>
-</body>
-<script>
-    (function () {
-        var files = document.getElementById('files');
-        var visible;
-        files.addEventListener('change', onChange, false);
-
-        function select(part) {
-            if (visible)
-                visible.style.display = 'none';
-            visible = document.getElementById(part);
-            if (!visible)
-                return;
-            files.value = part;
-            visible.style.display = 'block';
-            location.hash = part;
-        }
-
-        function onChange() {
-            select(files.value);
-            window.scrollTo(0, 0);
-        }
-
-        if (location.hash != "") {
-            select(location.hash.substr(1));
-        }
-        if (!visible) {
-            select("file0");
-        }
-    })();
-</script>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
 </html>
