@@ -12,9 +12,8 @@ type inputParams struct {
 }
 
 type datesDiffTest struct {
-	in    inputParams
-	out   *DateTimeDiff
-	inSec int64
+	in  inputParams
+	out *DateTimeDiff
 }
 
 var datesDiffTests = []datesDiffTest{

@@ -335,8 +335,8 @@ type TranslitRusLatTest struct {
 
 var TranslitRusLatTests = []TranslitRusLatTest{
 	{
-		in:  "Привет Ромашки, Кидайте деньги. Читайте книжки. Дурной мальчишка. Ушёл. Такая фишка. Нелепый мальчишка.",
-		out: "Privet Romashki, Kidayte dengi. CHitayte knizhki. Durnoy malchishka. Ushyol. Takaya fishka. Nelepyy malchishka.",
+		in:  "Привет Ромашки, Кидайте деньги. Читайте книжки. Дурной мальчишка. Ушёл. Такая фишка.",
+		out: "Privet Romashki, Kidayte dengi. CHitayte knizhki. Durnoy malchishka. Ushyol. Takaya fishka.",
 	},
 }
 

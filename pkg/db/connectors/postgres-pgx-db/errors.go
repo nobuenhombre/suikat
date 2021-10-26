@@ -1,6 +1,7 @@
 package postgrespgxdb
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/jackc/pgconn"
@@ -11,12 +12,12 @@ const (
 )
 
 func IsConstraintError(err error, name string) bool {
-	pgErr, ok := err.(*pgconn.PgError)
-	if !ok {
-		return false
+	var e *pgconn.PgError
+	if errors.As(err, &e) {
+		return e.Code == ConstraintErrorCode && e.ConstraintName == name
 	}
 
-	return pgErr.Code == ConstraintErrorCode && pgErr.ConstraintName == name
+	return false
 }
 
 type AffectedLessThenNecessaryError struct {

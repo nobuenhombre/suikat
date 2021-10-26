@@ -45,6 +45,7 @@ func Convert(structData interface{}, parent string, form *url.Values) (err error
 
 		if !value.CanInterface() {
 			structValue := refavour.GetReflectValue(structData)
+
 			return &PrivateStructFieldError{
 				Name: structValue.Type().String(),
 			}
