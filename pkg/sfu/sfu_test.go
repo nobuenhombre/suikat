@@ -1,11 +1,12 @@
 package sfu
 
 import (
-	"github.com/nobuenhombre/suikat/pkg/refavour"
 	"net/url"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
 // Prepared Data
