@@ -4,8 +4,7 @@ import (
 	"fmt"
 )
 
-// Ошибка Парсер не найден
-//------------------------
+// ParserNotFoundError Ошибка - Парсер не найден
 type ParserNotFoundError struct {
 	FieldType string
 }
@@ -14,8 +13,7 @@ func (e *ParserNotFoundError) Error() string {
 	return fmt.Sprintf("Parser not found for Type [%v]", e.FieldType)
 }
 
-// Ошибка Поле отсутсвует в СЛайсе
-//--------------------------------
+// FieldNotExistsInSliceError Ошибка - Поле отсутствует в Слайсе
 type FieldNotExistsInSliceError struct {
 	FieldName string
 	FieldType string
