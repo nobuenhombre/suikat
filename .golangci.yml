@@ -41,4 +41,4 @@ issues:
 # all available settings of specific linters
 linters-settings:
   cyclop:
-    max-complexity: 35
+    max-complexity: 25
