@@ -2,10 +2,11 @@ package converter
 
 import (
 	"fmt"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 type ParserError struct {
@@ -145,7 +146,9 @@ func StringToTime(s, format string) (time.Time, error) {
 
 func StringToIntSlice(s, sep string) ([]int, error) {
 	sList := strings.Split(s, sep)
-	out := make([]int, len(sList))
+
+	out := make([]int, 0, len(sList))
+
 	for i, sValue := range sList {
 		iValue, err := StringToInt(sValue)
 		if err != nil {
