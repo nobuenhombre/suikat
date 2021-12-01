@@ -8,17 +8,45 @@ import (
 //------------------------------------
 // example:
 // func SomeBodyDo() {
-//     defer tracktime.Stop(tracktime.Start("SomeBodyDo"))
-//
+//     timer := tracktime.Start("Some Body Do")
+//     defer func() {
+//         timer.Stop()
+//         timer.Log()
+//     }()
 //     ...
 //
 // }
 //------------------------------------
 
-func Start(msg string) (string, time.Time) {
-	return msg, time.Now()
+type Tracker struct {
+	Label    string
+	Run      time.Time
+	Finish   time.Time
+	Duration time.Duration
 }
 
-func Stop(msg string, start time.Time) {
-	log.Printf("%v: %v\n", msg, time.Since(start))
+func Start(label string) *Tracker {
+	return &Tracker{
+		Label: label,
+		Run:   time.Now(),
+	}
+}
+
+func (t *Tracker) Stop() {
+	t.Finish = time.Now()
+	t.Duration = time.Since(t.Run)
+}
+
+func (t *Tracker) Log() {
+	log.Printf(
+		"track time:\n"+
+			" - label [%v]\n"+
+			" - run at [%v]\n"+
+			" - finish at [%v]\n"+
+			" - duration [%v]\n",
+		t.Label,
+		t.Run,
+		t.Finish,
+		t.Duration,
+	)
 }
