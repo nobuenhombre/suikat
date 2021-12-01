@@ -6,21 +6,7 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-type Config struct {
-}
-
-type Service interface {
-	Check(val reflect.Value, expectType string) error
-	Bool(v interface{}) (bool, error)
-	Int(v interface{}) (int, error)
-	String(v interface{}) (string, error)
-}
-
-func New() Service {
-	return &Config{}
-}
-
-func (c *Config) Check(val reflect.Value, expectType string) error {
+func Check(val reflect.Value, expectType string) error {
 	if val.Type().String() != expectType {
 		return ge.Pin(&ge.MismatchError{
 			ComparedItems: "val.Type().String() vs expectType",
@@ -32,7 +18,7 @@ func (c *Config) Check(val reflect.Value, expectType string) error {
 	return nil
 }
 
-func (c *Config) Bool(v interface{}) (bool, error) {
+func Bool(v interface{}) (bool, error) {
 	val := reflect.ValueOf(v)
 
 	result, ok := val.Interface().(bool)
@@ -47,7 +33,7 @@ func (c *Config) Bool(v interface{}) (bool, error) {
 	return result, nil
 }
 
-func (c *Config) Int(v interface{}) (int, error) {
+func Int(v interface{}) (int, error) {
 	val := reflect.ValueOf(v)
 
 	result, ok := val.Interface().(int)
@@ -62,7 +48,7 @@ func (c *Config) Int(v interface{}) (int, error) {
 	return result, nil
 }
 
-func (c *Config) String(v interface{}) (string, error) {
+func String(v interface{}) (string, error) {
 	val := reflect.ValueOf(v)
 
 	result, ok := val.Interface().(string)
@@ -75,4 +61,18 @@ func (c *Config) String(v interface{}) (string, error) {
 	}
 
 	return result, nil
+}
+
+func IsNil(i interface{}) bool {
+	if i == nil {
+		return true
+	}
+
+	// nolint: exhaustive
+	switch reflect.TypeOf(i).Kind() {
+	case reflect.Ptr, reflect.Map, reflect.Array, reflect.Chan, reflect.Slice:
+		return reflect.ValueOf(i).IsNil()
+	default:
+		return false
+	}
 }

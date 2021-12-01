@@ -21,7 +21,7 @@ func Hello(outData interface{}) error {
 	return nil
 }
 
-func main() {
+func ChangeMapThroughInterface() {
 	gettedHeader := http.Header{}
 
 	err := Hello(gettedHeader)
