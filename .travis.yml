@@ -1,13 +1,11 @@
 language: go
 
 go:
-  - 1.13.x
-  - 1.14.x
-  - master
+  - 1.17.x
 
 before_install:
-  - go get github.com/axw/gocov/...
-  - go get github.com/AlekSi/gocov-xml
+  - go install github.com/axw/gocov/gocov@latest
+  - go install github.com/AlekSi/gocov-xml@latest
   - go get -t -v ./...
 
 script:
