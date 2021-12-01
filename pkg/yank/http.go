@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
+	"github.com/nobuenhombre/suikat/pkg/tracktime"
 )
 
 type HTTPHeaders interface {
@@ -27,11 +28,14 @@ func (r *HTTPRequest) AddHeaders(headers http.Header) {
 
 type HTTPResponse struct {
 	*http.Response
+	Timer *tracktime.Tracker
 
 	RawBody []byte
 }
 
 func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
+	timer := tracktime.Start("HTTPRequest.Execute()")
+
 	client := &http.Client{}
 
 	//nolint:bodyclose
@@ -40,7 +44,9 @@ func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 		return nil, ge.Pin(err)
 	}
 
-	return &HTTPResponse{Response: response}, nil
+	timer.Stop()
+
+	return &HTTPResponse{Response: response, Timer: timer}, nil
 }
 
 func (rs *HTTPResponse) ReadBody() error {
@@ -60,6 +66,10 @@ func (rs *HTTPResponse) Parse(data interface{}) error {
 	switch data.(type) {
 	case nil:
 		// nothing need to be parsed
+
+	case *string:
+		rv := reflect.ValueOf(data).Elem()
+		rv.SetString(string(rs.RawBody))
 
 	case http.Header:
 		// write Response Headers to data

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+
+	"github.com/nobuenhombre/suikat/pkg/adapt"
 )
 
 type RawContent struct {
@@ -11,7 +13,7 @@ type RawContent struct {
 	MimeType      string
 	ContentType   string
 	ContentLength int
-	reader        io.Reader
+	buffer        *bytes.Buffer
 }
 
 func NewRawContent(buffer *bytes.Buffer, mimeType string, contentType string) *RawContent {
@@ -22,16 +24,20 @@ func NewRawContent(buffer *bytes.Buffer, mimeType string, contentType string) *R
 		MimeType:      mimeType,
 		ContentType:   contentType,
 		ContentLength: bb.Len(),
-		reader:        buffer,
+		buffer:        buffer,
 	}
 }
 
-func (rc *RawContent) GetReader() io.Reader {
-	return rc.reader
+func (rc *RawContent) GetBuffer() io.Reader {
+	if adapt.IsNil(rc.buffer) {
+		return nil
+	}
+
+	return rc.buffer
 }
 
 func (rc *RawContent) AddHeaders(r *HTTPRequest) {
-	if rc.reader != nil {
+	if rc.buffer != nil {
 		// Set the Boundary in the Content-Type
 		r.Header.Set("Content-Type", rc.ContentType)
 

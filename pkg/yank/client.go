@@ -6,18 +6,6 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-type Defaults struct {
-	URL     string
-	Auth    Auth
-	Headers http.Header
-}
-
-func (d *Defaults) AddHeaders(r *HTTPRequest) {
-	if d.Headers != nil {
-		r.AddHeaders(d.Headers)
-	}
-}
-
 type Client struct {
 	Defaults *Defaults
 }
@@ -66,8 +54,8 @@ func (c *Client) ApplyDefaultsOnRequest(request *Request, ignoreDefaults bool) e
 }
 
 // Request - make http request
-func (c *Client) Request(request *Request, response *Response, ignoreDefaults bool) error {
-	err := c.ApplyDefaultsOnRequest(request, ignoreDefaults)
+func (c *Client) Request(request *Request, response *Response, ignoreDefaults bool) (err error) {
+	err = c.ApplyDefaultsOnRequest(request, ignoreDefaults)
 	if err != nil {
 		return ge.Pin(&ApplyDefaultsError{
 			Parent: err,
@@ -85,7 +73,7 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 		})
 	}
 
-	httpRequest, err := request.NewHTTPRequest(raw, c.Defaults, ignoreDefaults)
+	httpRequest, err := request.NewHTTPRequest(uri, raw, c.Defaults, ignoreDefaults)
 	if err != nil {
 		return ge.Pin(&CreateHTTPRequestError{
 			URL:            uri,
@@ -106,8 +94,14 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 		})
 	}
 
-	defer httpResponse.Body.Close()
+	defer func() {
+		err = httpResponse.Body.Close()
+		if err != nil {
+			err = ge.Pin(err)
+		}
+	}()
 
+	response.Timer = httpResponse.Timer
 	response.Headers = httpResponse.Header
 
 	err = httpResponse.ReadBody()

@@ -7,7 +7,7 @@ type BodyBuffer struct {
 }
 
 func (buffer *BodyBuffer) String() string {
-	if buffer == nil {
+	if buffer.Buffer == nil {
 		return "nil"
 	}
 
@@ -15,7 +15,7 @@ func (buffer *BodyBuffer) String() string {
 }
 
 func (buffer *BodyBuffer) Len() int {
-	if buffer == nil {
+	if buffer.Buffer == nil {
 		return 0
 	}
 
