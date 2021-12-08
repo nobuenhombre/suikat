@@ -1,11 +1,8 @@
 # suikat
 
 [![Build Status](https://travis-ci.com/nobuenhombre/suikat.svg?branch=master)](https://app.travis-ci.com/github/nobuenhombre/suikat)
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/nobuenhombre/suikat)](https://goreportcard.com/report/github.com/nobuenhombre/suikat)
-
 [![codecov](https://codecov.io/gh/nobuenhombre/suikat/branch/master/graph/badge.svg)](https://codecov.io/gh/nobuenhombre/suikat)
-
 [![GitHub Release](https://img.shields.io/github/release/nobuenhombre/suikat.svg)](https://github.com/nobuenhombre/suikat/releases)
 
 # Suikat
