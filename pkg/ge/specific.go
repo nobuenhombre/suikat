@@ -2,6 +2,14 @@ package ge
 
 import "fmt"
 
+type NotFoundError struct {
+	Key string
+}
+
+func (e *NotFoundError) Error() string {
+	return fmt.Sprintf("not found (key = %v)", e.Key)
+}
+
 type NotReleasedError struct {
 	Name string
 }
