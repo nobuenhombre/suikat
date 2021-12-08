@@ -6,6 +6,8 @@
 
 [![codecov](https://codecov.io/gh/nobuenhombre/suikat/branch/master/graph/badge.svg)](https://codecov.io/gh/nobuenhombre/suikat)
 
+[![GitHub Release](https://img.shields.io/github/release/nobuenhombre/suikat.svg)](https://github.com/nobuenhombre/suikat/releases)
+
 # Suikat
 
 содержит пакеты
