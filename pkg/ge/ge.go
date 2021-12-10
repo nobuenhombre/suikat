@@ -42,7 +42,7 @@ type IdentityError struct {
 	Way     *Way
 }
 
-func (e *IdentityError) Unwrap(err error) error {
+func (e *IdentityError) Unwrap() error {
 	return e.Parent
 }
 
