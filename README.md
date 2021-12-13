@@ -4,6 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/nobuenhombre/suikat)](https://goreportcard.com/report/github.com/nobuenhombre/suikat)
 [![codecov](https://codecov.io/gh/nobuenhombre/suikat/branch/master/graph/badge.svg)](https://codecov.io/gh/nobuenhombre/suikat)
 [![GitHub Release](https://img.shields.io/github/release/nobuenhombre/suikat.svg)](https://github.com/nobuenhombre/suikat/releases)
+[![Go Reference](https://pkg.go.dev/badge/github.com/nobuenhombre/suikat.svg)](https://pkg.go.dev/github.com/nobuenhombre/suikat)
 
 # Suikat
 
