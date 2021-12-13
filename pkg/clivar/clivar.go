@@ -1,19 +1,24 @@
+// Package clivar provides syntactic sugar for working with the flag package.
+// Allows you to describe using structure tags how to use flag to fill in this structure.
 package clivar
 
 import (
 	"flag"
+	"github.com/nobuenhombre/suikat/pkg/ge"
 	"reflect"
 	"strconv"
 
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
+// CliVar describe tag for struct receiver
 type CliVar struct {
 	Key          string
 	Description  string
 	DefaultValue interface{}
 }
 
+// GetString read string value from flag
 func (cli *CliVar) GetString() *string {
 	return flag.String(
 		cli.Key,
@@ -22,6 +27,7 @@ func (cli *CliVar) GetString() *string {
 	)
 }
 
+// GetInt read int value from flag
 func (cli *CliVar) GetInt() *int {
 	return flag.Int(
 		cli.Key,
@@ -30,6 +36,7 @@ func (cli *CliVar) GetInt() *int {
 	)
 }
 
+// GetFloat64 read float64 value from flag
 func (cli *CliVar) GetFloat64() *float64 {
 	return flag.Float64(
 		cli.Key,
@@ -38,6 +45,7 @@ func (cli *CliVar) GetFloat64() *float64 {
 	)
 }
 
+// GetBool read bool value from flag
 func (cli *CliVar) GetBool() *bool {
 	return flag.Bool(
 		cli.Key,
@@ -46,6 +54,7 @@ func (cli *CliVar) GetBool() *bool {
 	)
 }
 
+// Load field of target struct from flag like described in tags
 func Load(structData interface{}) error {
 	tagProcessor := NewTagProcessor()
 
@@ -105,9 +114,9 @@ func Load(structData interface{}) error {
 			tempMap[fieldName] = ev.GetBool()
 
 		default:
-			return &UnknownValueTypeError{
-				ValueType: fieldInfo.(*FieldInfo).ValueType,
-			}
+			return ge.Pin(&ge.UndefinedSwitchCaseError{
+				Var: fieldInfo.(*FieldInfo).ValueType,
+			})
 		}
 	}
 
@@ -130,9 +139,9 @@ func Load(structData interface{}) error {
 			reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(*(tempMap[fieldName].(*bool))))
 
 		default:
-			return &UnknownValueTypeError{
-				ValueType: fieldInfo.(*FieldInfo).ValueType,
-			}
+			return ge.Pin(&ge.UndefinedSwitchCaseError{
+				Var: fieldInfo.(*FieldInfo).ValueType,
+			})
 		}
 	}
 
