@@ -1,15 +1,16 @@
+// Package refavour provides interface to work with tags of struct and several functions for working with reflect
 package refavour
 
 import (
 	"reflect"
 )
 
+// TagProcessor interface to provide parsing tags of struct
 type TagProcessor interface {
 	GetFieldInfo(typeField reflect.StructField, valueField reflect.Value) (interface{}, error)
 }
 
-// Получить значение рефлекса
-//-------------------------------
+// GetReflectValue return reflect.Value of interface{}
 func GetReflectValue(s interface{}) reflect.Value {
 	val := reflect.ValueOf(s)
 	if val.Kind() == reflect.Ptr {
@@ -19,8 +20,9 @@ func GetReflectValue(s interface{}) reflect.Value {
 	return val
 }
 
-// Проверить Kind
-//---------------
+// CheckKind check is that interface{} equal expected Kind
+// if equal then return nil
+// else return KindNotMatchedError
 func CheckKind(value interface{}, expectedKind reflect.Kind) error {
 	reflectValue := GetReflectValue(value)
 	reflectKind := reflectValue.Kind()
@@ -35,26 +37,28 @@ func CheckKind(value interface{}, expectedKind reflect.Kind) error {
 	return nil
 }
 
-// Проверить Структура Ли ?
-//-------------------------
+// CheckStructure check is that interface{} struct
+// if struct then return nil
+// else return KindNotMatchedError
 func CheckStructure(data interface{}) error {
 	return CheckKind(data, reflect.Struct)
 }
 
-// Проверить Мапа Ли ?
-//-------------------------
+// CheckMap check is that interface{} map
+// if map then return nil
+// else return KindNotMatchedError
 func CheckMap(data interface{}) error {
 	return CheckKind(data, reflect.Map)
 }
 
-// Проверить Слайс Ли ?
-//-------------------------
+// CheckSlice check is that interface{} slice
+// if slice then return nil
+// else return KindNotMatchedError
 func CheckSlice(data interface{}) error {
 	return CheckKind(data, reflect.Slice)
 }
 
-// Проверить Можно ли изменять приемник данных
-//--------------------------------------------
+// CheckCanBeChanged Check whether the data receiver can be changed
 func CheckCanBeChanged(value interface{}) error {
 	reflectValue := GetReflectValue(value)
 	if !reflectValue.CanSet() {
@@ -64,12 +68,10 @@ func CheckCanBeChanged(value interface{}) error {
 	return nil
 }
 
-// Типы полей структуры
-//-------------------------------
+// FieldsInfo Types of structure fields
 type FieldsInfo map[string]interface{}
 
-// Функция читает из интерфейса структуру и формирует список имен полей и их типы
-//-------------------------------------------------------------------------------
+// GetStructureFieldsTypes reads the structure from the interface and generates a list of field names and their types
 func GetStructureFieldsTypes(value interface{}, tagProcessor TagProcessor) (FieldsInfo, error) {
 	reflectValue := GetReflectValue(value)
 	reflectedValueType := reflectValue.Type()
