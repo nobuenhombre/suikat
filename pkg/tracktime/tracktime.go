@@ -1,12 +1,7 @@
-package tracktime
-
-import (
-	"log"
-	"time"
-)
-
-//------------------------------------
+// Package tracktime provides special struct to describe timer and log duration between start and stop points
+//
 // example:
+//
 // func SomeBodyDo() {
 //     timer := tracktime.Start("Some Body Do")
 //     defer func() {
@@ -14,10 +9,17 @@ import (
 //         timer.Log()
 //     }()
 //     ...
-//
+//     Here some actions
+//     ...
 // }
-//------------------------------------
+package tracktime
 
+import (
+	"log"
+	"time"
+)
+
+// Tracker struct save info about timer
 type Tracker struct {
 	Label    string
 	Run      time.Time
@@ -25,6 +27,7 @@ type Tracker struct {
 	Duration time.Duration
 }
 
+// Start create new Tracker
 func Start(label string) *Tracker {
 	return &Tracker{
 		Label: label,
@@ -32,11 +35,13 @@ func Start(label string) *Tracker {
 	}
 }
 
+// Stop fix time moment in Tracker
 func (t *Tracker) Stop() {
 	t.Finish = time.Now()
 	t.Duration = time.Since(t.Run)
 }
 
+// Log logging Tracker info
 func (t *Tracker) Log() {
 	log.Printf(
 		"track time:\n"+
