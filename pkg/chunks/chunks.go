@@ -1,5 +1,8 @@
+// Package chunks provides
+// functions for dividing a one-dimensional slice into several pieces
 package chunks
 
+// Split dividing a one-dimensional slice []int64 into several pieces
 func Split(in []int64, limit int) [][]int64 {
 	var chunk []int64
 
