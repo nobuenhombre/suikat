@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ADAPT &mdash; SUIKAT 1.0 Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SUIKAT
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../chacha/index.html">CHACHA - Дерево Валидации</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chunks/index.html">CHUNKS - Кусочки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clivar/index.html">CLIVAR - Сахаренные флаги</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../colorog/index.html">COLOROG - Цветной Лог</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../converter/index.html">CONVERTER - Строка в другие типы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credentials/index.html">CREDENTIALS - Файлы через Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../csvarser/index.html">CSVARSER - CSV Parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dates/index.html">DATES - Даты</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../db/connectors/maria-db/index.html">MARIA-DB Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../db/connectors/postgresql-pgx-db/index.html">POSTGRESQL-PGX-DB Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../envar/index.html">ENVAR - Сахаренные переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fico/index.html">FICO - FIles COntent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figlu/index.html">FIGLU - FIles GLUe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fina/index.html">FINA - File Names</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitree/index.html">FITREE - Files Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../futi/index.html">FUTI - File Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ge/index.html">GE - Global Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hash/index.html">HASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imgs/index.html">IMGS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../inslice/index.html">INSLICE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interceptor/index.html">INTERCEPTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../json-config/index.html">JSON-CONFIG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../less-rest-client/index.html">LESS-REST-CLIENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mimes/index.html">MIMES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os-detector/index.html">OS-DETECTOR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../osexec/index.html">OSEXEC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parallelworks/index.html">PARALLELWORKS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelin/index.html">PIPELIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../refavour/index.html">REFAVOUR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../repeater/index.html">REPEATER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replacer/index.html">REPLACER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../secreto/index.html">SECRETO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sfu/index.html">SFU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracktime/index.html">TRACKTIME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webula/index.html">WEBULA</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SUIKAT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ADAPT</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/adapt/index.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="adapt">
+<h1>ADAPT<a class="headerlink" href="#adapt" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Package adapt provides functions
+to check vars interface{} type
+and convert interface{} to basic types: bool, int, string.</p>
+<div class="section" id="check">
+<h2>Check<a class="headerlink" href="#check" title="Ссылка на этот заголовок">¶</a></h2>
+<p>compares reflect.Value with a string representation of the expected type.
+If the type does not match the expected one, the ge.MismatchError{} error is returned</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">func</span> <span class="nx">Check</span><span class="p">(</span><span class="nx">val</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span> <span class="nx">expectType</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bool">
+<h2>Bool<a class="headerlink" href="#bool" title="Ссылка на этот заголовок">¶</a></h2>
+<p>convert v interface{} into bool.
+If v can’t be converted - return ge.MismatchError{}</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">func</span> <span class="nx">Bool</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="int">
+<h2>Int<a class="headerlink" href="#int" title="Ссылка на этот заголовок">¶</a></h2>
+<p>convert v interface{} into int.
+If v can’t be converted - return ge.MismatchError{}</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">func</span> <span class="nx">Int</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="string">
+<h2>String<a class="headerlink" href="#string" title="Ссылка на этот заголовок">¶</a></h2>
+<p>convert v interface{} into string.
+If v can’t be converted - return ge.MismatchError{}</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">func</span> <span class="nx">String</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="isnil">
+<h2>IsNil<a class="headerlink" href="#isnil" title="Ссылка на этот заголовок">¶</a></h2>
+<p>check interface{} is nil.
+and return bool value</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">func</span> <span class="nx">IsNil</span><span class="p">(</span><span class="nx">i</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">bool</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ivan Sukharev (Lucky Star).
+
+    </p>
+  </div>
+    
+    
+    
+    Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

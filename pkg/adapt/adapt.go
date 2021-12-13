@@ -1,3 +1,6 @@
+// Package adapt provides functions
+// to check vars interface{} type
+// and convert interface{} to basic types: bool, int, string.
 package adapt
 
 import (
@@ -6,6 +9,8 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
+// Check compares reflect.Value with a string representation of the expected type.
+// If the type does not match the expected one, the ge.MismatchError{} error is returned
 func Check(val reflect.Value, expectType string) error {
 	if val.Type().String() != expectType {
 		return ge.Pin(&ge.MismatchError{
@@ -18,6 +23,8 @@ func Check(val reflect.Value, expectType string) error {
 	return nil
 }
 
+// Bool convert v interface{} into bool.
+// If v can't be converted - return ge.MismatchError{}
 func Bool(v interface{}) (bool, error) {
 	val := reflect.ValueOf(v)
 
@@ -33,6 +40,8 @@ func Bool(v interface{}) (bool, error) {
 	return result, nil
 }
 
+// Int convert v interface{} into int.
+// If v can't be converted - return ge.MismatchError{}
 func Int(v interface{}) (int, error) {
 	val := reflect.ValueOf(v)
 
@@ -48,6 +57,8 @@ func Int(v interface{}) (int, error) {
 	return result, nil
 }
 
+// String convert v interface{} into string.
+// If v can't be converted - return ge.MismatchError{}
 func String(v interface{}) (string, error) {
 	val := reflect.ValueOf(v)
 
@@ -63,6 +74,8 @@ func String(v interface{}) (string, error) {
 	return result, nil
 }
 
+// IsNil check interface{} is nil.
+// and return bool value
 func IsNil(i interface{}) bool {
 	if i == nil {
 		return true

@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ru" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>FITREE - Files Tree &mdash; SUIKAT 1.0 Documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/translations.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
@@ -52,7 +57,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> SUIKAT
+            <a href="../index.html" class="icon icon-home"> SUIKAT
           
 
           
@@ -168,6 +173,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -179,7 +186,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/fitree/index.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
           
         
@@ -201,44 +208,31 @@
 <li><p>Узел или <code class="docutils literal notranslate"><span class="pre">TreeNodeStruct</span></code></p></li>
 <li><p>Список узлов или <code class="docutils literal notranslate"><span class="pre">TreeNodeListStruct</span></code></p></li>
 </ol>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Узел</span>
-  <span class="kd">type</span> <span class="nx">TreeNodeStruct</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="nx">Path</span>         <span class="kt">string</span>         <span class="c1">// Путь</span>
-    <span class="nx">Name</span>         <span class="kt">string</span>         <span class="c1">// Имя</span>
-    <span class="nx">Depth</span>        <span class="kt">int</span>            <span class="c1">// Глубина от корня</span>
-    <span class="nx">Files</span>        <span class="p">[]</span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span>  <span class="c1">// Список файлов в данном узле</span>
-    <span class="nx">FilesCount</span>   <span class="kt">int</span>            <span class="c1">// Число файлов</span>
-    <span class="nx">SubDirs</span>      <span class="p">[]</span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span>  <span class="c1">// Список подкаталогов</span>
-    <span class="nx">SubDirsCount</span> <span class="kt">int</span>            <span class="c1">// Число подкаталогов</span>
-  <span class="p">}</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>  <span class="c1">// Узел</span>
+<span class="linenos"> 2</span>  <span class="kd">type</span> <span class="nx">TreeNodeStruct</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="linenos"> 3</span>    <span class="nx">Path</span>         <span class="kt">string</span>         <span class="c1">// Путь</span>
+<span class="linenos"> 4</span>    <span class="nx">Name</span>         <span class="kt">string</span>         <span class="c1">// Имя</span>
+<span class="linenos"> 5</span>    <span class="nx">Depth</span>        <span class="kt">int</span>            <span class="c1">// Глубина от корня</span>
+<span class="linenos"> 6</span>    <span class="nx">Files</span>        <span class="p">[]</span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span>  <span class="c1">// Список файлов в данном узле</span>
+<span class="linenos"> 7</span>    <span class="nx">FilesCount</span>   <span class="kt">int</span>            <span class="c1">// Число файлов</span>
+<span class="linenos"> 8</span>    <span class="nx">SubDirs</span>      <span class="p">[]</span><span class="nx">os</span><span class="p">.</span><span class="nx">FileInfo</span>  <span class="c1">// Список подкаталогов</span>
+<span class="linenos"> 9</span>    <span class="nx">SubDirsCount</span> <span class="kt">int</span>            <span class="c1">// Число подкаталогов</span>
+<span class="linenos">10</span>  <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Список узлов</span>
-  <span class="kd">type</span> <span class="nx">TreeNodeListStruct</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="nx">List</span>    <span class="p">[]</span><span class="nx">TreeNodeStruct</span>    <span class="c1">// Список узлов TreeNodeStruct</span>
-    <span class="nx">Reverse</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>      <span class="c1">// Обратный индекс для быстрых путешествий по дереву (подробнее см. ниже)</span>
-  <span class="p">}</span>
+</div>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="c1">// Список узлов</span>
+<span class="linenos">2</span>  <span class="kd">type</span> <span class="nx">TreeNodeListStruct</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="linenos">3</span>    <span class="nx">List</span>    <span class="p">[]</span><span class="nx">TreeNodeStruct</span>    <span class="c1">// Список узлов TreeNodeStruct</span>
+<span class="linenos">4</span>    <span class="nx">Reverse</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>      <span class="c1">// Обратный индекс для быстрых путешествий по дереву (подробнее см. ниже)</span>
+<span class="linenos">5</span>  <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <div class="section" id="id1">
 <h2>Узел<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Узел имеет только один метод - Fill.</p>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">TreeNodeStruct</span><span class="p">)</span> <span class="nx">Fill</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">depth</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">error</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">TreeNodeStruct</span><span class="p">)</span> <span class="nx">Fill</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">depth</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">error</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>Здесь два входящих параметра</p>
 <ol class="arabic simple">
 <li><p>path - Путь</p></li>
@@ -252,27 +246,18 @@
 <div class="section" id="id2">
 <h2>Список узлов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Имеет уже три метода</p>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="c1">// Добавляет в список новый Узел</span>
-  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">Add</span><span class="p">(</span><span class="nx">node</span> <span class="nx">TreeNodeStruct</span><span class="p">)</span>
-
-  <span class="c1">// Получает Узел для указанного пути со стартовой глубиной</span>
-  <span class="c1">// и добавляет Узел в список</span>
-  <span class="c1">// Далее Получает узлы вложенных каталогов и так рекурсивно спускается до самого глубокого каталога.</span>
-  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">Scan</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">depth</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">ignoreErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">error</span>
-
-  <span class="c1">// Возвращает Узел по его индексу</span>
-  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">GetNode</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">TreeNodeStruct</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>  <span class="c1">// Добавляет в список новый Узел</span>
+<span class="linenos"> 2</span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">Add</span><span class="p">(</span><span class="nx">node</span> <span class="nx">TreeNodeStruct</span><span class="p">)</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>  <span class="c1">// Получает Узел для указанного пути со стартовой глубиной</span>
+<span class="linenos"> 5</span>  <span class="c1">// и добавляет Узел в список</span>
+<span class="linenos"> 6</span>  <span class="c1">// Далее Получает узлы вложенных каталогов и так рекурсивно спускается до самого глубокого каталога.</span>
+<span class="linenos"> 7</span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">Scan</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">depth</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">ignoreErr</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">error</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>  <span class="c1">// Возвращает Узел по его индексу</span>
+<span class="linenos">10</span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">list</span> <span class="o">*</span><span class="nx">TreeNodeListStruct</span><span class="p">)</span> <span class="nx">GetNode</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">TreeNodeStruct</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </div>
 </div>
 
@@ -281,37 +266,29 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../futi/index.html" class="btn btn-neutral float-right" title="FUTI - File Utils" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../fina/index.html" class="btn btn-neutral float-left" title="FINA - File Names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
-      
+        <a href="../futi/index.html" class="btn btn-neutral float-right" title="FUTI - File Utils" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../fina/index.html" class="btn btn-neutral float-left" title="FINA - File Names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Авторские права 2021, Ivan Sukharev (Lucky Star)
+        &#169; Copyright 2021, Ivan Sukharev (Lucky Star).
 
     </p>
   </div>
     
     
     
-    Собрано при помощи <a href="http://sphinx-doc.org/">Sphinx</a> с использованием
+    Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">темы,</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
     
     предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

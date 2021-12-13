@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ru" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>CHACHA - Дерево Валидации &mdash; SUIKAT 1.0 Documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/translations.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
@@ -52,7 +57,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> SUIKAT
+            <a href="../index.html" class="icon icon-home"> SUIKAT
           
 
           
@@ -168,6 +173,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -179,7 +186,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/chacha/index.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
           
         
@@ -213,266 +220,150 @@
 </ol>
 <p>и т.п.</p>
 <p>т.е. получилось вот такое дерево валидаторов</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="m">1</span>
-  └─2
-    └─3
-      ├─4
-      └─5
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="m">1</span>
+<span class="linenos">2</span>  └─2
+<span class="linenos">3</span>    └─3
+<span class="linenos">4</span>      ├─4
+<span class="linenos">5</span>      └─5
 </pre></div>
-</td></tr></table></div>
+</div>
 <div class="section" id="id1">
 <h2>Валидатор<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Для того чтобы создать валидатор нужно воспользоваться типом <code class="docutils literal notranslate"><span class="pre">Validator</span></code> из данного пакета</p>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kd">type</span> <span class="nx">Validator</span> <span class="kd">func</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>  <span class="kd">type</span> <span class="nx">Validator</span> <span class="kd">func</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>как мы видим функция валидатор, это Вариативная функция, т.е. она на вход принимает любое количество аргументов</p>
 <p>Например</p>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chacha&quot;</span>
-
-  <span class="o">...</span>
-
-  <span class="kd">type</span> <span class="nx">YourJSON</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="nx">Hello</span> <span class="kt">string</span>
-  <span class="p">}</span>
-
-  <span class="kd">type</span> <span class="nx">JsonError</span> <span class="kd">struct</span> <span class="p">{</span>
-          <span class="nx">Parent</span> <span class="kt">error</span>
-  <span class="p">}</span>
-
-  <span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="o">*</span><span class="nx">JsonError</span><span class="p">)</span> <span class="nx">Error</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;invalid json [%v]&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">Parent</span><span class="p">)</span>
-  <span class="p">}</span>
-
-  <span class="c1">// Вот он наш валидатор</span>
-  <span class="kd">func</span> <span class="nx">IsValidJSON</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">jsonStr</span> <span class="o">:=</span> <span class="nx">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="nx">testJson</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">YourJSON</span><span class="p">{}</span>
-
-    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">jsonStr</span><span class="p">,</span> <span class="nx">testJson</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">JsonError</span><span class="p">{</span>
-                <span class="nx">Parent</span><span class="p">:</span> <span class="nx">err</span><span class="p">,</span>
-          <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="nx">testJson</span><span class="p">,</span> <span class="kc">nil</span>
-  <span class="p">}</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chacha&quot;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>  <span class="o">...</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>  <span class="kd">type</span> <span class="nx">YourJSON</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="linenos"> 6</span>    <span class="nx">Hello</span> <span class="kt">string</span>
+<span class="linenos"> 7</span>  <span class="p">}</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>  <span class="kd">type</span> <span class="nx">JsonError</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="linenos">10</span>          <span class="nx">Parent</span> <span class="kt">error</span>
+<span class="linenos">11</span>  <span class="p">}</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="o">*</span><span class="nx">JsonError</span><span class="p">)</span> <span class="nx">Error</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+<span class="linenos">14</span>          <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;invalid json [%v]&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">Parent</span><span class="p">)</span>
+<span class="linenos">15</span>  <span class="p">}</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>  <span class="c1">// Вот он наш валидатор</span>
+<span class="linenos">18</span>  <span class="kd">func</span> <span class="nx">IsValidJSON</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">19</span>    <span class="nx">jsonStr</span> <span class="o">:=</span> <span class="nx">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>    <span class="nx">testJson</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">YourJSON</span><span class="p">{}</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">jsonStr</span><span class="p">,</span> <span class="nx">testJson</span><span class="p">)</span>
+<span class="linenos">24</span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="linenos">25</span>              <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">JsonError</span><span class="p">{</span>
+<span class="linenos">26</span>                <span class="nx">Parent</span><span class="p">:</span> <span class="nx">err</span><span class="p">,</span>
+<span class="linenos">27</span>          <span class="p">}</span>
+<span class="linenos">28</span>    <span class="p">}</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span>    <span class="k">return</span> <span class="nx">testJson</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="linenos">31</span>  <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>Поучилась такая функция валидатор, которая пытается разобрать json строку и превратить ее в нашу структуру YourJSONStruct
 если это не удается - функция возвращает ошибку <code class="docutils literal notranslate"><span class="pre">JsonError</span></code>
 если это удается - она возвращает получившуюся структуру</p>
 <p>вообще в валидаторе можно вернуть следующие варианты ответов</p>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chacha&quot;</span>
-
-  <span class="o">...</span>
-
-  <span class="kd">func</span> <span class="nx">IsValidSomething</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="o">...</span>
-
-    <span class="c1">// 1. Какую то ошибку - это означает что валидация не прошла</span>
-    <span class="c1">//    т.е. исследуемые данные невалидны</span>
-    <span class="c1">//    Это значит что дочерние валидаторы не будут выполнятся</span>
-    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">someError</span>
-
-    <span class="c1">// 2. Нет ошибки и нет никаких данных</span>
-    <span class="c1">//    если есть дочерние валидаторы они будут вызваны</span>
-    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span>
-
-    <span class="c1">// 3. Нет ошибки, есть данные</span>
-    <span class="c1">//    если есть дочерние валидаторы они будут вызваны</span>
-    <span class="c1">//    Кроме того эти данные будут переданы в дочерние валидаторы</span>
-    <span class="c1">//    что-бы дочерние валидаторы могли их проверить</span>
-    <span class="k">return</span> <span class="nx">someData</span><span class="p">,</span> <span class="kc">nil</span>
-
-    <span class="c1">// 4. Нет ошибки, но и дочерние валидаторы я не хочу запускать</span>
-    <span class="c1">//    дочерние валидаторы не будут выполнятся</span>
-    <span class="k">return</span> <span class="nb">new</span><span class="p">(</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">DontCheckChildrens</span><span class="p">),</span> <span class="kc">nil</span>
-
-  <span class="p">}</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chacha&quot;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>  <span class="o">...</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>  <span class="kd">func</span> <span class="nx">IsValidSomething</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>    <span class="o">...</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>    <span class="c1">// 1. Какую то ошибку - это означает что валидация не прошла</span>
+<span class="linenos">10</span>    <span class="c1">//    т.е. исследуемые данные невалидны</span>
+<span class="linenos">11</span>    <span class="c1">//    Это значит что дочерние валидаторы не будут выполнятся</span>
+<span class="linenos">12</span>    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">someError</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span>    <span class="c1">// 2. Нет ошибки и нет никаких данных</span>
+<span class="linenos">15</span>    <span class="c1">//    если есть дочерние валидаторы они будут вызваны</span>
+<span class="linenos">16</span>    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>    <span class="c1">// 3. Нет ошибки, есть данные</span>
+<span class="linenos">19</span>    <span class="c1">//    если есть дочерние валидаторы они будут вызваны</span>
+<span class="linenos">20</span>    <span class="c1">//    Кроме того эти данные будут переданы в дочерние валидаторы</span>
+<span class="linenos">21</span>    <span class="c1">//    что-бы дочерние валидаторы могли их проверить</span>
+<span class="linenos">22</span>    <span class="k">return</span> <span class="nx">someData</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span>    <span class="c1">// 4. Нет ошибки, но и дочерние валидаторы я не хочу запускать</span>
+<span class="linenos">25</span>    <span class="c1">//    дочерние валидаторы не будут выполнятся</span>
+<span class="linenos">26</span>    <span class="k">return</span> <span class="nb">new</span><span class="p">(</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">DontCheckChildrens</span><span class="p">),</span> <span class="kc">nil</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>  <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </div>
 <div class="section" id="id2">
 <h2>Дерево Валидации<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Вот такой код можно написать чтобы составить дерево валидации</p>
-<div class="highlight-go notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chacha&quot;</span>
-
-  <span class="o">...</span>
-
-  <span class="c1">// Объявляем валидаторы</span>
-  <span class="kd">func</span> <span class="nx">IsValidRoot</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-  <span class="kd">func</span> <span class="nx">IsValidSortPresent</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-  <span class="kd">func</span> <span class="nx">IsValidSortLength</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-  <span class="kd">func</span> <span class="nx">IsValidNameLength</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-  <span class="kd">func</span> <span class="nx">IsValidDepth</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-  <span class="kd">func</span> <span class="nx">IsValidCount</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-  <span class="kd">func</span> <span class="nx">IsValidNames</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
-
-  <span class="o">...</span>
-
-  <span class="c1">// Объявляем Дерево Валидаторов</span>
-  <span class="kd">type</span> <span class="nx">MyValidator</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="nx">Rules</span> <span class="o">*</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span>
-  <span class="p">}</span>
-
-  <span class="kd">func</span> <span class="p">(</span><span class="nx">v</span> <span class="o">*</span><span class="nx">MyValidator</span><span class="p">)</span> <span class="nx">CreateRules</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">v</span><span class="p">.</span><span class="nx">Rules</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span><span class="p">{</span>
-      <span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidRoot</span><span class="p">,</span>
-      <span class="nx">Childrens</span><span class="p">:</span> <span class="p">[]</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span><span class="p">{</span>
-        <span class="p">{</span>
-          <span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidSortPresent</span><span class="p">,</span>
-          <span class="nx">Childrens</span><span class="p">:</span> <span class="p">[]</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span><span class="p">{</span>
-            <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidSortLength</span><span class="p">},</span>
-            <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidNameLength</span><span class="p">},</span>
-          <span class="p">},</span>
-        <span class="p">},</span>
-        <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidDepth</span><span class="p">},</span>
-        <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidCount</span><span class="p">},</span>
-        <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidNames</span><span class="p">},</span>
-      <span class="p">},</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="o">...</span>
-
-  <span class="kd">func</span> <span class="nx">ValidateData</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="nx">index</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">data</span> <span class="p">{</span>
-
-      <span class="nx">validator</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">MyValidator</span><span class="p">{}</span>
-      <span class="nx">validator</span><span class="p">.</span><span class="nx">CreateRules</span><span class="p">()</span>
-      <span class="nx">validator</span><span class="p">.</span><span class="nx">Rules</span><span class="p">.</span><span class="nx">Validate</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span>
-
-      <span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">Rules</span><span class="p">.</span><span class="nx">Valid</span> <span class="p">{</span>
-        <span class="c1">// Что то делать если валидно</span>
-        <span class="c1">// Например считать счетчик</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="c1">// Что то делать если невалидно</span>
-        <span class="c1">// Например считать счетчик и выводить на экран ошибку валидации</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>  <span class="kn">import</span> <span class="s">&quot;github.com/nobuenhombre/suikat/pkg/chacha&quot;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>  <span class="o">...</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>  <span class="c1">// Объявляем валидаторы</span>
+<span class="linenos"> 6</span>  <span class="kd">func</span> <span class="nx">IsValidRoot</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos"> 7</span>  <span class="kd">func</span> <span class="nx">IsValidSortPresent</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos"> 8</span>  <span class="kd">func</span> <span class="nx">IsValidSortLength</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos"> 9</span>  <span class="kd">func</span> <span class="nx">IsValidNameLength</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos">10</span>  <span class="kd">func</span> <span class="nx">IsValidDepth</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos">11</span>  <span class="kd">func</span> <span class="nx">IsValidCount</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos">12</span>  <span class="kd">func</span> <span class="nx">IsValidNames</span><span class="p">(</span><span class="nx">params</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span>  <span class="o">...</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span>  <span class="c1">// Объявляем Дерево Валидаторов</span>
+<span class="linenos">17</span>  <span class="kd">type</span> <span class="nx">MyValidator</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="linenos">18</span>    <span class="nx">Rules</span> <span class="o">*</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span>
+<span class="linenos">19</span>  <span class="p">}</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>  <span class="kd">func</span> <span class="p">(</span><span class="nx">v</span> <span class="o">*</span><span class="nx">MyValidator</span><span class="p">)</span> <span class="nx">CreateRules</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">22</span>    <span class="nx">v</span><span class="p">.</span><span class="nx">Rules</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span><span class="p">{</span>
+<span class="linenos">23</span>      <span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidRoot</span><span class="p">,</span>
+<span class="linenos">24</span>      <span class="nx">Childrens</span><span class="p">:</span> <span class="p">[]</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span><span class="p">{</span>
+<span class="linenos">25</span>        <span class="p">{</span>
+<span class="linenos">26</span>          <span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidSortPresent</span><span class="p">,</span>
+<span class="linenos">27</span>          <span class="nx">Childrens</span><span class="p">:</span> <span class="p">[]</span><span class="nx">chacha</span><span class="p">.</span><span class="nx">Tree</span><span class="p">{</span>
+<span class="linenos">28</span>            <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidSortLength</span><span class="p">},</span>
+<span class="linenos">29</span>            <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidNameLength</span><span class="p">},</span>
+<span class="linenos">30</span>          <span class="p">},</span>
+<span class="linenos">31</span>        <span class="p">},</span>
+<span class="linenos">32</span>        <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidDepth</span><span class="p">},</span>
+<span class="linenos">33</span>        <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidCount</span><span class="p">},</span>
+<span class="linenos">34</span>        <span class="p">{</span><span class="nx">Validator</span><span class="p">:</span> <span class="nx">IsValidNames</span><span class="p">},</span>
+<span class="linenos">35</span>      <span class="p">},</span>
+<span class="linenos">36</span>    <span class="p">}</span>
+<span class="linenos">37</span>  <span class="p">}</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>  <span class="o">...</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span>  <span class="kd">func</span> <span class="nx">ValidateData</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">42</span>    <span class="k">for</span> <span class="nx">index</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">data</span> <span class="p">{</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span>      <span class="nx">validator</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">MyValidator</span><span class="p">{}</span>
+<span class="linenos">45</span>      <span class="nx">validator</span><span class="p">.</span><span class="nx">CreateRules</span><span class="p">()</span>
+<span class="linenos">46</span>      <span class="nx">validator</span><span class="p">.</span><span class="nx">Rules</span><span class="p">.</span><span class="nx">Validate</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span>      <span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">Rules</span><span class="p">.</span><span class="nx">Valid</span> <span class="p">{</span>
+<span class="linenos">49</span>        <span class="c1">// Что то делать если валидно</span>
+<span class="linenos">50</span>        <span class="c1">// Например считать счетчик</span>
+<span class="linenos">51</span>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<span class="linenos">52</span>        <span class="c1">// Что то делать если невалидно</span>
+<span class="linenos">53</span>        <span class="c1">// Например считать счетчик и выводить на экран ошибку валидации</span>
+<span class="linenos">54</span>      <span class="p">}</span>
+<span class="linenos">55</span>    <span class="p">}</span>
+<span class="linenos">56</span>  <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </div>
 </div>
 
@@ -481,37 +372,29 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../chunks/index.html" class="btn btn-neutral float-right" title="CHUNKS - Кусочки" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../index.html" class="btn btn-neutral float-left" title="Набор компонентов SUIKAT для языка GO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Предыдущая</a>
-      
+        <a href="../chunks/index.html" class="btn btn-neutral float-right" title="CHUNKS - Кусочки" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Набор компонентов SUIKAT для языка GO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Авторские права 2021, Ivan Sukharev (Lucky Star)
+        &#169; Copyright 2021, Ivan Sukharev (Lucky Star).
 
     </p>
   </div>
     
     
     
-    Собрано при помощи <a href="http://sphinx-doc.org/">Sphinx</a> с использованием
+    Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">темы,</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
     
     предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

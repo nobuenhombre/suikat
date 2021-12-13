@@ -1,3 +1,5 @@
+// Package chacha provides primitives and functions
+// to create a complex tree of checks when one check depends on another check
 package chacha
 
 import (
@@ -7,12 +9,13 @@ import (
 	"github.com/fatih/color"
 )
 
-// Тип проверяльщик
+// Validator описывает функцию валидации
 type Validator func(params ...interface{}) (interface{}, error)
 
+// DontCheckChildrens a special marker that stops checking child branches
 type DontCheckChildrens struct{}
 
-// Дерево проверок
+// Tree describes the validation tree
 type Tree struct {
 	Validator Validator
 	Data      interface{}
@@ -21,7 +24,7 @@ type Tree struct {
 	Childrens []Tree
 }
 
-// Проверять детей
+// CheckChildrens returns a flag - whether it is necessary to perform checks of child branches
 func (t *Tree) CheckChildrens() bool {
 	checkChildrens := true
 
@@ -33,7 +36,8 @@ func (t *Tree) CheckChildrens() bool {
 	return checkChildrens
 }
 
-// Валидировать рекурсивно дерево
+// Validate Recursive function - traverses all branches of the validation tree and calls the validator function.
+// The result of the check is saved in the Valid field.
 func (t *Tree) Validate(params ...interface{}) {
 	t.Data, t.Result = t.Validator(params...)
 	if t.Result != nil {
@@ -50,6 +54,7 @@ func (t *Tree) Validate(params ...interface{}) {
 	}
 }
 
+// ShowErrors display validation errors on the screen
 func (t *Tree) ShowErrors() {
 	if t.Result != nil {
 		invalidColor := color.New(color.FgRed).SprintFunc()
