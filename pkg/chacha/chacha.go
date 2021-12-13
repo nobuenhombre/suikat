@@ -9,7 +9,7 @@ import (
 	"github.com/fatih/color"
 )
 
-// Validator описывает функцию валидации
+// Validator describes the validation function
 type Validator func(params ...interface{}) (interface{}, error)
 
 // DontCheckChildrens a special marker that stops checking child branches
