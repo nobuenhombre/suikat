@@ -1,6 +1,6 @@
-package mimes
-
+// Package mimes provides mime types described on mozilla.org
 // https://developer.mozilla.org/ru/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+package mimes
 
 const (
 	AACAudio                          = "audio/aac"
@@ -150,6 +150,7 @@ func mimesByExt() map[string]string {
 	}
 }
 
+// GetByExt return mime type by file extension
 func GetByExt(ext string) string {
 	list := mimesByExt()
 
