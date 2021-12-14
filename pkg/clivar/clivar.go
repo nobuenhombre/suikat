@@ -4,9 +4,10 @@ package clivar
 
 import (
 	"flag"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"reflect"
 	"strconv"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
