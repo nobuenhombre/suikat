@@ -1,3 +1,4 @@
+// Package postgrespgxdb provides constructor to connect to postgresql with pgx
 package postgrespgxdb
 
 import (
@@ -12,16 +13,17 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
-// StatementCacheMode values
-// prepare - default
-// describe - use it for PGBouncer connections
 const (
-	SCMPrepare  = "prepare"
+	// SCMPrepare
+	// Statement Cache Mode value - "prepare" - is default
+	SCMPrepare = "prepare"
+
+	// SCMDescribe
+	// Statement Cache Mode value - "describe" - use it for PGBouncer connections
 	SCMDescribe = "describe"
 )
 
-// Start Config
-//-------------------------------------------------
+// Config describe connection params to database
 type Config struct {
 	Host               string
 	Port               string
@@ -34,6 +36,8 @@ type Config struct {
 	MaxConnections     string
 }
 
+// GetDSN
+// return DSN string for db connection params
 func (cfg *Config) GetDSN() string {
 	dsn := fmt.Sprintf(
 		"postgres://%v:%v@%v:%v/%v",
@@ -65,10 +69,8 @@ func (cfg *Config) GetDSN() string {
 	return dsn
 }
 
-//-------------------------------------------------
-
-// Start Connect
-//-------------------------------------------------
+// DBQuery
+// describe interface
 type DBQuery interface {
 	Exec(ctx context.Context, sql string, arguments ...interface{}) (pgconn.CommandTag, error)
 	Query(ctx context.Context, sql string, optionsAndArgs ...interface{}) (pgx.Rows, error)
@@ -80,11 +82,15 @@ type DBQuery interface {
 	types.SQLLogger
 }
 
+// Conn
+// database connection and log
 type Conn struct {
 	*pgxpool.Pool
 	*types.DBLog
 }
 
+// New
+// create new database connection
 func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 	dsn := cfg.GetDSN()
 

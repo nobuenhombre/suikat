@@ -1,3 +1,4 @@
+// Package mariadb provides constructor to connect to mariadb with standard sql
 package mariadb
 
 import (
@@ -16,8 +17,7 @@ const (
 	ProtocolUNIXSocket = "unix"
 )
 
-// Start Config
-//-------------------------------------------------
+// Config describe connection params to database
 type Config struct {
 	Protocol string
 	Address  string
@@ -27,6 +27,8 @@ type Config struct {
 	Charset  string
 }
 
+// GetDSN
+// return DSN string for db connection params
 func (cfg *Config) GetDSN() string {
 	dsn := fmt.Sprintf(
 		"%v:%v@%v(%v)/%v?charset=%v&parseTime=true",
@@ -41,10 +43,8 @@ func (cfg *Config) GetDSN() string {
 	return dsn
 }
 
-//-------------------------------------------------
-
-// Start Connect
-//-------------------------------------------------
+// DBQuery
+// describe interface
 type DBQuery interface {
 	Exec(query string, args ...interface{}) (sql.Result, error)
 	Query(query string, args ...interface{}) (*sql.Rows, error)
@@ -55,11 +55,15 @@ type DBQuery interface {
 	types.SQLLogger
 }
 
+// Conn
+// database connection and log
 type Conn struct {
 	*sql.DB
 	*types.DBLog
 }
 
+// New
+// create new database connection
 func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 	dsn := cfg.GetDSN()
 

@@ -1,3 +1,4 @@
+// Package fico provides access to files content
 package fico
 
 import (

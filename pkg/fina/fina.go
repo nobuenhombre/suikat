@@ -1,3 +1,4 @@
+// Package fina provides function to change file names
 package fina
 
 import (

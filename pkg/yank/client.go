@@ -1,3 +1,4 @@
+// Package yank provides HTTP Client functions
 package yank
 
 import (

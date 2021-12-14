@@ -1,3 +1,4 @@
+// Package csvarser provides functions to parse CSV files
 package csvarser
 
 import (

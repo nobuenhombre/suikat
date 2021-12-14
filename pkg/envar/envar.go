@@ -1,6 +1,9 @@
+// Package envar provides syntactic sugar for working with the environment variables.
+// Allows you to describe using structure tags how to use environment variables to fill in this structure.
 package envar
 
 import (
+	"github.com/nobuenhombre/suikat/pkg/ge"
 	"os"
 	"reflect"
 	"strconv"
@@ -8,11 +11,16 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
+// EnvVar describe tag for struct receiver
 type EnvVar struct {
-	Key          string
+	// Key - name environment variable
+	Key string
+
+	// DefaultValue - default value if environment variable is not set
 	DefaultValue interface{}
 }
 
+// GetString read string value from environment variable ev.Key
 func (ev *EnvVar) GetString() string {
 	if value, exists := os.LookupEnv(ev.Key); exists {
 		return value
@@ -21,6 +29,7 @@ func (ev *EnvVar) GetString() string {
 	return ev.DefaultValue.(string)
 }
 
+// GetInt read int value from environment variable ev.Key
 func (ev *EnvVar) GetInt() int {
 	if valueStr, exists := os.LookupEnv(ev.Key); exists {
 		if value, err := strconv.Atoi(valueStr); err == nil {
@@ -31,6 +40,7 @@ func (ev *EnvVar) GetInt() int {
 	return ev.DefaultValue.(int)
 }
 
+// GetFloat64 read float64 value from environment variable ev.Key
 func (ev *EnvVar) GetFloat64() float64 {
 	if valueStr, exists := os.LookupEnv(ev.Key); exists {
 		if value, err := strconv.ParseFloat(valueStr, 64); err == nil {
@@ -41,6 +51,7 @@ func (ev *EnvVar) GetFloat64() float64 {
 	return ev.DefaultValue.(float64)
 }
 
+// GetBool read bool value from environment variable ev.Key
 func (ev *EnvVar) GetBool() bool {
 	if valueStr, exists := os.LookupEnv(ev.Key); exists {
 		if value, err := strconv.ParseBool(valueStr); err == nil {
@@ -51,6 +62,7 @@ func (ev *EnvVar) GetBool() bool {
 	return ev.DefaultValue.(bool)
 }
 
+// Load field of target struct from flag like described in tags
 func Load(structData interface{}) error {
 	tagProcessor := NewTagProcessor()
 
@@ -112,9 +124,9 @@ func Load(structData interface{}) error {
 			value = ev.GetBool()
 
 		default:
-			return &UnknownValueTypeError{
-				ValueType: fieldInfo.(*FieldInfo).ValueType,
-			}
+			return ge.Pin(&ge.UndefinedSwitchCaseError{
+				Var: fieldInfo.(*FieldInfo).ValueType,
+			})
 		}
 
 		reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(value))

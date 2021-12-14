@@ -1,3 +1,4 @@
+// Package inslice provides functions to search in slices
 package inslice
 
 import (

@@ -1,3 +1,4 @@
+// Package jsonconfig provides function to load config files in json format
 package jsonconfig
 
 import (

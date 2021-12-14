@@ -1,3 +1,4 @@
+// Package credentials provides functions to store and read content of some files in environment variables
 package credentials
 
 import (

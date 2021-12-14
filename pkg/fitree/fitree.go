@@ -1,3 +1,4 @@
+// Package fitree provides function to read folders tree with files
 package fitree
 
 import (

@@ -1,8 +1,9 @@
+// Package types provides types to work with SQL databases
 package types
 
 import "time"
 
-// Log provides the log func used by generated queries.
+// SQLLoggerFunc provides the log func used by generated queries.
 type SQLLoggerFunc func(sql string, du time.Duration, sqlParams ...interface{})
 
 type SQLLogger interface {

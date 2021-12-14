@@ -1,3 +1,4 @@
+// Package colorog provides functions to make colorize your logs.
 package colorog
 
 import (

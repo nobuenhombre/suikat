@@ -1,3 +1,4 @@
+// Package converter provides functions to convert strings to other types: int, float64, bool etc.
 package converter
 
 import (

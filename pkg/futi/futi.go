@@ -1,3 +1,4 @@
+// Package futi provides util functions to work with files
 package futi
 
 import (

@@ -1,3 +1,5 @@
+// Package repeater provides functions
+// allows you to call an external function repeatedly with a limit on the result or number of attempts
 package repeater
 
 import (

@@ -1,3 +1,4 @@
+// Package figlu provides function to glue files
 package figlu
 
 import (

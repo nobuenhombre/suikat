@@ -1,3 +1,4 @@
+// Package parallelworks provides start parallel calls some function with collecting results
 package parallelworks
 
 import (
