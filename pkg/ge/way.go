@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// Way
+// en: the structure contains the exact coordinates of the error, package, function, file name, line number in the file
+// ru: структура содержит точные координаты ошибки, пакет, функция, имя файла, номер строки в файле
 type Way struct {
 	Package string
 	Caller  string
@@ -14,6 +17,9 @@ type Way struct {
 	Line    int
 }
 
+// View
+// en: returns a formatted string with error coordinates
+// ru: возвращает форматированную строку с координатами ошибки
 func (w *Way) View() string {
 	return fmt.Sprintf("%v : %v, file %v line %v", w.Package, w.Caller, w.File, w.Line)
 }
