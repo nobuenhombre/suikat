@@ -117,7 +117,7 @@ func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField refle
 
 	partsTagData := strings.Split(tagData, "=")
 	if len(partsTagData) != CountPartsTagData {
-		return nil, &refavour.InvalidTagError{
+		return nil, &ge.MismatchError{
 			Actual:   tagData,
 			Expected: TagCliExample,
 		}
@@ -128,7 +128,7 @@ func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField refle
 
 	partsNameType := strings.Split(nameType, ":")
 	if len(partsNameType) != CountPartsNameType {
-		return nil, &refavour.InvalidTagError{
+		return nil, &ge.MismatchError{
 			Actual:   tagData,
 			Expected: TagCliExample,
 		}
@@ -139,7 +139,7 @@ func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField refle
 
 	partsNameDescription := strings.Split(nameDescription, "[")
 	if len(partsNameDescription) != CountPartsNameDescription {
-		return nil, &refavour.InvalidTagError{
+		return nil, &ge.MismatchError{
 			Actual:   tagData,
 			Expected: TagCliExample,
 		}

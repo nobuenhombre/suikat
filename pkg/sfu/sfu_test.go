@@ -1,12 +1,13 @@
 package sfu
 
 import (
+	"errors"
 	"net/url"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/nobuenhombre/suikat/pkg/refavour"
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 // Prepared Data
@@ -273,7 +274,7 @@ var convertTests = []convertTest{
 		},
 		parent: "",
 		form:   GetFormErrA(),
-		err: &PrivateStructFieldError{
+		err: &ge.PrivateStructFieldError{
 			Name: "time.Time",
 		},
 	},
@@ -283,7 +284,7 @@ var convertTests = []convertTest{
 		},
 		parent: "",
 		form:   GetFormErrB(),
-		err:    &UnknownTypeError{Type: "uint8"},
+		err:    &ge.UnknownTypeError{Type: "uint8"},
 	},
 	{
 		structData: &FormErrC{
@@ -291,7 +292,7 @@ var convertTests = []convertTest{
 		},
 		parent: "",
 		form:   GetFormErrC(),
-		err:    &UnknownTypeError{Type: "uint8"},
+		err:    &ge.UnknownTypeError{Type: "uint8"},
 	},
 	{
 		structData: &FormErrD{
@@ -303,7 +304,7 @@ var convertTests = []convertTest{
 		},
 		parent: "",
 		form:   GetFormErrD(),
-		err: &PrivateStructFieldError{
+		err: &ge.PrivateStructFieldError{
 			Name: "time.Time",
 		},
 	},
@@ -311,7 +312,7 @@ var convertTests = []convertTest{
 		structData: 123,
 		parent:     "",
 		form:       GetFormErrF(),
-		err:        &refavour.KindNotMatchedError{Expected: "struct", Actual: "int"},
+		err:        &ge.MismatchError{Expected: "struct", Actual: "int"},
 	},
 	{
 		structData: FormA{
@@ -320,7 +321,7 @@ var convertTests = []convertTest{
 		},
 		parent: "",
 		form:   GetFormErrF(),
-		err:    &refavour.CantBeSetError{},
+		err:    &ge.CantBeSetError{},
 	},
 }
 
@@ -332,7 +333,7 @@ func TestConvert(t *testing.T) {
 
 		err := Convert(test.structData, test.parent, form)
 
-		if !(reflect.DeepEqual(form, test.form) && reflect.DeepEqual(err, test.err)) {
+		if !(reflect.DeepEqual(form, test.form) && errors.Is(err, test.err)) {
 			t.Errorf(
 				"Convert(\n\t%#v,\n\t%#v),\n Expected (\n\t%#v,\n\t%#v),\n Actual (\n\t%#v,\n\t%#v).\n",
 				test.structData, test.parent, test.form, test.err, form, err,

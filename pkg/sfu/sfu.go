@@ -48,14 +48,14 @@ func Convert(structData interface{}, parent string, form *url.Values) (err error
 		if !value.CanInterface() {
 			structValue := refavour.GetReflectValue(structData)
 
-			return &PrivateStructFieldError{
+			return &ge.PrivateStructFieldError{
 				Name: structValue.Type().String(),
 			}
 		}
 
 		err := convertSimpleTypes(t, n, value, form)
 		if err != nil {
-			ge.Pin(err)
+			return ge.Pin(err)
 		}
 	}
 
@@ -86,7 +86,7 @@ func convertSimpleTypes(itemType string, n string, value reflect.Value, form *ur
 	default:
 		err := convertComplexTypes(itemType, n, value, form)
 		if err != nil {
-			ge.Pin(err)
+			return ge.Pin(err)
 		}
 	}
 
@@ -102,7 +102,7 @@ func convertComplexTypes(itemType string, n string, value reflect.Value, form *u
 
 		err := Convert(data, n, form)
 		if err != nil {
-			return err
+			return ge.Pin(err)
 		}
 
 	case reflect.Slice:
@@ -112,7 +112,7 @@ func convertComplexTypes(itemType string, n string, value reflect.Value, form *u
 		}
 
 	default:
-		return &UnknownTypeError{
+		return &ge.UnknownTypeError{
 			Type: itemType,
 		}
 	}
@@ -175,11 +175,11 @@ func convertSliceItemStruct(itemType string, name string, sliceItem reflect.Valu
 
 		err := Convert(slData, name, form)
 		if err != nil {
-			return err
+			return ge.Pin(err)
 		}
 
 	default:
-		return &UnknownTypeError{
+		return &ge.UnknownTypeError{
 			Type: itemType,
 		}
 	}

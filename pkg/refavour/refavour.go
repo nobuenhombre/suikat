@@ -3,6 +3,8 @@ package refavour
 
 import (
 	"reflect"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 // TagProcessor interface to provide parsing tags of struct
@@ -22,13 +24,13 @@ func GetReflectValue(s interface{}) reflect.Value {
 
 // CheckKind check is that interface{} equal expected Kind
 // if equal then return nil
-// else return KindNotMatchedError
+// else return ge.MismatchError
 func CheckKind(value interface{}, expectedKind reflect.Kind) error {
 	reflectValue := GetReflectValue(value)
 	reflectKind := reflectValue.Kind()
 
 	if reflectKind != expectedKind {
-		return &KindNotMatchedError{
+		return &ge.MismatchError{
 			Expected: expectedKind.String(),
 			Actual:   reflectKind.String(),
 		}
@@ -39,21 +41,21 @@ func CheckKind(value interface{}, expectedKind reflect.Kind) error {
 
 // CheckStructure check is that interface{} struct
 // if struct then return nil
-// else return KindNotMatchedError
+// else return ge.MismatchError
 func CheckStructure(data interface{}) error {
 	return CheckKind(data, reflect.Struct)
 }
 
 // CheckMap check is that interface{} map
 // if map then return nil
-// else return KindNotMatchedError
+// else return ge.MismatchError
 func CheckMap(data interface{}) error {
 	return CheckKind(data, reflect.Map)
 }
 
 // CheckSlice check is that interface{} slice
 // if slice then return nil
-// else return KindNotMatchedError
+// else return ge.MismatchError
 func CheckSlice(data interface{}) error {
 	return CheckKind(data, reflect.Slice)
 }
@@ -62,7 +64,7 @@ func CheckSlice(data interface{}) error {
 func CheckCanBeChanged(value interface{}) error {
 	reflectValue := GetReflectValue(value)
 	if !reflectValue.CanSet() {
-		return &CantBeSetError{}
+		return &ge.CantBeSetError{}
 	}
 
 	return nil
