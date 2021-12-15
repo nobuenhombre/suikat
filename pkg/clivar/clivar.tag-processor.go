@@ -2,7 +2,10 @@ package clivar
 
 import (
 	"reflect"
+	"strconv"
 	"strings"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
@@ -29,6 +32,74 @@ type FieldInfo struct {
 	ValueType    string
 	DefaultValue string
 	Description  string
+}
+
+func (f *FieldInfo) readFlag(name string, store map[string]interface{}) (err error) {
+	ev := CliVar{
+		Key:          f.Name,
+		Description:  f.Description,
+		DefaultValue: nil,
+	}
+
+	switch f.ValueType {
+	case "string":
+		ev.DefaultValue = f.DefaultValue
+		store[name] = ev.GetString()
+
+	case "int":
+		ev.DefaultValue, err = strconv.Atoi(f.DefaultValue)
+		if err != nil {
+			return err
+		}
+
+		store[name] = ev.GetInt()
+
+	case "float64":
+		ev.DefaultValue, err = strconv.ParseFloat(f.DefaultValue, 64)
+		if err != nil {
+			return err
+		}
+
+		store[name] = ev.GetFloat64()
+
+	case "bool":
+		ev.DefaultValue, err = strconv.ParseBool(f.DefaultValue)
+		if err != nil {
+			return err
+		}
+
+		store[name] = ev.GetBool()
+
+	default:
+		return ge.Pin(&ge.UndefinedSwitchCaseError{
+			Var: f.ValueType,
+		})
+	}
+
+	return nil
+}
+
+func (f *FieldInfo) fillStructField(name string, store map[string]interface{}, data reflect.Value) (err error) {
+	switch f.ValueType {
+	case "string":
+		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*string))))
+
+	case "int":
+		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*int))))
+
+	case "float64":
+		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*float64))))
+
+	case "bool":
+		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*bool))))
+
+	default:
+		return ge.Pin(&ge.UndefinedSwitchCaseError{
+			Var: f.ValueType,
+		})
+	}
+
+	return nil
 }
 
 type TagInfo struct {

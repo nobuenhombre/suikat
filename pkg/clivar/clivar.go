@@ -4,11 +4,8 @@ package clivar
 
 import (
 	"flag"
-	"reflect"
-	"strconv"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
-
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
@@ -77,47 +74,9 @@ func Load(structData interface{}) error {
 	tempMap := make(map[string]interface{})
 
 	for fieldName, fieldInfo := range structureFields {
-		ev := CliVar{
-			Key:          fieldInfo.(*FieldInfo).Name,
-			Description:  fieldInfo.(*FieldInfo).Description,
-			DefaultValue: nil,
-		}
-
-		var err error
-
-		switch fieldInfo.(*FieldInfo).ValueType {
-		case "string":
-			ev.DefaultValue = fieldInfo.(*FieldInfo).DefaultValue
-			tempMap[fieldName] = ev.GetString()
-
-		case "int":
-			ev.DefaultValue, err = strconv.Atoi(fieldInfo.(*FieldInfo).DefaultValue)
-			if err != nil {
-				return err
-			}
-
-			tempMap[fieldName] = ev.GetInt()
-
-		case "float64":
-			ev.DefaultValue, err = strconv.ParseFloat(fieldInfo.(*FieldInfo).DefaultValue, 64)
-			if err != nil {
-				return err
-			}
-
-			tempMap[fieldName] = ev.GetFloat64()
-
-		case "bool":
-			ev.DefaultValue, err = strconv.ParseBool(fieldInfo.(*FieldInfo).DefaultValue)
-			if err != nil {
-				return err
-			}
-
-			tempMap[fieldName] = ev.GetBool()
-
-		default:
-			return ge.Pin(&ge.UndefinedSwitchCaseError{
-				Var: fieldInfo.(*FieldInfo).ValueType,
-			})
+		err := fieldInfo.(*FieldInfo).readFlag(fieldName, tempMap)
+		if err != nil {
+			return ge.Pin(err)
 		}
 	}
 
@@ -126,23 +85,9 @@ func Load(structData interface{}) error {
 	reflectValue := refavour.GetReflectValue(structData)
 
 	for fieldName, fieldInfo := range structureFields {
-		switch fieldInfo.(*FieldInfo).ValueType {
-		case "string":
-			reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(*(tempMap[fieldName].(*string))))
-
-		case "int":
-			reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(*(tempMap[fieldName].(*int))))
-
-		case "float64":
-			reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(*(tempMap[fieldName].(*float64))))
-
-		case "bool":
-			reflectValue.FieldByName(fieldName).Set(reflect.ValueOf(*(tempMap[fieldName].(*bool))))
-
-		default:
-			return ge.Pin(&ge.UndefinedSwitchCaseError{
-				Var: fieldInfo.(*FieldInfo).ValueType,
-			})
+		err := fieldInfo.(*FieldInfo).fillStructField(fieldName, tempMap, reflectValue)
+		if err != nil {
+			return ge.Pin(err)
 		}
 	}
 

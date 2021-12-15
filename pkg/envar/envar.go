@@ -3,10 +3,11 @@
 package envar
 
 import (
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"os"
 	"reflect"
 	"strconv"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )

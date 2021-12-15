@@ -12,6 +12,8 @@ import (
 	"net/url"
 	"reflect"
 
+	"github.com/nobuenhombre/suikat/pkg/ge"
+
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
@@ -51,89 +53,134 @@ func Convert(structData interface{}, parent string, form *url.Values) (err error
 			}
 		}
 
-		switch t {
-		case "string":
-			v := value.String()
-			form.Add(n, v)
+		err := convertSimpleTypes(t, n, value, form)
+		if err != nil {
+			ge.Pin(err)
+		}
+	}
 
-		case "int64":
-			vi := value.Int()
-			v := fmt.Sprintf("%v", vi)
-			form.Add(n, v)
+	return nil
+}
 
-		case "float64":
-			vf := value.Float()
-			v := fmt.Sprintf("%v", vf)
-			form.Add(n, v)
+func convertSimpleTypes(itemType string, n string, value reflect.Value, form *url.Values) (err error) {
+	switch itemType {
+	case "string":
+		v := value.String()
+		form.Add(n, v)
 
-		case "bool":
-			vb := value.Bool()
-			v := fmt.Sprintf("%v", vb)
-			form.Add(n, v)
+	case "int64":
+		vi := value.Int()
+		v := fmt.Sprintf("%v", vi)
+		form.Add(n, v)
 
-		default:
-			kind := value.Kind()
+	case "float64":
+		vf := value.Float()
+		v := fmt.Sprintf("%v", vf)
+		form.Add(n, v)
 
-			switch kind {
-			case reflect.Struct:
-				data := value.Addr().Interface()
+	case "bool":
+		vb := value.Bool()
+		v := fmt.Sprintf("%v", vb)
+		form.Add(n, v)
 
-				err := Convert(data, n, form)
-				if err != nil {
-					return err
-				}
+	default:
+		err := convertComplexTypes(itemType, n, value, form)
+		if err != nil {
+			ge.Pin(err)
+		}
+	}
 
-			case reflect.Slice:
-				for i := 0; i < value.Len(); i++ {
-					sliceItem := value.Index(i)
-					name := fmt.Sprintf("%v[%v]", n, i)
-					ts := sliceItem.Type().String()
+	return nil
+}
 
-					switch ts {
-					case "string":
-						v := sliceItem.String()
-						form.Add(name, v)
+func convertComplexTypes(itemType string, n string, value reflect.Value, form *url.Values) (err error) {
+	kind := value.Kind()
 
-					case "int64":
-						vi := sliceItem.Int()
-						v := fmt.Sprintf("%v", vi)
-						form.Add(name, v)
+	switch kind {
+	case reflect.Struct:
+		data := value.Addr().Interface()
 
-					case "float64":
-						vf := sliceItem.Float()
-						v := fmt.Sprintf("%v", vf)
-						form.Add(name, v)
+		err := Convert(data, n, form)
+		if err != nil {
+			return err
+		}
 
-					case "bool":
-						vb := sliceItem.Bool()
-						v := fmt.Sprintf("%v", vb)
-						form.Add(name, v)
+	case reflect.Slice:
+		err := convertSlice(n, value, form)
+		if err != nil {
+			return ge.Pin(err)
+		}
 
-					default:
-						slKind := sliceItem.Kind()
+	default:
+		return &UnknownTypeError{
+			Type: itemType,
+		}
+	}
 
-						switch slKind {
-						case reflect.Struct:
-							slData := sliceItem.Addr().Interface()
+	return nil
+}
 
-							err := Convert(slData, name, form)
-							if err != nil {
-								return err
-							}
+func convertSlice(n string, value reflect.Value, form *url.Values) (err error) {
+	for i := 0; i < value.Len(); i++ {
+		sliceItem := value.Index(i)
+		name := fmt.Sprintf("%v[%v]", n, i)
+		ts := sliceItem.Type().String()
 
-						default:
-							return &UnknownTypeError{
-								Type: ts,
-							}
-						}
-					}
-				}
+		err := convertSliceItem(ts, name, sliceItem, form)
+		if err != nil {
+			return ge.Pin(err)
+		}
+	}
 
-			default:
-				return &UnknownTypeError{
-					Type: t,
-				}
-			}
+	return nil
+}
+
+func convertSliceItem(itemType string, name string, sliceItem reflect.Value, form *url.Values) (err error) {
+	switch itemType {
+	case "string":
+		v := sliceItem.String()
+		form.Add(name, v)
+
+	case "int64":
+		vi := sliceItem.Int()
+		v := fmt.Sprintf("%v", vi)
+		form.Add(name, v)
+
+	case "float64":
+		vf := sliceItem.Float()
+		v := fmt.Sprintf("%v", vf)
+		form.Add(name, v)
+
+	case "bool":
+		vb := sliceItem.Bool()
+		v := fmt.Sprintf("%v", vb)
+		form.Add(name, v)
+
+	default:
+		err := convertSliceItemStruct(itemType, name, sliceItem, form)
+		if err != nil {
+			return ge.Pin(err)
+		}
+	}
+
+	return nil
+}
+
+func convertSliceItemStruct(itemType string, name string, sliceItem reflect.Value, form *url.Values) (err error) {
+	slKind := sliceItem.Kind()
+
+	switch slKind {
+	case reflect.Struct:
+		slData := sliceItem.Addr().Interface()
+
+		err := Convert(slData, name, form)
+		if err != nil {
+			return err
+		}
+
+	default:
+		return &UnknownTypeError{
+			Type: itemType,
 		}
 	}
 
