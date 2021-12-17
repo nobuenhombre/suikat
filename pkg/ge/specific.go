@@ -232,3 +232,25 @@ func (e *CantBeSetError) Is(target error) bool {
 
 	return errors.As(target, &val)
 }
+
+// LimitCountExhaustedError
+// en: error - the number of attempts has been exhausted
+// ru: ошибка - число попыток исчерпано
+type LimitCountExhaustedError struct {
+}
+
+// Error
+// en: error text formation
+// ru: формирование текста ошибки
+func (e *LimitCountExhaustedError) Error() string {
+	return "the number of attempts has been exhausted"
+}
+
+// Is
+// en: compare with target error
+// ru: сравнение с другой ошибкой
+func (e *LimitCountExhaustedError) Is(target error) bool {
+	var val *LimitCountExhaustedError
+
+	return errors.As(target, &val)
+}

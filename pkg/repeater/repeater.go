@@ -4,6 +4,8 @@ package repeater
 
 import (
 	"time"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 // При взаимодействии с некоторыми внешними апи - например банк Точка
@@ -55,13 +57,6 @@ type Config struct {
 	Timeout    time.Duration
 }
 
-type LimitCountExceedError struct {
-}
-
-func (e *LimitCountExceedError) Error() string {
-	return "Limit Count Exceed"
-}
-
 func (worker Worker) Run(inData interface{}, checker Checker, config Config) (interface{}, error) {
 	config.count++
 
@@ -77,7 +72,7 @@ func (worker Worker) Run(inData interface{}, checker Checker, config Config) (in
 	}
 
 	if config.count >= config.LimitCount {
-		return nil, &LimitCountExceedError{}
+		return nil, ge.Pin(&ge.LimitCountExhaustedError{})
 	}
 
 	time.Sleep(config.Timeout)
