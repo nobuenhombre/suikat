@@ -10,6 +10,8 @@ import (
 	"github.com/nobuenhombre/suikat/pkg/refavour"
 )
 
+type SliceStrings []string // separator = ","
+
 const (
 	TagCliExample             = "NAME[description key]:valueType=defaultValue"
 	CountPartsTagData         = 2
@@ -20,10 +22,11 @@ const (
 // Tag Examples
 //==============================================================
 //type CommandLineParams struct {
-//	Path           string  `cli:"PATH[Path to file]:string=/some/default/path"`
-//	Port           int     `cli:"PORT[Port for server]:int=8080"`
-//	Coefficient    float64 `cli:"COEFFICIENT[Coefficient transmutation]:float64=75.31"`
-//	MakeSomeAction bool    `cli:"MSA[Do make some action?]:bool=false"`
+//	Path           string   `cli:"PATH[Path to file]:string=/some/default/path"`
+//	Port           int      `cli:"PORT[Port for server]:int=8080"`
+//	Coefficient    float64  `cli:"COEFFICIENT[Coefficient transmutation]:float64=75.31"`
+//	MakeSomeAction bool     `cli:"MSA[Do make some action?]:bool=false"`
+//  Languages      []string `cli:"LANGUAGES[Languages]:SliceStrings=ru,en,de,fr"`
 //}
 
 type FieldInfo struct {
@@ -34,6 +37,14 @@ type FieldInfo struct {
 	Description  string
 }
 
+const (
+	ValueTypeString       = "string"
+	ValueTypeInt          = "int"
+	ValueTypeFloat64      = "float64"
+	ValueTypeBool         = "bool"
+	ValueTypeSliceStrings = "SliceStrings"
+)
+
 func (f *FieldInfo) readFlag(name string, store map[string]interface{}) (err error) {
 	ev := CliVar{
 		Key:          f.Name,
@@ -42,11 +53,15 @@ func (f *FieldInfo) readFlag(name string, store map[string]interface{}) (err err
 	}
 
 	switch f.ValueType {
-	case "string":
+	case ValueTypeString:
 		ev.DefaultValue = f.DefaultValue
 		store[name] = ev.GetString()
 
-	case "int":
+	case ValueTypeSliceStrings:
+		ev.DefaultValue = f.DefaultValue
+		store[name] = ev.GetString()
+
+	case ValueTypeInt:
 		ev.DefaultValue, err = strconv.Atoi(f.DefaultValue)
 		if err != nil {
 			return err
@@ -54,7 +69,8 @@ func (f *FieldInfo) readFlag(name string, store map[string]interface{}) (err err
 
 		store[name] = ev.GetInt()
 
-	case "float64":
+	case ValueTypeFloat64:
+		// nolint: gomnd
 		ev.DefaultValue, err = strconv.ParseFloat(f.DefaultValue, 64)
 		if err != nil {
 			return err
@@ -62,7 +78,7 @@ func (f *FieldInfo) readFlag(name string, store map[string]interface{}) (err err
 
 		store[name] = ev.GetFloat64()
 
-	case "bool":
+	case ValueTypeBool:
 		ev.DefaultValue, err = strconv.ParseBool(f.DefaultValue)
 		if err != nil {
 			return err
@@ -81,16 +97,20 @@ func (f *FieldInfo) readFlag(name string, store map[string]interface{}) (err err
 
 func (f *FieldInfo) fillStructField(name string, store map[string]interface{}, data reflect.Value) (err error) {
 	switch f.ValueType {
-	case "string":
+	case ValueTypeString:
 		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*string))))
 
-	case "int":
+	case ValueTypeSliceStrings:
+		flagValue := *(store[name].(*string))
+		data.FieldByName(name).Set(reflect.ValueOf(strings.Split(flagValue, ",")))
+
+	case ValueTypeInt:
 		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*int))))
 
-	case "float64":
+	case ValueTypeFloat64:
 		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*float64))))
 
-	case "bool":
+	case ValueTypeBool:
 		data.FieldByName(name).Set(reflect.ValueOf(*(store[name].(*bool))))
 
 	default:
