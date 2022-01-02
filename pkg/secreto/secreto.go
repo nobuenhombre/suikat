@@ -65,9 +65,14 @@ func Decrypt(key, data []byte) ([]byte, error) {
 	return plaintext, nil
 }
 
+const (
+	SaltLength = 32
+	KeyLength  = 32
+)
+
 func DeriveKey(password, salt []byte) ([]byte, []byte, error) {
 	if salt == nil {
-		salt = make([]byte, 32)
+		salt = make([]byte, SaltLength)
 
 		_, err := rand.Read(salt)
 		if err != nil {
@@ -75,7 +80,8 @@ func DeriveKey(password, salt []byte) ([]byte, []byte, error) {
 		}
 	}
 
-	key, err := scrypt.Key(password, salt, 1048576, 8, 1, 32)
+	// nolint: gomnd
+	key, err := scrypt.Key(password, salt, 1048576, 8, 1, KeyLength)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -126,7 +132,7 @@ func DecryptSimple(key, data []byte) ([]byte, error) {
 }
 
 func GenerateSimpleKey() ([]byte, error) {
-	key := make([]byte, 32)
+	key := make([]byte, KeyLength)
 
 	_, err := rand.Read(key)
 	if err != nil {

@@ -8,8 +8,11 @@ const (
 )
 
 type ReplaceRule struct {
-	SourceType  string `json:"SourceType"`
-	Source      string `json:"Source"`
+	// nolint: tagliatelle
+	SourceType string `json:"SourceType"`
+	// nolint: tagliatelle
+	Source string `json:"Source"`
+	// nolint: tagliatelle
 	Replacement string `json:"Replacement"`
 
 	regExp *regexp.Regexp

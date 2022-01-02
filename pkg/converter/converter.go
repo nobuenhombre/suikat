@@ -34,6 +34,7 @@ func StringToInt(s string) (int, error) {
 }
 
 func StringToInt8(s string) (int8, error) {
+	// nolint: gomnd
 	n, err := strconv.ParseInt(s, 10, 8)
 
 	if err != nil {
@@ -48,6 +49,7 @@ func StringToInt8(s string) (int8, error) {
 }
 
 func StringToInt16(s string) (int16, error) {
+	// nolint: gomnd
 	n, err := strconv.ParseInt(s, 10, 16)
 
 	if err != nil {
@@ -62,6 +64,7 @@ func StringToInt16(s string) (int16, error) {
 }
 
 func StringToInt32(s string) (int32, error) {
+	// nolint: gomnd
 	n, err := strconv.ParseInt(s, 10, 32)
 
 	if err != nil {
@@ -76,6 +79,7 @@ func StringToInt32(s string) (int32, error) {
 }
 
 func StringToInt64(s string) (int64, error) {
+	// nolint: gomnd
 	n, err := strconv.ParseInt(s, 10, 64)
 
 	if err != nil {
@@ -104,6 +108,7 @@ func StringToBool(s string) (bool, error) {
 }
 
 func StringToFloat32(s string) (float32, error) {
+	// nolint: gomnd
 	f, err := strconv.ParseFloat(s, 32)
 
 	if err != nil {
@@ -118,6 +123,7 @@ func StringToFloat32(s string) (float32, error) {
 }
 
 func StringToFloat64(s string) (float64, error) {
+	// nolint: gomnd
 	f, err := strconv.ParseFloat(s, 64)
 
 	if err != nil {
