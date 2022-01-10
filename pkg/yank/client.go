@@ -18,6 +18,7 @@ type Service interface {
 	PUT(request *Request, response *Response, ignoreDefaults bool) error
 	PATCH(request *Request, response *Response, ignoreDefaults bool) error
 	DELETE(request *Request, response *Response, ignoreDefaults bool) error
+	Light() LightService
 }
 
 func New(d *Defaults) Service {
@@ -130,6 +131,8 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			Actual:             httpResponse.StatusCode,
 		})
 	}
+
+	response.Raw = httpResponse.RawBody
 
 	err = httpResponse.Parse(response.Data)
 	if err != nil {

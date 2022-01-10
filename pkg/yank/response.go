@@ -11,6 +11,7 @@ type Response struct {
 
 	HTTPCode int
 	Headers  http.Header
+	Raw      []byte
 	Data     interface{}
 	Timer    *tracktime.Tracker
 }
