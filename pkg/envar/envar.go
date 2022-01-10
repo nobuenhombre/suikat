@@ -44,6 +44,7 @@ func (ev *EnvVar) GetInt() int {
 // GetFloat64 read float64 value from environment variable ev.Key
 func (ev *EnvVar) GetFloat64() float64 {
 	if valueStr, exists := os.LookupEnv(ev.Key); exists {
+		// nolint: gomnd
 		if value, err := strconv.ParseFloat(valueStr, 64); err == nil {
 			return value
 		}
@@ -109,6 +110,7 @@ func Load(structData interface{}) error {
 			value = ev.GetInt()
 
 		case "float64":
+			// nolint: gomnd
 			ev.DefaultValue, err = strconv.ParseFloat(fieldInfo.(*FieldInfo).DefaultValue, 64)
 			if err != nil {
 				return err

@@ -17,6 +17,7 @@ linters:
     - ifshort
     - wastedassign
     - scopelint
+    - golint
     - gci
 
 issues:

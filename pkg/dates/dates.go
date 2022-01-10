@@ -138,13 +138,13 @@ func BeginOfNextDay(t time.Time) time.Time {
 }
 
 func BeginOfPrevWeek(t time.Time) time.Time {
-	prevDay := t.AddDate(0, 0, -7)
+	prevDay := t.AddDate(0, 0, -1*WeekDays)
 
 	return BeginOfDay(prevDay)
 }
 
 func BeginOfNextWeek(t time.Time) time.Time {
-	nextDay := t.AddDate(0, 0, 7)
+	nextDay := t.AddDate(0, 0, WeekDays)
 
 	return BeginOfDay(nextDay)
 }

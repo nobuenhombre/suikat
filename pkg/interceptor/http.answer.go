@@ -194,6 +194,7 @@ func (answer *HTTPAnswer) sendData(data *[]byte, w http.ResponseWriter) (err err
 		outData = *data
 	}
 
+	// nolint: gomnd
 	w.Header().Add("Content-Length", strconv.FormatInt(int64(len(outData)), 10))
 
 	w.WriteHeader(answer.ResponseCode)
