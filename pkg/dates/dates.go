@@ -29,7 +29,10 @@ type DateTimeDiff struct {
 
 const (
 	SecondsInMinute = 60
+	SecondsInHour   = 3600
+	SecondsInDay    = 86400
 	MinutesInHour   = 60
+	MinutesInDay    = 1440
 	HourInDay       = 24
 	daysInMonth     = 32
 	MonthInYear     = 12
