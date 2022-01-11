@@ -11,7 +11,7 @@ func (buffer *BodyBuffer) String() string {
 		return "nil"
 	}
 
-	return buffer.String()
+	return buffer.Buffer.String()
 }
 
 func (buffer *BodyBuffer) Len() int {
@@ -19,5 +19,5 @@ func (buffer *BodyBuffer) Len() int {
 		return 0
 	}
 
-	return buffer.Len()
+	return buffer.Buffer.Len()
 }
