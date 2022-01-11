@@ -81,6 +81,8 @@ func (lc *LightClient) Request(
 	methods := []string{http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete}
 	if !adapt.IsNil(send) && inslice.String(method, &methods) {
 		switch mimeType {
+		case mimes.JSON:
+			request.BodyConstructor().SetBody(NewJSON(send))
 		case mimes.FormUrlencoded:
 			request.BodyConstructor().SetBody(NewFormURLEncoded(send))
 		case mimes.FormMultipartData:
