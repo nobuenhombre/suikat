@@ -19,12 +19,17 @@ type Service interface {
 	PATCH(request *Request, response *Response, ignoreDefaults bool) error
 	DELETE(request *Request, response *Response, ignoreDefaults bool) error
 	Light() LightService
+	GetDefaults() *Defaults
 }
 
 func New(d *Defaults) Service {
 	return &Client{
 		Defaults: d,
 	}
+}
+
+func (c *Client) GetDefaults() *Defaults {
+	return c.Defaults
 }
 
 func (c *Client) ApplyDefaultsOnRequest(request *Request, ignoreDefaults bool) error {
