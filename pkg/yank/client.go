@@ -86,7 +86,7 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			URL:            uri,
 			Method:         request.Method,
 			RequestRawBody: raw.Body,
-			Parent:         nil,
+			Parent:         err,
 		})
 	}
 
@@ -97,7 +97,7 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			Method:            request.Method,
 			RequestRawBody:    raw.Body,
 			RequestRawHeaders: httpRequest.Header,
-			Parent:            nil,
+			Parent:            err,
 		})
 	}
 
@@ -119,7 +119,7 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			RequestRawBody:     raw.Body,
 			RequestRawHeaders:  httpRequest.Header,
 			ResponseRawHeaders: httpResponse.Header,
-			Parent:             nil,
+			Parent:             err,
 		})
 	}
 
