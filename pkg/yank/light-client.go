@@ -77,6 +77,7 @@ func (lc *LightClient) Request(
 	mimeType string,
 ) (statusCode int, rawBody []byte, err error) {
 	request := NewRequest(route)
+	request.Method = method
 
 	methods := []string{http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete}
 	if !adapt.IsNil(send) && inslice.String(method, &methods) {
