@@ -117,11 +117,11 @@ var splitTests = []splitTest{
 func TestSplit(t *testing.T) {
 	for i := 0; i < len(splitTests); i++ {
 		test := &splitTests[i]
-		out := Split(test.in, test.limit)
+		out := SplitInt64(test.in, test.limit)
 
 		if !reflect.DeepEqual(out, test.out) {
 			t.Errorf(
-				"Split(%v, %v), Expected %v, Actual %v",
+				"SplitInt64(%v, %v), Expected %v, Actual %v",
 				test.in, test.limit, test.out, out,
 			)
 		}
