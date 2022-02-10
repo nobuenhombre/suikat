@@ -75,7 +75,7 @@ func (lc *LightClient) Request(
 	receiver interface{},
 	expectedStatusCode int,
 	mimeType string,
-) (statusCode int, rawBody []byte, err error) {
+) (int, []byte, error) {
 	request := NewRequest(route)
 	request.Method = method
 
@@ -97,11 +97,9 @@ func (lc *LightClient) Request(
 
 	response := NewResponse(receiver, expectedStatusCode)
 
-	err = lc.Client.Request(request, response, false)
-	statusCode = response.HTTPCode
-	rawBody = response.Raw
+	requestErr := lc.Client.Request(request, response, false)
 
-	return
+	return response.HTTPCode, response.Raw, requestErr
 }
 
 func (lc *LightClient) GET(
