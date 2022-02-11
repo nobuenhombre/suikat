@@ -2,6 +2,7 @@ package interceptor
 
 import (
 	"fmt"
+	"github.com/nobuenhombre/suikat/pkg/ge"
 	"io/ioutil"
 	"net/http"
 )
@@ -23,11 +24,14 @@ func GetFile(key string, r *http.Request) (upFile *UploadedFile, err error) {
 
 	file, fileHeader, err := r.FormFile(key)
 	if err != nil {
-		return nil, err
+		return nil, ge.Pin(err)
 	}
 
 	defer func() {
-		err = file.Close()
+		closeErr := file.Close()
+		if closeErr != nil {
+			err = ge.Pin(closeErr, ge.Params{ge.BaseError: err})
+		}
 	}()
 
 	fileData, err := ioutil.ReadAll(file)

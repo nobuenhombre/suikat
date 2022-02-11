@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+const BaseError = "baseError"
+
 // Params
 // en: error parameters - variables in the presence of which the error occurred
 // - will help you understand what happened

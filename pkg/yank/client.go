@@ -104,7 +104,7 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 	defer func() {
 		bodyCloseErr := httpResponse.Body.Close()
 		if bodyCloseErr != nil {
-			err = ge.Pin(bodyCloseErr, ge.Params{"baseError": err})
+			err = ge.Pin(bodyCloseErr, ge.Params{ge.BaseError: err})
 		}
 	}()
 
