@@ -61,8 +61,8 @@ func (c *Client) ApplyDefaultsOnRequest(request *Request, ignoreDefaults bool) e
 }
 
 // Request - make http request
-func (c *Client) Request(request *Request, response *Response, ignoreDefaults bool) error {
-	err := c.ApplyDefaultsOnRequest(request, ignoreDefaults)
+func (c *Client) Request(request *Request, response *Response, ignoreDefaults bool) (err error) {
+	err = c.ApplyDefaultsOnRequest(request, ignoreDefaults)
 	if err != nil {
 		return ge.Pin(&ApplyDefaultsError{
 			Parent: err,
@@ -102,9 +102,9 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 	}
 
 	defer func() {
-		err = httpResponse.Body.Close()
-		if err != nil {
-			err = ge.Pin(err)
+		bodyCloseErr := httpResponse.Body.Close()
+		if bodyCloseErr != nil {
+			err = ge.Pin(bodyCloseErr, ge.Params{"baseError": err})
 		}
 	}()
 
