@@ -2,9 +2,10 @@ package interceptor
 
 import (
 	"fmt"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 const MaxFormSizeMemory = 10 << 20
