@@ -10,6 +10,7 @@ const (
 	DateTimeFormat1C                 = "2006-01-02T15:04:05"
 	DateTimeFormatQiwi               = "02012006 15:04:05"
 	DateFormatYYYYMMDD               = "20060102"
+	DateTimeFormatYYYYMMDDHHmmss     = "20060102150405"
 )
 
 const (
