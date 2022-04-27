@@ -254,3 +254,33 @@ func (e *LimitCountExhaustedError) Is(target error) bool {
 
 	return errors.As(target, &val)
 }
+
+// ServiceRequiredError
+// en: error - service required
+// ru: ошибка - требуется сервис
+type ServiceRequiredError struct {
+	ServiceName string
+}
+
+// Error
+// en: error text formation
+// ru: формирование текста ошибки
+func (e *ServiceRequiredError) Error() string {
+	return fmt.Sprintf("service required (name = %v)", e.ServiceName)
+}
+
+// Is
+// en: compare with target error
+// ru: сравнение с другой ошибкой
+func (e *ServiceRequiredError) Is(target error) bool {
+	var val *ServiceRequiredError
+	if !errors.As(target, &val) {
+		return false
+	}
+
+	if val.ServiceName != e.ServiceName {
+		return false
+	}
+
+	return true
+}
