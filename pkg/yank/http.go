@@ -16,6 +16,7 @@ type HTTPHeaders interface {
 
 type HTTPRequest struct {
 	*http.Request
+	FollowRedirects bool
 }
 
 func (r *HTTPRequest) AddHeaders(headers http.Header) {
@@ -36,7 +37,17 @@ type HTTPResponse struct {
 func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 	timer := tracktime.Start("HTTPRequest.Execute()")
 
-	client := &http.Client{}
+	var client *http.Client
+
+	if r.FollowRedirects {
+		client = &http.Client{}
+	} else {
+		client = &http.Client{
+			CheckRedirect: func(req *http.Request, via []*http.Request) error {
+				return http.ErrUseLastResponse
+			},
+		}
+	}
 
 	//nolint:bodyclose
 	response, err := client.Do(r.Request)

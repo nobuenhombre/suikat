@@ -9,13 +9,14 @@ import (
 )
 
 type Request struct {
-	Method  string
-	URL     string
-	Route   string
-	Query   url.Values
-	Auth    Auth
-	Headers http.Header
-	Content Content
+	Method          string
+	URL             string
+	Route           string
+	Query           url.Values
+	Auth            Auth
+	Headers         http.Header
+	Content         Content
+	FollowRedirects bool
 }
 
 type RequestConstructor interface {
@@ -58,6 +59,10 @@ func (r *Request) BodyConstructor() BodyConstructor {
 
 func (r *Request) SetURL(url string) {
 	r.URL = url
+}
+
+func (r *Request) SetFollowRedirects(followRedirects bool) {
+	r.FollowRedirects = followRedirects
 }
 
 func (r *Request) AddQuery(key, value string) {
@@ -138,7 +143,10 @@ func (r *Request) NewHTTPRequest(
 		return nil, ge.Pin(err, ge.Params{"request": r})
 	}
 
-	httpRequest = &HTTPRequest{Request: req}
+	httpRequest = &HTTPRequest{
+		Request:         req,
+		FollowRedirects: r.FollowRedirects,
+	}
 
 	raw.AddHeaders(httpRequest)
 
