@@ -17,6 +17,7 @@ type Request struct {
 	Headers         http.Header
 	Content         Content
 	FollowRedirects bool
+	Transport       http.RoundTripper
 }
 
 type RequestConstructor interface {
@@ -63,6 +64,10 @@ func (r *Request) SetURL(url string) {
 
 func (r *Request) SetFollowRedirects(followRedirects bool) {
 	r.FollowRedirects = followRedirects
+}
+
+func (r *Request) SetTransport(transport http.RoundTripper) {
+	r.Transport = transport
 }
 
 func (r *Request) AddQuery(key, value string) {
@@ -146,6 +151,7 @@ func (r *Request) NewHTTPRequest(
 	httpRequest = &HTTPRequest{
 		Request:         req,
 		FollowRedirects: r.FollowRedirects,
+		Transport:       r.Transport,
 	}
 
 	raw.AddHeaders(httpRequest)

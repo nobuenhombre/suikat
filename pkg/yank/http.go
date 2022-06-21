@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"reflect"
 
+	"github.com/nobuenhombre/suikat/pkg/adapt"
+
 	"github.com/nobuenhombre/suikat/pkg/ge"
 	"github.com/nobuenhombre/suikat/pkg/tracktime"
 )
@@ -17,6 +19,7 @@ type HTTPHeaders interface {
 type HTTPRequest struct {
 	*http.Request
 	FollowRedirects bool
+	Transport       http.RoundTripper
 }
 
 func (r *HTTPRequest) AddHeaders(headers http.Header) {
@@ -37,16 +40,16 @@ type HTTPResponse struct {
 func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 	timer := tracktime.Start("HTTPRequest.Execute()")
 
-	var client *http.Client
+	client := &http.Client{}
 
-	if r.FollowRedirects {
-		client = &http.Client{}
-	} else {
-		client = &http.Client{
-			CheckRedirect: func(req *http.Request, via []*http.Request) error {
-				return http.ErrUseLastResponse
-			},
+	if !r.FollowRedirects {
+		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
 		}
+	}
+
+	if !adapt.IsNil(r.Transport) {
+		client.Transport = r.Transport
 	}
 
 	//nolint:bodyclose
