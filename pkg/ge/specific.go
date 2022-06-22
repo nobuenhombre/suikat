@@ -3,6 +3,7 @@ package ge
 import (
 	"errors"
 	"fmt"
+	"reflect"
 )
 
 // en: the most common errors
@@ -279,6 +280,36 @@ func (e *ServiceRequiredError) Is(target error) bool {
 	}
 
 	if val.ServiceName != e.ServiceName {
+		return false
+	}
+
+	return true
+}
+
+// UndefinedTypeError
+// en: error - undefined type
+// ru: ошибка - неопределенный тип
+type UndefinedTypeError struct {
+	Type reflect.Type
+}
+
+// Error
+// en: error text formation
+// ru: формирование текста ошибки
+func (e *UndefinedTypeError) Error() string {
+	return fmt.Sprintf("undefined type error = %v", e.Type)
+}
+
+// Is
+// en: compare with target error
+// ru: сравнение с другой ошибкой
+func (e *UndefinedTypeError) Is(target error) bool {
+	var val *UndefinedTypeError
+	if !errors.As(target, &val) {
+		return false
+	}
+
+	if val.Type != e.Type {
 		return false
 	}
 
