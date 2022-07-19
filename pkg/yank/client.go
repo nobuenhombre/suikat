@@ -57,6 +57,18 @@ func (c *Client) ApplyDefaultsOnRequest(request *Request, ignoreDefaults bool) e
 		request.Route = "/"
 	}
 
+	if !request.FollowRedirects {
+		if !ignoreDefaults && c.Defaults.FollowRedirects {
+			request.SetFollowRedirects(c.Defaults.FollowRedirects)
+		}
+	}
+
+	if request.Transport == nil {
+		if !ignoreDefaults && c.Defaults.Transport != nil {
+			request.SetTransport(c.Defaults.Transport)
+		}
+	}
+
 	return nil
 }
 

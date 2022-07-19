@@ -3,9 +3,11 @@ package yank
 import "net/http"
 
 type Defaults struct {
-	URL     string
-	Auth    Auth
-	Headers http.Header
+	URL             string
+	Auth            Auth
+	Headers         http.Header
+	FollowRedirects bool
+	Transport       http.RoundTripper
 }
 
 func NewDefaults(url string) *Defaults {
@@ -17,6 +19,14 @@ func NewDefaults(url string) *Defaults {
 type DefaultsConstructor interface {
 	HeaderConstructor
 	AuthConstructor
+}
+
+func (d *Defaults) SetFollowRedirects(value bool) {
+	d.FollowRedirects = value
+}
+
+func (d *Defaults) SetTransport(value http.RoundTripper) {
+	d.Transport = value
 }
 
 func (d *Defaults) AuthConstructor() AuthConstructor {
