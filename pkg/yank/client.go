@@ -135,21 +135,8 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 		})
 	}
 
-	response.HTTPCode = httpResponse.StatusCode
-	if httpResponse.StatusCode != response.ExpectedHTTPCode {
-		return ge.Pin(&WrongHTTPCodeError{
-			URL:                uri,
-			Method:             request.Method,
-			RequestRawBody:     raw.Body,
-			RequestRawHeaders:  httpRequest.Header,
-			ResponseRawBody:    string(httpResponse.RawBody),
-			ResponseRawHeaders: httpResponse.Header,
-			Expected:           response.ExpectedHTTPCode,
-			Actual:             httpResponse.StatusCode,
-		})
-	}
-
 	response.Raw = httpResponse.RawBody
+	response.HTTPCode = httpResponse.StatusCode
 
 	err = httpResponse.Parse(response.Data)
 	if err != nil {
@@ -161,6 +148,19 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			ResponseRawBody:    string(httpResponse.RawBody),
 			ResponseRawHeaders: httpResponse.Header,
 			Parent:             err,
+		})
+	}
+
+	if httpResponse.StatusCode != response.ExpectedHTTPCode {
+		return ge.Pin(&WrongHTTPCodeError{
+			URL:                uri,
+			Method:             request.Method,
+			RequestRawBody:     raw.Body,
+			RequestRawHeaders:  httpRequest.Header,
+			ResponseRawBody:    string(httpResponse.RawBody),
+			ResponseRawHeaders: httpResponse.Header,
+			Expected:           response.ExpectedHTTPCode,
+			Actual:             httpResponse.StatusCode,
 		})
 	}
 
