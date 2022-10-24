@@ -6,7 +6,7 @@ import (
 )
 
 // StrLen Test
-//===================================================
+// ===================================================
 type webulaStrLenTest struct {
 	in  string
 	out int
@@ -50,7 +50,7 @@ func TestStrLen(t *testing.T) {
 }
 
 // StripHTML Test
-//===================================================
+// ===================================================
 type webulaStripHTMLTest struct {
 	in  string
 	out string
@@ -82,7 +82,7 @@ func TestStripHTML(t *testing.T) {
 }
 
 // Trim Test
-//===================================================
+// ===================================================
 type inputTrimParams struct {
 	s        []string
 	trimmers []string
@@ -125,7 +125,7 @@ func TestTrim(t *testing.T) {
 }
 
 // Words Test
-//===================================================
+// ===================================================
 type webulaWordsTest struct {
 	in  string
 	out []string
@@ -155,7 +155,7 @@ func TestWords(t *testing.T) {
 }
 
 // NormalizeText Test
-//===================================================
+// ===================================================
 type inputNormalizeTextParams struct {
 	text string
 	glue string
@@ -202,7 +202,7 @@ func TestNormalizeText(t *testing.T) {
 }
 
 // IsHTML Test
-//===================================================
+// ===================================================
 type webulaIsHTMLTest struct {
 	in  string
 	out bool
@@ -242,7 +242,7 @@ func TestIsHTML(t *testing.T) {
 }
 
 // RemoveDuplicatesString Test
-//===================================================
+// ===================================================
 type RemoveDuplicatesStringTest struct {
 	in  []string
 	out []string
@@ -270,7 +270,7 @@ func TestRemoveDuplicatesString(t *testing.T) {
 }
 
 // NormalizeNameURL Test
-//===================================================
+// ===================================================
 type NormalizeNameURLTest struct {
 	in  string
 	out string
@@ -299,7 +299,7 @@ func TestNormalizeNameURL(t *testing.T) {
 }
 
 // NormalizeAlphabet Test
-//===================================================
+// ===================================================
 type NormalizeAlphabetTest struct {
 	in  string
 	out string
@@ -327,7 +327,7 @@ func TestNormalizeAlphabet(t *testing.T) {
 }
 
 // TranslitRusLat Test
-//===================================================
+// ===================================================
 type TranslitRusLatTest struct {
 	in  string
 	out string

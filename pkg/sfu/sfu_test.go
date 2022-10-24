@@ -14,7 +14,7 @@ import (
 //===============================
 
 // FormA
-//-------------------------------
+// -------------------------------
 type FormA struct {
 	ID   int64  `form:"id"`
 	Name string `form:"name"`
@@ -29,7 +29,7 @@ func GetFormA() *url.Values {
 }
 
 // FormB
-//-------------------------------
+// -------------------------------
 type Address struct {
 	PostIndex   int64  `form:"postIndex"`
 	Country     string `form:"country"`
@@ -58,7 +58,7 @@ func GetFormB() *url.Values {
 }
 
 // FormC
-//-------------------------------
+// -------------------------------
 type Prices struct {
 	Chicken  float64 `form:"chicken"`
 	FishRice float64 `form:"fishRice"`
@@ -91,7 +91,7 @@ func GetFormC() *url.Values {
 }
 
 // FormD
-//-------------------------------
+// -------------------------------
 type Tunnel struct {
 	IPFrom  string `form:"ipFrom"`
 	IPTo    string `form:"ipTo"`

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -338,7 +337,7 @@ func (c *Client) Request(
 
 	statusCode = resp.StatusCode
 
-	respBody, err = ioutil.ReadAll(resp.Body)
+	respBody, err = io.ReadAll(resp.Body)
 	if err != nil {
 		err = &ReadResponseBodyError{
 			URL:     URL,

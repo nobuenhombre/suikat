@@ -1,7 +1,7 @@
 package fitree
 
 import (
-	"io/ioutil"
+	"io/fs"
 	"os"
 )
 
@@ -23,9 +23,20 @@ func (node *TreeNodeStruct) Fill(path string, depth int) error {
 		return DirInfoErr
 	}
 
-	files, readDirErr := ioutil.ReadDir(path)
-	if readDirErr != nil {
-		return readDirErr
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return err
+	}
+
+	files := make([]fs.FileInfo, 0, len(entries))
+
+	for _, entry := range entries {
+		info, err := entry.Info()
+		if err != nil {
+			return err
+		}
+
+		files = append(files, info)
 	}
 
 	node.Path = path

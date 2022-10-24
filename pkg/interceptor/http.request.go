@@ -2,7 +2,7 @@ package interceptor
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
@@ -35,7 +35,7 @@ func GetFile(key string, r *http.Request) (upFile *UploadedFile, err error) {
 		}
 	}()
 
-	fileData, err := ioutil.ReadAll(file)
+	fileData, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}

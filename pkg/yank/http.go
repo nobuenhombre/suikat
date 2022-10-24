@@ -2,7 +2,7 @@ package yank
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"reflect"
 
@@ -66,7 +66,7 @@ func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 func (rs *HTTPResponse) ReadBody() error {
 	// parse Response JSON body
 	//-------------------------
-	respBody, err := ioutil.ReadAll(rs.Body)
+	respBody, err := io.ReadAll(rs.Body)
 	if err != nil {
 		return ge.Pin(err)
 	}

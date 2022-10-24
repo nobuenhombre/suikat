@@ -6,7 +6,7 @@ import (
 )
 
 // ApplyDefaultsError - Ошибка применения настроек по умолчанию (1)
-//-----------------------------------------------------------------
+// -----------------------------------------------------------------
 type ApplyDefaultsError struct {
 	Parent error
 }
@@ -19,7 +19,7 @@ func (e *ApplyDefaultsError) Error() string {
 }
 
 // RawContentError - Ошибка формирования тела запроса из структуры данных (2)
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 type RawContentError struct {
 	Method   string
 	URL      string
@@ -41,7 +41,7 @@ func (e *RawContentError) Error() string {
 }
 
 // CreateHTTPRequestError - Ошибка создания http запроса (3)
-//----------------------------------------------------------
+// ----------------------------------------------------------
 type CreateHTTPRequestError struct {
 	Method         string
 	URL            string
@@ -66,7 +66,7 @@ func (e *CreateHTTPRequestError) Error() string {
 }
 
 // ExecuteHTTPRequestError - Ошибка исполнения http запроса (4)
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 type ExecuteHTTPRequestError struct {
 	Method            string
 	URL               string
@@ -94,7 +94,7 @@ func (e *ExecuteHTTPRequestError) Error() string {
 }
 
 // ReadBodyHTTPRequestError - Ошибка чтения тела http ответа (5)
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 type ReadBodyHTTPRequestError struct {
 	Method             string
 	URL                string
@@ -125,7 +125,7 @@ func (e *ReadBodyHTTPRequestError) Error() string {
 }
 
 // WrongHTTPCodeError - Ошибка неверный http код (6)
-//--------------------------------------------------
+// --------------------------------------------------
 type WrongHTTPCodeError struct {
 	Method             string
 	URL                string
@@ -163,7 +163,7 @@ func (e *WrongHTTPCodeError) Error() string {
 }
 
 // ParseResponseError - Ошибка разбора тела ответа в структуру (7)
-//----------------------------------------------------------------
+// ----------------------------------------------------------------
 type ParseResponseError struct {
 	Method             string
 	URL                string

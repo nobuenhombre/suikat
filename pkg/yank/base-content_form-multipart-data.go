@@ -66,7 +66,7 @@ func (d *FormMultipartData) GetRawContent() (raw *RawContent, err error) {
 }
 
 // addFile - Add a file to the multipart request
-//----------------------------------------------
+// ----------------------------------------------
 func addFile(w *multipart.Writer, fieldName, path string) error {
 	file, err := os.Open(path)
 	if err != nil {

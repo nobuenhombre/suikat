@@ -26,7 +26,7 @@ func (p *CsvParser) AddTypeParser(dataType string, parser ParserFunc) {
 // fieldName - имя поля
 // fieldType - тип поля
 // data - Данные
-//-------------------------------------------
+// -------------------------------------------
 func (p *CsvParser) setStructureFieldData(
 	value interface{},
 	fieldName string,
@@ -54,7 +54,7 @@ func (p *CsvParser) setStructureFieldData(
 }
 
 // Заполнить структуру из слайса
-//------------------------------
+// ------------------------------
 func (p *CsvParser) FillStructFromSlice(structData interface{}, sliceData []string) error {
 	tagProcessor := NewTagProcessor()
 

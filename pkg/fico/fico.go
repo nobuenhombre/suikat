@@ -8,7 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 
@@ -32,7 +32,7 @@ func (f *TxtFile) ReadBytes() ([]byte, error) {
 	}
 	defer file.Close()
 
-	b, readErr := ioutil.ReadAll(file)
+	b, readErr := io.ReadAll(file)
 	if readErr != nil {
 		return []byte{}, readErr
 	}

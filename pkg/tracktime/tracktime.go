@@ -2,16 +2,16 @@
 //
 // example:
 //
-// func SomeBodyDo() {
-//     timer := tracktime.Start("Some Body Do")
-//     defer func() {
-//         timer.Stop()
-//         timer.Log()
-//     }()
-//     ...
-//     Here some actions
-//     ...
-// }
+//	func SomeBodyDo() {
+//	    timer := tracktime.Start("Some Body Do")
+//	    defer func() {
+//	        timer.Stop()
+//	        timer.Log()
+//	    }()
+//	    ...
+//	    Here some actions
+//	    ...
+//	}
 package tracktime
 
 import (

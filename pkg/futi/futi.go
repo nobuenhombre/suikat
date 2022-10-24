@@ -4,7 +4,6 @@ package futi
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 )
 
@@ -67,7 +66,7 @@ func (e *CreateTempFileError) Error() string {
 }
 
 func CreateTempFile(dir, pattern string, data *[]byte) (string, error) {
-	tempFile, err := ioutil.TempFile(dir, pattern)
+	tempFile, err := os.CreateTemp(dir, pattern)
 	if err != nil {
 		return "", &CreateTempFileError{
 			Dir:     dir,
