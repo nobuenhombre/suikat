@@ -62,6 +62,12 @@ func GetSamaraLocation() *time.Location {
 	return location
 }
 
+func GetBerlinLocation() *time.Location {
+	location, _ := time.LoadLocation("Europe/Berlin")
+
+	return location
+}
+
 func Diff(a, b time.Time) *DateTimeDiff {
 	if a.Location() != b.Location() {
 		b = b.In(a.Location())
