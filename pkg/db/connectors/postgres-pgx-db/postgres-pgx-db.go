@@ -4,11 +4,11 @@ package postgrespgxdb
 import (
 	"context"
 	"fmt"
+	"github.com/jackc/pgx/v5/pgconn"
 	"net/url"
 
-	"github.com/jackc/pgconn"
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/nobuenhombre/suikat/pkg/db/types"
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
@@ -25,15 +25,16 @@ const (
 
 // Config describe connection params to database
 type Config struct {
-	Host               string
-	Port               string
-	Name               string
-	User               string
-	Password           string
-	SSLMode            string
-	BinaryParameters   string // lib/pq setting for prepared statements in pgbouncer
-	StatementCacheMode string
-	MaxConnections     string
+	Host                string
+	Port                string
+	Name                string
+	User                string
+	Password            string
+	SSLMode             string
+	BinaryParameters    string // lib/pq setting for prepared statements in pgbouncer
+	StatementCacheMode  string
+	MaxConnections      string
+	UseConnectionPooler bool
 }
 
 // GetDSN
@@ -72,9 +73,9 @@ func (cfg *Config) GetDSN() string {
 // DBQuery
 // describe interface
 type DBQuery interface {
-	Exec(ctx context.Context, sql string, arguments ...interface{}) (pgconn.CommandTag, error)
-	Query(ctx context.Context, sql string, optionsAndArgs ...interface{}) (pgx.Rows, error)
-	QueryRow(ctx context.Context, sql string, optionsAndArgs ...interface{}) pgx.Row
+	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, optionsAndArgs ...any) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, optionsAndArgs ...any) pgx.Row
 	Begin(ctx context.Context) (pgx.Tx, error)
 	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
 	SendBatch(ctx context.Context, b *pgx.Batch) pgx.BatchResults
@@ -101,11 +102,13 @@ func New(cfg *Config, log types.SQLLoggerFunc) (DBQuery, error) {
 
 	// prepared statements for pgbouncer
 	// https://blog.bullgare.com/2019/06/pgbouncer-and-prepared-statements/
-	config.ConnConfig.PreferSimpleProtocol = true
+	if cfg.UseConnectionPooler {
+		config.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+	}
 
-	connectPool, err := pgxpool.ConnectConfig(context.Background(), config)
+	connectPool, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
-		return nil, ge.Pin(err)
+		return nil, err
 	}
 
 	return &Conn{
