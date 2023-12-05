@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-type Terminator struct {
+type Service struct {
 	Services []terminated.IGracefulShutDownService
 }
 
@@ -16,8 +16,8 @@ type ITerminator interface {
 	WaitOSInterruptSignalAndShutDown()
 }
 
-func NewTerminator(services []terminated.IGracefulShutDownService) ITerminator {
-	return &Terminator{
+func New(services []terminated.IGracefulShutDownService) ITerminator {
+	return &Service{
 		Services: services,
 	}
 }
@@ -26,13 +26,13 @@ func NewTerminator(services []terminated.IGracefulShutDownService) ITerminator {
 // kill (no param) default send syscall.SIGTERM
 // kill -2 is syscall.SIGINT
 // kill -9 is syscall. SIGKILL but can"t be caught, so don't need to add it
-func (t *Terminator) WaitOSInterruptSignalAndShutDown() {
+func (t *Service) WaitOSInterruptSignalAndShutDown() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Println("Shutdown ...")
 
-	for _, srv := range t.Services {
-		srv.GracefulShutDown()
+	for _, s := range t.Services {
+		s.GracefulShutDown()
 	}
 }
