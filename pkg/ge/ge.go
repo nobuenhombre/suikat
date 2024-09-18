@@ -6,6 +6,7 @@ package ge
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/nobuenhombre/suikat/pkg/inslice"
 )
@@ -14,6 +15,11 @@ import (
 // en: Description of the error identifying its place of origin
 // ru: Описание ошибки идентифицирующей место ее происхождения
 type IdentityError struct {
+	// CreatedAt
+	// en: Date Time of creation
+	// ru: дата время создания
+	CreatedAt time.Time
+
 	// Message
 	// en: error text message
 	// ru: текстовое сообщение ошибки
@@ -47,9 +53,10 @@ func New(message string, params ...Params) error {
 	}
 
 	return &IdentityError{
-		Message: message,
-		Params:  p,
-		Way:     getWay(),
+		CreatedAt: time.Now(),
+		Message:   message,
+		Params:    p,
+		Way:       getWay(),
 	}
 }
 
@@ -64,9 +71,10 @@ func Pin(parent error, params ...Params) error {
 	}
 
 	return &IdentityError{
-		Parent: parent,
-		Params: p,
-		Way:    getWay(),
+		CreatedAt: time.Now(),
+		Parent:    parent,
+		Params:    p,
+		Way:       getWay(),
 	}
 }
 
@@ -81,6 +89,8 @@ func (e *IdentityError) Unwrap() error {
 // en: error text formation
 // ru: формирование текста ошибки
 func (e *IdentityError) Error() string {
+	createdAtStr := fmt.Sprintf("CreatedAt[ %v ], ", e.CreatedAt)
+
 	wayStr := ""
 	if e.Way != nil {
 		wayStr = fmt.Sprintf("Way[ %v ], ", e.Way.View())
@@ -101,5 +111,5 @@ func (e *IdentityError) Error() string {
 		messageStr = fmt.Sprintf("Message[ %v ], ", e.Message)
 	}
 
-	return strings.TrimSuffix(fmt.Sprintf("%v%v%v%v", wayStr, paramsStr, parentStr, messageStr), ", ")
+	return strings.TrimSuffix(fmt.Sprintf("%v%v%v%v%v", createdAtStr, wayStr, paramsStr, parentStr, messageStr), ", ")
 }
