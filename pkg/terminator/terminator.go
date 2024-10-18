@@ -1,11 +1,12 @@
 package terminator
 
 import (
-	"github.com/nobuenhombre/suikat/pkg/terminator/terminated"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/nobuenhombre/suikat/pkg/terminator/terminated"
 )
 
 type Service struct {

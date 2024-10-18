@@ -3,6 +3,7 @@ package binhex
 import (
 	"encoding/hex"
 	"fmt"
+
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 

@@ -4,8 +4,9 @@ package postgrespgxdb
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v5/pgconn"
 	"net/url"
+
+	"github.com/jackc/pgx/v5/pgconn"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
