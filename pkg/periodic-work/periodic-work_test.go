@@ -29,14 +29,14 @@ func TestRunWithGracefulShutDown(t *testing.T) {
 	}()
 
 	config := &Config{
-		WithGracefulShutDown: true,
-		StopTimeout:          0 * time.Millisecond,
-		WorkGapInterval:      100 * time.Millisecond,
-		Worker:               myRunTestWorker,
+		StopTimeout:     0 * time.Millisecond,
+		WorkGapInterval: 100 * time.Millisecond,
+		Worker:          myRunTestWorker,
 	}
 
 	pw := New(config)
 	pw.Run()
+	pw.GracefulShutDown()
 
 	err := pw.GetStatus()
 	assert.NoError(t, err)
@@ -44,10 +44,9 @@ func TestRunWithGracefulShutDown(t *testing.T) {
 
 func TestRunWithStop(t *testing.T) {
 	config := &Config{
-		WithGracefulShutDown: false,
-		StopTimeout:          300 * time.Millisecond,
-		WorkGapInterval:      100 * time.Millisecond,
-		Worker:               myRunTestWorker,
+		StopTimeout:     300 * time.Millisecond,
+		WorkGapInterval: 100 * time.Millisecond,
+		Worker:          myRunTestWorker,
 	}
 
 	pw := New(config)

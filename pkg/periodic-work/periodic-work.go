@@ -12,19 +12,19 @@ import (
 type Worker func(wg *sync.WaitGroup, counter *Counter, config interface{})
 
 type Config struct {
-	WithGracefulShutDown bool
-	StopTimeout          time.Duration
-	WorkGapInterval      time.Duration
-	Worker               Worker
-	WorkerConfig         interface{}
-	ctx                  context.Context
-	executeWaitGroup     *sync.WaitGroup
-	counter              *Counter
+	StopTimeout      time.Duration
+	WorkGapInterval  time.Duration
+	Worker           Worker
+	WorkerConfig     interface{}
+	ctx              context.Context
+	executeWaitGroup *sync.WaitGroup
+	counter          *Counter
 }
 
 type Service interface {
 	Run()
 	Stop()
+	GracefulShutDown()
 	GetStatus() error
 }
 
@@ -66,10 +66,6 @@ func (c *Config) Run() {
 		c.executeWaitGroup.Add(1)
 		c.execute()
 	}()
-
-	if c.WithGracefulShutDown {
-		c.gracefulShutDown()
-	}
 }
 
 func (c *Config) Stop() {

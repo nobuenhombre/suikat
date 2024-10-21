@@ -18,7 +18,7 @@ func (c *Config) waitOSInterruptSignal() {
 	log.Println("Shutdown Periodic Work ...")
 }
 
-func (c *Config) gracefulShutDown() {
+func (c *Config) GracefulShutDown() {
 	c.waitOSInterruptSignal()
 	c.Stop()
 }
