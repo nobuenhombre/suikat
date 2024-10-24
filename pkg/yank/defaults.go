@@ -45,6 +45,14 @@ func (d *Defaults) AddHeader(key, value string) {
 	d.Headers.Add(key, value)
 }
 
+func (d *Defaults) GetAuth() Auth {
+	return d.Auth
+}
+
+func (d *Defaults) SetAuth(auth Auth) {
+	d.Auth = auth
+}
+
 func (d *Defaults) AuthNone() {
 	d.Auth = NewAuthNone()
 }
