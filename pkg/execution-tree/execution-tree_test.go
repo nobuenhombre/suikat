@@ -62,7 +62,7 @@ func TestExecutorTree(t *testing.T) {
 	executorC := func(input interface{}) NodeKey {
 		sum := input.(*Sum)
 		*sum += 3
-		return "exit"
+		return NodeKeyExit
 	}
 
 	nodeA := NewNode(executorA, &TestSum)
