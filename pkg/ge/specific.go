@@ -183,6 +183,36 @@ func (e *UnknownTypeError) Is(target error) bool {
 	return true
 }
 
+// TypeAssertionError
+// en: error - unknown type
+// ru: ошибка - неизвестный тип
+type TypeAssertionError struct {
+	TargetType string
+}
+
+// Error
+// en: error text formation
+// ru: формирование текста ошибки
+func (e *TypeAssertionError) Error() string {
+	return fmt.Sprintf("type assertion error (target type = %v)", e.TargetType)
+}
+
+// Is
+// en: compare with target error
+// ru: сравнение с другой ошибкой
+func (e *TypeAssertionError) Is(target error) bool {
+	var val *TypeAssertionError
+	if !errors.As(target, &val) {
+		return false
+	}
+
+	if val.TargetType != e.TargetType {
+		return false
+	}
+
+	return true
+}
+
 // PrivateStructFieldError
 // en: error - field in struct is private
 // ru: ошибка - поле структуры приватное
