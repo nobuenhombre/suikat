@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
+	str2duration "github.com/xhit/go-str2duration/v2"
 )
 
 type ParserError struct {
@@ -170,4 +171,30 @@ func StringToIntSlice(s, sep string) ([]int, error) {
 	}
 
 	return out, nil
+}
+
+func StringToDuration(s string) (time.Duration, error) {
+	s = strings.ReplaceAll(s, " ", "")
+	switch strings.Count(s, ":") {
+	case 0:
+		break
+	case 1:
+		s = strings.Replace(s, ":", "m", 1)
+		s += "s"
+	case 2:
+		s = strings.Replace(s, ":", "h", 1)
+		s = strings.Replace(s, ":", "m", 1)
+		s += "s"
+	default:
+		return time.Duration(0), ge.Pin(&ge.UndefinedSwitchCaseError{
+			Var: "unknown time pattern",
+		})
+	}
+
+	result, err := str2duration.ParseDuration(strings.ReplaceAll(s, " ", ""))
+	if err != nil {
+		return time.Duration(0), ge.Pin(err)
+	}
+
+	return result, nil
 }

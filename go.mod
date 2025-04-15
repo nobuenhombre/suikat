@@ -11,6 +11,7 @@ require (
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/microcosm-cc/bluemonday v1.0.19
 	github.com/stretchr/testify v1.8.1
+	github.com/xhit/go-str2duration/v2 v2.1.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.9.0
 )
