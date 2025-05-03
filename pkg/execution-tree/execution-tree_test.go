@@ -1,9 +1,10 @@
 package executiontree
 
 import (
+	"testing"
+
 	"github.com/nobuenhombre/suikat/pkg/ge"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNilExecutor(t *testing.T) {

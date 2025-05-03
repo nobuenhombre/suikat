@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"io"
 	"os"
 	"syscall"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 type conn struct {
