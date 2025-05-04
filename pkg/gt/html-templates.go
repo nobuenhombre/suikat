@@ -1,4 +1,4 @@
-package gotemplates
+package gt
 
 import (
 	"bytes"
@@ -41,7 +41,7 @@ func (hp HTMLPath) GetTemplate() (*htmlTemplate.Template, error) {
 	return t, nil
 }
 
-func (hp HTMLPath) HTML(data interface{}) (string, error) {
+func (hp HTMLPath) HTML(name string, data interface{}) (string, error) {
 	t, err := hp.GetTemplate()
 	if err != nil {
 		return "", ge.Pin(err)
@@ -49,7 +49,7 @@ func (hp HTMLPath) HTML(data interface{}) (string, error) {
 
 	buf := new(bytes.Buffer)
 
-	err = t.ExecuteTemplate(buf, "index", data)
+	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {
 		return "", err
 	}

@@ -1,4 +1,4 @@
-package gotemplates
+package gt
 
 import (
 	"testing"
@@ -37,7 +37,7 @@ func TestTextPathText(t *testing.T) {
 	}
 
 	p := TextPath("test-data/text")
-	text, err := p.Text(textDocData)
+	text, err := p.Text("index", textDocData)
 	require.NoError(t, err)
 	require.NotEmpty(t, text)
 	require.Equal(t, "\n    \n    Hello\n\n    \n    World\n\n", text)

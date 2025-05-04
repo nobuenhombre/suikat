@@ -1,4 +1,4 @@
-package gotemplates
+package gt
 
 import (
 	"bytes"
@@ -41,7 +41,7 @@ func (tp TextPath) GetTemplate() (*textTemplate.Template, error) {
 	return t, nil
 }
 
-func (tp TextPath) Text(data interface{}) (string, error) {
+func (tp TextPath) Text(name string, data interface{}) (string, error) {
 	t, err := tp.GetTemplate()
 	if err != nil {
 		return "", ge.Pin(err)
@@ -49,7 +49,7 @@ func (tp TextPath) Text(data interface{}) (string, error) {
 
 	buf := new(bytes.Buffer)
 
-	err = t.ExecuteTemplate(buf, "index", data)
+	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {
 		return "", err
 	}

@@ -1,4 +1,4 @@
-package gotemplates
+package gt
 
 import (
 	"testing"

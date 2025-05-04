@@ -1,4 +1,4 @@
-package gotemplates
+package gt
 
 import (
 	"testing"
@@ -37,7 +37,7 @@ func TestHTMLPathHTML(t *testing.T) {
 	}
 
 	p := HTMLPath("test-data/html")
-	html, err := p.HTML(htmlPageData)
+	html, err := p.HTML("index", htmlPageData)
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(t, "\n    <!DOCTYPE html>\n    <html>\n        \n    <head>\n        <meta charset=\"UTF-8\">\n        <title>Hello</title>\n    </head>\n\n        \n    <body>\n        <main>\n            World\n        </main>\n    </body>\n\n    </html>\n", html)
