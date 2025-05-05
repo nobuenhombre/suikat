@@ -7,7 +7,7 @@ import (
 )
 
 func TestPathGetDirectories(t *testing.T) {
-	p := Path("test-data/html")
+	p := Path("test-data/html/single-root")
 	list, err := p.GetSubDirectories()
 	require.NoError(t, err)
 	require.Len(t, list, 2)

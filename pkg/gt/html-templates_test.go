@@ -7,7 +7,7 @@ import (
 )
 
 func TestHTMLPathGetTemplate(t *testing.T) {
-	p := HTMLPath("test-data/html")
+	p := HTMLPath("test-data/html/single-root")
 	template, err := p.GetTemplate()
 	require.NoError(t, err)
 	require.NotEmpty(t, template)
@@ -36,9 +36,27 @@ func TestHTMLPathHTML(t *testing.T) {
 		},
 	}
 
-	p := HTMLPath("test-data/html")
+	p := HTMLPath("test-data/html/single-root")
 	html, err := p.HTML("index", htmlPageData)
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
-	require.Equal(t, "\n    <!DOCTYPE html>\n    <html>\n        \n    <head>\n        <meta charset=\"UTF-8\">\n        <title>Hello</title>\n    </head>\n\n        \n    <body>\n        <main>\n            World\n        </main>\n    </body>\n\n    </html>\n", html)
+	require.Equal(
+		t,
+		"\n"+
+			"    <!DOCTYPE html>\n"+
+			"    <html>\n"+
+			"        \n"+
+			"    <head>\n"+
+			"        <meta charset=\"UTF-8\">\n"+
+			"        <title>Hello</title>\n"+
+			"    </head>\n\n"+
+			"        \n"+
+			"    <body>\n"+
+			"        <main>\n"+
+			"            World\n"+
+			"        </main>\n"+
+			"    </body>\n\n"+
+			"    </html>\n",
+		html,
+	)
 }
