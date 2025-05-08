@@ -17,10 +17,16 @@ func (tp TextPath) GetMask() string {
 	return MaskGoTPL
 }
 
-func (tp TextPath) GetTemplate() (*textTemplate.Template, error) {
+func (tp TextPath) GetTemplate(funcMap template.FuncMap) (*textTemplate.Template, error) {
+	t := textTemplate.New("")
+
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
+
 	// Create a template for parsing all directories
 	fullPath := string(tp) + string(os.PathSeparator) + tp.GetMask()
-	t, err := textTemplate.ParseGlob(fullPath)
+	t, err := t.ParseGlob(fullPath)
 	if err != nil {
 		return nil, ge.Pin(err, ge.Params{"path": fullPath})
 	}
@@ -43,17 +49,13 @@ func (tp TextPath) GetTemplate() (*textTemplate.Template, error) {
 }
 
 func (tp TextPath) Text(name string, data interface{}, funcMap template.FuncMap) (string, error) {
-	t, err := tp.GetTemplate()
+	t, err := tp.GetTemplate(funcMap)
 	if err != nil {
 		return "", ge.Pin(err)
 	}
 
 	buf := new(bytes.Buffer)
 
-	if funcMap != nil {
-		t = t.Funcs(funcMap)
-	}
-	
 	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {
 		return "", err

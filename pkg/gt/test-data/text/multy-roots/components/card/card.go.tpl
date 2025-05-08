@@ -1,6 +1,6 @@
 {{define "card"}}
     ## Hello
-    Card
+    Card {{ .25 | formatPercent }}
     {{ template "button-blue" }}
     {{ template "button-red" }}
 {{end}}

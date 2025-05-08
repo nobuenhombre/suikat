@@ -1,3 +1,3 @@
 {{define "paragraph"}}
-    {{ .P }}
+    {{ .P }} {{ .25 | formatPercent }}
 {{end}}

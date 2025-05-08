@@ -1,14 +1,23 @@
 package gt
 
 import (
+	"html/template"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestHTMLPathGetTemplate(t *testing.T) {
+	getFuncMap := func() template.FuncMap {
+		return template.FuncMap{
+			"htmlSafe": func(html string) template.HTML {
+				return template.HTML(html)
+			},
+		}
+	}
+
 	p := HTMLPath("test-data/html/single-root")
-	template, err := p.GetTemplate()
+	template, err := p.GetTemplate(getFuncMap())
 	require.NoError(t, err)
 	require.NotEmpty(t, template)
 }
@@ -36,8 +45,16 @@ func TestHTMLPathHTML(t *testing.T) {
 		},
 	}
 
+	getFuncMap := func() template.FuncMap {
+		return template.FuncMap{
+			"htmlSafe": func(html string) template.HTML {
+				return template.HTML(html)
+			},
+		}
+	}
+
 	p := HTMLPath("test-data/html/single-root")
-	html, err := p.HTML("index", htmlPageData, nil)
+	html, err := p.HTML("index", htmlPageData, getFuncMap())
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(
@@ -45,6 +62,7 @@ func TestHTMLPathHTML(t *testing.T) {
 		"\n"+
 			"    <!DOCTYPE html>\n"+
 			"    <html>\n"+
+			"        <!-- test funcMap -->\n"+
 			"        \n"+
 			"    <head>\n"+
 			"        <meta charset=\"UTF-8\">\n"+

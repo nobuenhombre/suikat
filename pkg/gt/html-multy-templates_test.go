@@ -2,15 +2,24 @@ package gt
 
 import (
 	"github.com/stretchr/testify/require"
+	"html/template"
 	"testing"
 )
 
 func TestHTMLPathsGetTemplate(t *testing.T) {
+	getFuncMap := func() template.FuncMap {
+		return template.FuncMap{
+			"htmlSafe": func(html string) template.HTML {
+				return template.HTML(html)
+			},
+		}
+	}
+
 	p := NewHTMLPaths()
 	p.AddPath("test-data/html/multy-roots/pages/index")
 	p.AddPath("test-data/html/multy-roots/components")
 
-	template, err := p.GetTemplate()
+	template, err := p.GetTemplate(getFuncMap())
 	require.NoError(t, err)
 	require.NotEmpty(t, template)
 }
@@ -53,11 +62,19 @@ func TestHTMLPathsHTMLIndex(t *testing.T) {
 		},
 	}
 
+	getFuncMap := func() template.FuncMap {
+		return template.FuncMap{
+			"htmlSafe": func(html string) template.HTML {
+				return template.HTML(html)
+			},
+		}
+	}
+
 	p := NewHTMLPaths()
 	p.AddPath("test-data/html/multy-roots/pages/index")
 	p.AddPath("test-data/html/multy-roots/components")
 
-	html, err := p.HTML("page", htmlPageData, nil)
+	html, err := p.HTML("page", htmlPageData, getFuncMap())
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(
@@ -65,6 +82,7 @@ func TestHTMLPathsHTMLIndex(t *testing.T) {
 		"\n"+
 			"    <!DOCTYPE html>\n"+
 			"    <html>\n"+
+			"        <!-- test funcMap -->\n"+
 			"        \n"+
 			"    <head>\n"+
 			"        <meta charset=\"UTF-8\">\n"+
@@ -113,11 +131,19 @@ func TestHTMLPathsHTMLContact(t *testing.T) {
 		},
 	}
 
+	getFuncMap := func() template.FuncMap {
+		return template.FuncMap{
+			"htmlSafe": func(html string) template.HTML {
+				return template.HTML(html)
+			},
+		}
+	}
+
 	p := NewHTMLPaths()
 	p.AddPath("test-data/html/multy-roots/pages/contact")
 	p.AddPath("test-data/html/multy-roots/components")
 
-	html, err := p.HTML("page", htmlPageData, nil)
+	html, err := p.HTML("page", htmlPageData, getFuncMap())
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(
@@ -125,6 +151,7 @@ func TestHTMLPathsHTMLContact(t *testing.T) {
 		"\n"+
 			"    <!DOCTYPE html>\n"+
 			"    <html>\n"+
+			"        <!-- test funcMap -->\n"+
 			"        \n"+
 			"    <head>\n"+
 			"        <meta charset=\"UTF-8\">\n"+

@@ -3,10 +3,10 @@ package gt
 import (
 	"bytes"
 	"github.com/nobuenhombre/suikat/pkg/ge"
-	htmlTemplate "html/template"
+	"html/template"
 	"os"
 	"strings"
-	"text/template"
+	textTemplate "text/template"
 )
 
 type TextPaths struct {
@@ -27,14 +27,20 @@ func (textPaths *TextPaths) GetMask() string {
 	return MaskGoTPL
 }
 
-func (textPaths *TextPaths) GetTemplate() (*htmlTemplate.Template, error) {
+func (textPaths *TextPaths) GetTemplate(funcMap template.FuncMap) (*textTemplate.Template, error) {
 	if len(textPaths.List) == 0 {
 		return nil, ge.Pin(NoPathsDefinedError)
 	}
 
+	t := textTemplate.New("")
+
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
+
 	// Create a template for parsing all directories
 	fullPath := string(textPaths.List[0]) + string(os.PathSeparator) + textPaths.GetMask()
-	t, err := htmlTemplate.ParseGlob(fullPath)
+	t, err := t.ParseGlob(fullPath)
 	if err != nil {
 		return nil, ge.Pin(err, ge.Params{"path": fullPath})
 	}
@@ -69,16 +75,12 @@ func (textPaths *TextPaths) GetTemplate() (*htmlTemplate.Template, error) {
 }
 
 func (textPaths *TextPaths) HTML(name string, data interface{}, funcMap template.FuncMap) (string, error) {
-	t, err := textPaths.GetTemplate()
+	t, err := textPaths.GetTemplate(funcMap)
 	if err != nil {
 		return "", ge.Pin(err)
 	}
 
 	buf := new(bytes.Buffer)
-
-	if funcMap != nil {
-		t = t.Funcs(funcMap)
-	}
 
 	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {

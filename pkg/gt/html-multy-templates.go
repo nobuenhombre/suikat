@@ -30,14 +30,20 @@ func (htmlPaths *HTMLPaths) GetMask() string {
 	return MaskGoHTML
 }
 
-func (htmlPaths *HTMLPaths) GetTemplate() (*htmlTemplate.Template, error) {
+func (htmlPaths *HTMLPaths) GetTemplate(funcMap template.FuncMap) (*htmlTemplate.Template, error) {
 	if len(htmlPaths.List) == 0 {
 		return nil, ge.Pin(NoPathsDefinedError)
 	}
 
+	t := htmlTemplate.New("")
+
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
+
 	// Create a template for parsing all directories
 	fullPath := string(htmlPaths.List[0]) + string(os.PathSeparator) + htmlPaths.GetMask()
-	t, err := htmlTemplate.ParseGlob(fullPath)
+	t, err := t.ParseGlob(fullPath)
 	if err != nil {
 		return nil, ge.Pin(err, ge.Params{"path": fullPath})
 	}
@@ -72,16 +78,12 @@ func (htmlPaths *HTMLPaths) GetTemplate() (*htmlTemplate.Template, error) {
 }
 
 func (htmlPaths *HTMLPaths) HTML(name string, data interface{}, funcMap template.FuncMap) (string, error) {
-	t, err := htmlPaths.GetTemplate()
+	t, err := htmlPaths.GetTemplate(funcMap)
 	if err != nil {
 		return "", ge.Pin(err)
 	}
 
 	buf := new(bytes.Buffer)
-
-	if funcMap != nil {
-		t = t.Funcs(funcMap)
-	}
 
 	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {
