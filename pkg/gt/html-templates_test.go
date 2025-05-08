@@ -37,7 +37,7 @@ func TestHTMLPathHTML(t *testing.T) {
 	}
 
 	p := HTMLPath("test-data/html/single-root")
-	html, err := p.HTML("index", htmlPageData)
+	html, err := p.HTML("index", htmlPageData, nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(

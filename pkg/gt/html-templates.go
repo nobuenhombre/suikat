@@ -4,6 +4,7 @@ import (
 	"bytes"
 	htmlTemplate "html/template"
 	"os"
+	"text/template"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
@@ -41,13 +42,17 @@ func (hp HTMLPath) GetTemplate() (*htmlTemplate.Template, error) {
 	return t, nil
 }
 
-func (hp HTMLPath) HTML(name string, data interface{}) (string, error) {
+func (hp HTMLPath) HTML(name string, data interface{}, funcMap template.FuncMap) (string, error) {
 	t, err := hp.GetTemplate()
 	if err != nil {
 		return "", ge.Pin(err)
 	}
 
 	buf := new(bytes.Buffer)
+
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
 
 	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {

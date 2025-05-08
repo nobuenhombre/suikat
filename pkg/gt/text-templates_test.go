@@ -37,7 +37,7 @@ func TestTextPathText(t *testing.T) {
 	}
 
 	p := TextPath("test-data/text/single-root")
-	text, err := p.Text("index", textDocData)
+	text, err := p.Text("index", textDocData, nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, text)
 	require.Equal(

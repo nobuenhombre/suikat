@@ -2,6 +2,7 @@ package gt
 
 import (
 	"bytes"
+	"html/template"
 	"os"
 	textTemplate "text/template"
 
@@ -41,7 +42,7 @@ func (tp TextPath) GetTemplate() (*textTemplate.Template, error) {
 	return t, nil
 }
 
-func (tp TextPath) Text(name string, data interface{}) (string, error) {
+func (tp TextPath) Text(name string, data interface{}, funcMap template.FuncMap) (string, error) {
 	t, err := tp.GetTemplate()
 	if err != nil {
 		return "", ge.Pin(err)
@@ -49,6 +50,10 @@ func (tp TextPath) Text(name string, data interface{}) (string, error) {
 
 	buf := new(bytes.Buffer)
 
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
+	
 	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {
 		return "", err

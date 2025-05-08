@@ -57,7 +57,7 @@ func TestTextPathsHTMLIndex(t *testing.T) {
 	p.AddPath("test-data/text/multy-roots/docs/index")
 	p.AddPath("test-data/text/multy-roots/components")
 
-	html, err := p.HTML("page", htmlPageData)
+	html, err := p.HTML("page", htmlPageData, nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(
@@ -105,7 +105,7 @@ func TestTextPathsHTMLContact(t *testing.T) {
 	p.AddPath("test-data/text/multy-roots/docs/contact")
 	p.AddPath("test-data/text/multy-roots/components")
 
-	html, err := p.HTML("page", htmlPageData)
+	html, err := p.HTML("page", htmlPageData, nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, html)
 	require.Equal(

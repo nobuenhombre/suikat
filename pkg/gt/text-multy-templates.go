@@ -6,6 +6,7 @@ import (
 	htmlTemplate "html/template"
 	"os"
 	"strings"
+	"text/template"
 )
 
 type TextPaths struct {
@@ -67,13 +68,17 @@ func (textPaths *TextPaths) GetTemplate() (*htmlTemplate.Template, error) {
 	return t, nil
 }
 
-func (textPaths *TextPaths) HTML(name string, data interface{}) (string, error) {
+func (textPaths *TextPaths) HTML(name string, data interface{}, funcMap template.FuncMap) (string, error) {
 	t, err := textPaths.GetTemplate()
 	if err != nil {
 		return "", ge.Pin(err)
 	}
 
 	buf := new(bytes.Buffer)
+
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
 
 	err = t.ExecuteTemplate(buf, name, data)
 	if err != nil {
