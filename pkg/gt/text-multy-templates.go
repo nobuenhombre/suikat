@@ -74,7 +74,7 @@ func (textPaths *TextPaths) GetTemplate(funcMap template.FuncMap) (*textTemplate
 	return t, nil
 }
 
-func (textPaths *TextPaths) HTML(name string, data interface{}, funcMap template.FuncMap) (string, error) {
+func (textPaths *TextPaths) Text(name string, data interface{}, funcMap template.FuncMap) (string, error) {
 	t, err := textPaths.GetTemplate(funcMap)
 	if err != nil {
 		return "", ge.Pin(err)
