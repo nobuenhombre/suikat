@@ -3,11 +3,12 @@ package gt
 import (
 	"bytes"
 	"errors"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	htmlTemplate "html/template"
 	"os"
 	"strings"
 	"text/template"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 type HTMLPaths struct {

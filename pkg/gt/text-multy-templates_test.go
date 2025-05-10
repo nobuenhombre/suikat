@@ -1,12 +1,13 @@
 package gt
 
 import (
-	"github.com/stretchr/testify/require"
-	"golang.org/x/text/language"
-	"golang.org/x/text/message"
 	"math"
 	"testing"
 	"text/template"
+
+	"github.com/stretchr/testify/require"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 func TestTextPathsGetTemplate(t *testing.T) {

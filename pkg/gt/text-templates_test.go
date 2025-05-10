@@ -1,11 +1,12 @@
 package gt
 
 import (
-	"golang.org/x/text/language"
-	"golang.org/x/text/message"
 	"math"
 	"testing"
 	"text/template"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 
 	"github.com/stretchr/testify/require"
 )

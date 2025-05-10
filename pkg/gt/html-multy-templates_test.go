@@ -1,9 +1,10 @@
 package gt
 
 import (
-	"github.com/stretchr/testify/require"
 	"html/template"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestHTMLPathsGetTemplate(t *testing.T) {

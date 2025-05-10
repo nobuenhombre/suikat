@@ -2,11 +2,12 @@ package gt
 
 import (
 	"bytes"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"html/template"
 	"os"
 	"strings"
 	textTemplate "text/template"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 )
 
 type TextPaths struct {
