@@ -12,6 +12,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/andybalholm/brotli"
+
 	"github.com/nobuenhombre/suikat/pkg/fina"
 	"github.com/nobuenhombre/suikat/pkg/mimes"
 
@@ -20,6 +22,7 @@ import (
 
 const EmptyString = ""
 const ExtGZ = ".gz"
+const ExtBR = ".br"
 const ExtB64 = ".b64"
 const ExtHEX = ".hex"
 
@@ -103,6 +106,45 @@ func (f *TxtFile) WriteGZ(content string) error {
 }
 
 func (f *TxtFile) GZ() error {
+	data, err := f.Read()
+	if err != nil {
+		return err
+	}
+
+	err = f.WriteGZ(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (f *TxtFile) WriteBR(content string) error {
+	file, createErr := os.Create(string(*f) + ExtBR)
+	if createErr != nil {
+		return createErr
+	}
+
+	defer file.Close()
+
+	gz := archiver.Brotli{
+		Quality: brotli.BestCompression,
+	}
+
+	contentReader := strings.NewReader(content)
+	gzWriter := bufio.NewWriter(file)
+
+	compressErr := gz.Compress(contentReader, gzWriter)
+	if compressErr != nil {
+		return compressErr
+	}
+
+	gzWriter.Flush()
+
+	return nil
+}
+
+func (f *TxtFile) BR() error {
 	data, err := f.Read()
 	if err != nil {
 		return err
