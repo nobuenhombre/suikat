@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/nobuenhombre/suikat/pkg/ge"
 	"io"
 	"os"
 	"strings"
@@ -153,6 +154,25 @@ func (f *TxtFile) BR() error {
 	err = f.WriteGZ(data)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (f *TxtFile) WriteAndCompress(content string) error {
+	err := f.Write(content)
+	if err != nil {
+		return ge.Pin(err)
+	}
+
+	err = f.WriteGZ(content)
+	if err != nil {
+		return ge.Pin(err)
+	}
+
+	err = f.WriteBR(content)
+	if err != nil {
+		return ge.Pin(err)
 	}
 
 	return nil
