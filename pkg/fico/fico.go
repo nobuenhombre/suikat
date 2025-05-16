@@ -151,7 +151,7 @@ func (f *TxtFile) BR() error {
 		return err
 	}
 
-	err = f.WriteGZ(data)
+	err = f.WriteBR(data)
 	if err != nil {
 		return err
 	}
