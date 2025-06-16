@@ -21,6 +21,7 @@ var (
 
 // IFileSystem интерфейс виртуальной файловой системы
 type IFileSystem interface {
+	Suggest(path string) (string, error)
 	Create(path string) (*os.File, error)
 	Open(path string) (*os.File, error)
 	MkdirAll(path string, perm fs.FileMode) error
@@ -78,6 +79,19 @@ func getDiskUsage(path string) (*syscall.Statfs_t, error) {
 	return &stat, nil
 }
 
+func (sfs *FileSystem) Suggest(path string) (string, error) {
+	available, err := sfs.getAvailableDirs()
+	if err != nil {
+		return "", ge.Pin(err)
+	}
+
+	selectedIdx := available[sfs.rand.Intn(len(available))]
+	selectedDir := sfs.dirs[selectedIdx]
+	realPath := filepath.Join(selectedDir, path)
+
+	return realPath, nil
+}
+
 func (sfs *FileSystem) resolveRealPath(path string) (string, int, error) {
 	for i, dir := range sfs.dirs {
 		realPath := filepath.Join(dir, path)
@@ -94,16 +108,13 @@ func (sfs *FileSystem) Create(path string) (*os.File, error) {
 		return nil, ge.Pin(InvalidPathError)
 	}
 
-	available, err := sfs.getAvailableDirs()
+	realPath, err := sfs.Suggest(path)
 	if err != nil {
 		return nil, ge.Pin(err)
 	}
 
-	selectedIdx := available[sfs.rand.Intn(len(available))]
-	selectedDir := sfs.dirs[selectedIdx]
-	realPath := filepath.Join(selectedDir, path)
-
-	if err := os.MkdirAll(filepath.Dir(realPath), 0755); err != nil {
+	err = os.MkdirAll(filepath.Dir(realPath), 0755)
+	if err != nil {
 		return nil, ge.Pin(err)
 	}
 
@@ -134,16 +145,13 @@ func (sfs *FileSystem) MkdirAll(path string, perm fs.FileMode) error {
 		return nil
 	}
 
-	available, err := sfs.getAvailableDirs()
+	realPath, err := sfs.Suggest(path)
 	if err != nil {
 		return ge.Pin(err)
 	}
 
-	selectedIdx := available[sfs.rand.Intn(len(available))]
-	selectedDir := sfs.dirs[selectedIdx]
-	realPath := filepath.Join(selectedDir, path)
-
-	if err := os.MkdirAll(realPath, perm); err != nil {
+	err = os.MkdirAll(realPath, perm)
+	if err != nil {
 		return ge.Pin(err)
 	}
 
