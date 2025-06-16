@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
-	"sync"
 	"syscall"
 	"time"
 
@@ -17,6 +16,7 @@ var (
 	NoDirectoriesWithFreeSpaceAvailableError = errors.New("no directories with free space available")
 	InvalidPathError                         = errors.New("invalid path")
 	CantRemoveRootError                      = errors.New("cannot remove root")
+	DirectoryNotFoundInAnyBaseDirectoryError = errors.New("directory not found in any base directory")
 )
 
 // IFileSystem интерфейс виртуальной файловой системы
@@ -28,14 +28,13 @@ type IFileSystem interface {
 	RemoveAll(path string) error
 	Stat(path string) (fs.FileInfo, error)
 	ReadDir(path string) ([]fs.DirEntry, error)
+	MoveDir(oldDir, newDir string) error
 }
 
 // FileSystem реализация виртуальной файловой системы
 type FileSystem struct {
 	dirs        []string
 	freePercent float64
-	fileMap     map[string]int
-	fileMapLock sync.RWMutex
 	rand        *rand.Rand
 }
 
@@ -44,7 +43,6 @@ func New(dirs []string, freePercent float64) IFileSystem {
 	return &FileSystem{
 		dirs:        dirs,
 		freePercent: freePercent,
-		fileMap:     make(map[string]int),
 		rand:        rand.New(rand.NewSource(time.Now().UnixNano())),
 	}
 }
@@ -81,19 +79,9 @@ func getDiskUsage(path string) (*syscall.Statfs_t, error) {
 }
 
 func (sfs *FileSystem) resolveRealPath(path string) (string, int, error) {
-	sfs.fileMapLock.RLock()
-	if idx, ok := sfs.fileMap[path]; ok {
-		sfs.fileMapLock.RUnlock()
-		return filepath.Join(sfs.dirs[idx], path), idx, nil
-	}
-	sfs.fileMapLock.RUnlock()
-
 	for i, dir := range sfs.dirs {
 		realPath := filepath.Join(dir, path)
 		if _, err := os.Stat(realPath); err == nil {
-			sfs.fileMapLock.Lock()
-			sfs.fileMap[path] = i
-			sfs.fileMapLock.Unlock()
 			return realPath, i, nil
 		}
 	}
@@ -123,10 +111,6 @@ func (sfs *FileSystem) Create(path string) (*os.File, error) {
 	if err != nil {
 		return nil, ge.Pin(err)
 	}
-
-	sfs.fileMapLock.Lock()
-	sfs.fileMap[path] = selectedIdx
-	sfs.fileMapLock.Unlock()
 
 	return file, nil
 }
@@ -163,10 +147,6 @@ func (sfs *FileSystem) MkdirAll(path string, perm fs.FileMode) error {
 		return ge.Pin(err)
 	}
 
-	sfs.fileMapLock.Lock()
-	sfs.fileMap[path] = selectedIdx
-	sfs.fileMapLock.Unlock()
-
 	return nil
 }
 
@@ -183,10 +163,6 @@ func (sfs *FileSystem) Remove(path string) error {
 	if err := os.Remove(realPath); err != nil {
 		return ge.Pin(err)
 	}
-
-	sfs.fileMapLock.Lock()
-	delete(sfs.fileMap, path)
-	sfs.fileMapLock.Unlock()
 
 	return nil
 }
@@ -207,10 +183,6 @@ func (sfs *FileSystem) RemoveAll(path string) error {
 	if err := os.RemoveAll(realPath); err != nil {
 		return ge.Pin(err)
 	}
-
-	sfs.fileMapLock.Lock()
-	delete(sfs.fileMap, path)
-	sfs.fileMapLock.Unlock()
 
 	return nil
 }
@@ -255,4 +227,91 @@ func (sfs *FileSystem) ReadDir(path string) ([]fs.DirEntry, error) {
 	}
 
 	return result, nil
+}
+
+func (sfs *FileSystem) MoveDir(oldDir, newDir string) error {
+	oldDir = filepath.Clean(oldDir)
+	newDir = filepath.Clean(newDir)
+
+	// 1. Собираем все реальные файлы из всех базовых каталогов
+	type fileInfo struct {
+		realPath string
+		baseIdx  int
+		relPath  string // Относительный путь от oldDir
+	}
+
+	var files []fileInfo
+
+	// Сканируем каждый базовый каталог
+	for i, baseDir := range sfs.dirs {
+		realOldDir := filepath.Join(baseDir, oldDir)
+
+		_ = filepath.Walk(realOldDir, func(realPath string, info os.FileInfo, err error) error {
+			if err != nil || info.IsDir() {
+				return nil // Пропускаем ошибки и директории
+			}
+
+			// Вычисляем относительный путь внутри виртуальной директории
+			relPath, err := filepath.Rel(realOldDir, realPath)
+			if err != nil {
+				return nil
+			}
+
+			files = append(files, fileInfo{
+				realPath: realPath,
+				baseIdx:  i,
+				relPath:  relPath,
+			})
+
+			return nil
+		})
+	}
+
+	if len(files) == 0 {
+		return ge.Pin(DirectoryNotFoundInAnyBaseDirectoryError)
+	}
+
+	// 2. Перемещаем файлы
+	for _, file := range files {
+		newVirtualPath := filepath.Join(newDir, file.relPath)
+
+		// Выбираем новый базовый каталог
+		available, err := sfs.getAvailableDirs()
+		if err != nil {
+			return ge.Pin(err)
+		}
+		newBaseIdx := available[sfs.rand.Intn(len(available))]
+		newRealPath := filepath.Join(sfs.dirs[newBaseIdx], newVirtualPath)
+
+		// Создаём целевую директорию
+		if err := os.MkdirAll(filepath.Dir(newRealPath), 0755); err != nil {
+			return ge.Pin(err)
+		}
+
+		// Перемещаем файл
+		if err := os.Rename(file.realPath, newRealPath); err != nil {
+			return ge.Pin(err)
+		}
+	}
+
+	// 3. Удаляем пустые директории в исходном расположении
+	sfs.cleanupEmptyDirs(oldDir)
+
+	return nil
+}
+
+func (sfs *FileSystem) cleanupEmptyDirs(virtualDir string) {
+	for _, baseDir := range sfs.dirs {
+		realDir := filepath.Join(baseDir, virtualDir)
+		_ = filepath.Walk(realDir, func(path string, info os.FileInfo, err error) error {
+			if err != nil || !info.IsDir() {
+				return nil
+			}
+
+			// Пытаемся удалить, если директория пуста
+			_ = os.Remove(path)
+
+			return nil
+		})
+	}
 }

@@ -165,6 +165,11 @@ func (m *MockFileSystem) ReadDir(path string) ([]fs.DirEntry, error) {
 	return args.Get(0).([]fs.DirEntry), args.Error(1)
 }
 
+func (m *MockFileSystem) MoveDir(oldDir, newDir string) error {
+	args := m.Called(oldDir, newDir)
+	return args.Error(0)
+}
+
 // MockFileInfo реализация fs.FileInfo
 type MockFileInfo struct {
 	mock.Mock
@@ -260,4 +265,64 @@ func TestIFileSystem(t *testing.T) {
 		mockFS.AssertExpectations(t)
 		mockInfo.AssertExpectations(t)
 	})
+}
+
+func TestFileSystemMoveDir(t *testing.T) {
+	tempDirs := make([]string, 3)
+	for i := 0; i < 3; i++ {
+		dir, err := os.MkdirTemp("", "testdir_*")
+		assert.NoError(t, err)
+		tempDirs[i] = dir
+		defer os.RemoveAll(dir)
+	}
+
+	vfs := New(tempDirs, 10).(*FileSystem)
+
+	// Создаем тестовую структуру
+	oldDir := "old_dir"
+	newDir := "new_dir"
+	oldNotExistsDir := "old_not_exists_dir"
+
+	err := vfs.MkdirAll(filepath.Join(oldDir, "subdir"), 0755)
+	assert.NoError(t, err)
+
+	file1, err := vfs.Create(filepath.Join(oldDir, "file1.txt"))
+	assert.NoError(t, err)
+	file1.Close()
+
+	file2, err := vfs.Create(filepath.Join(oldDir, "subdir", "file2.txt"))
+	assert.NoError(t, err)
+	file2.Close()
+
+	// Перемещаем директорию
+	err = vfs.MoveDir(oldDir, newDir)
+	assert.NoError(t, err)
+
+	// Проверяем что файлы переместились
+	_, err = vfs.Stat(filepath.Join(newDir, "file1.txt"))
+	assert.NoError(t, err)
+
+	_, err = vfs.Stat(filepath.Join(newDir, "subdir", "file2.txt"))
+	assert.NoError(t, err)
+
+	// Проверяем что старые файлы удалились
+	_, err = vfs.Stat(filepath.Join(oldDir, "file1.txt"))
+	assert.Error(t, err)
+
+	_, err = vfs.Stat(filepath.Join(oldDir, "subdir", "file2.txt"))
+	assert.Error(t, err)
+
+	err = vfs.MoveDir(oldNotExistsDir, newDir)
+	assert.ErrorAs(t, err, &DirectoryNotFoundInAnyBaseDirectoryError)
+}
+
+func TestIFileSystemMoveDir(t *testing.T) {
+	mockFS := new(MockFileSystem)
+
+	mockFS.On("MoveDir", "old_dir", "new_dir").Return(nil)
+
+	err := mockFS.MoveDir("old_dir", "new_dir")
+	assert.NoError(t, err)
+
+	mockFS.AssertExpectations(t)
 }
