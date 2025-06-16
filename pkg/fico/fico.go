@@ -8,10 +8,11 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/nobuenhombre/suikat/pkg/ge"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/nobuenhombre/suikat/pkg/ge"
 
 	"github.com/andybalholm/brotli"
 
