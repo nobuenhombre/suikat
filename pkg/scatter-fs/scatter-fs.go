@@ -174,9 +174,10 @@ func (sfs *FileSystem) RemoveAll(path string) error {
 
 	realPath, _, err := sfs.resolveRealPath(path)
 	if err != nil {
-		if os.IsNotExist(err) {
+		if errors.Is(err, fs.ErrNotExist) {
 			return nil
 		}
+
 		return ge.Pin(err)
 	}
 
