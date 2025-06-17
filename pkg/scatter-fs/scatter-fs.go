@@ -22,6 +22,7 @@ var (
 // IFileSystem интерфейс виртуальной файловой системы
 type IFileSystem interface {
 	Suggest(path string) (string, error)
+	ResolveRealPath(path string) (string, error)
 	Create(path string) (*os.File, error)
 	Open(path string) (*os.File, error)
 	MkdirAll(path string, perm fs.FileMode) error
@@ -92,15 +93,15 @@ func (sfs *FileSystem) Suggest(path string) (string, error) {
 	return realPath, nil
 }
 
-func (sfs *FileSystem) resolveRealPath(path string) (string, int, error) {
-	for i, dir := range sfs.dirs {
+func (sfs *FileSystem) ResolveRealPath(path string) (string, error) {
+	for _, dir := range sfs.dirs {
 		realPath := filepath.Join(dir, path)
 		if _, err := os.Stat(realPath); err == nil {
-			return realPath, i, nil
+			return realPath, nil
 		}
 	}
 
-	return "", -1, ge.Pin(fs.ErrNotExist)
+	return "", ge.Pin(fs.ErrNotExist)
 }
 
 func (sfs *FileSystem) Create(path string) (*os.File, error) {
@@ -127,7 +128,7 @@ func (sfs *FileSystem) Create(path string) (*os.File, error) {
 }
 
 func (sfs *FileSystem) Open(path string) (*os.File, error) {
-	realPath, _, err := sfs.resolveRealPath(path)
+	realPath, err := sfs.ResolveRealPath(path)
 	if err != nil {
 		return nil, ge.Pin(err)
 	}
@@ -163,7 +164,7 @@ func (sfs *FileSystem) Remove(path string) error {
 		return ge.Pin(CantRemoveRootError)
 	}
 
-	realPath, _, err := sfs.resolveRealPath(path)
+	realPath, err := sfs.ResolveRealPath(path)
 	if err != nil {
 		return ge.Pin(err)
 	}
@@ -180,7 +181,7 @@ func (sfs *FileSystem) RemoveAll(path string) error {
 		return ge.Pin(CantRemoveRootError)
 	}
 
-	realPath, _, err := sfs.resolveRealPath(path)
+	realPath, err := sfs.ResolveRealPath(path)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
 			return nil
@@ -197,7 +198,7 @@ func (sfs *FileSystem) RemoveAll(path string) error {
 }
 
 func (sfs *FileSystem) Stat(path string) (fs.FileInfo, error) {
-	realPath, _, err := sfs.resolveRealPath(path)
+	realPath, err := sfs.ResolveRealPath(path)
 	if err != nil {
 		return nil, ge.Pin(err)
 	}
