@@ -165,3 +165,12 @@ func BeforePeriod(t time.Time, period int64, measure time.Duration) time.Time {
 func AfterPeriod(t time.Time, period int64, measure time.Duration) time.Time {
 	return t.Add(time.Duration(period) * measure)
 }
+
+func GetMonthRange(year int, month time.Month) (time.Time, time.Time) {
+	startOfMonth := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+
+	nextMonth := startOfMonth.AddDate(0, 1, 0)
+	endOfMonth := nextMonth.Add(-time.Nanosecond)
+
+	return startOfMonth, endOfMonth
+}
