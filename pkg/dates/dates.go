@@ -175,6 +175,13 @@ func GetMonthRange(year int, month time.Month) (time.Time, time.Time) {
 	return startOfMonth, endOfMonth
 }
 
+func GetLastMonthRange(now time.Time) (time.Time, time.Time) {
+	endOfMonth := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 999999999, now.Location())
+	startOfMonth := endOfMonth.AddDate(0, -1, 0)
+
+	return startOfMonth, endOfMonth
+}
+
 func GetLastWeekRange(now time.Time) (time.Time, time.Time) {
 	endOfWeek := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 999999999, now.Location())
 	startOfWeek := endOfWeek.AddDate(0, 0, -7)
