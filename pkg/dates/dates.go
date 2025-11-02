@@ -189,6 +189,13 @@ func GetLastWeekRange(now time.Time) (time.Time, time.Time) {
 	return startOfWeek, endOfWeek
 }
 
+func GetLast3dRange(now time.Time) (time.Time, time.Time) {
+	endOf := now
+	startOf := endOf.AddDate(0, 0, -3)
+
+	return startOf, endOf
+}
+
 func GetLast24HoursRange(now time.Time) (time.Time, time.Time) {
 	endOf := now
 	startOf := endOf.AddDate(0, 0, -1)
