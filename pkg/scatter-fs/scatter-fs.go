@@ -146,14 +146,13 @@ func (sfs *FileSystem) MkdirAll(path string, perm fs.FileMode) error {
 		return nil
 	}
 
-	realPath, err := sfs.Suggest(path)
-	if err != nil {
-		return ge.Pin(err)
-	}
+	for _, dir := range sfs.dirs {
+		realPath := filepath.Join(dir, path)
 
-	err = os.MkdirAll(realPath, perm)
-	if err != nil {
-		return ge.Pin(err)
+		err := os.MkdirAll(realPath, perm)
+		if err != nil {
+			return ge.Pin(err)
+		}
 	}
 
 	return nil
