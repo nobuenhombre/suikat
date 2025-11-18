@@ -1,6 +1,9 @@
 package dates
 
-import "time"
+import (
+	"time"
+	_ "time/tzdata"
+)
 
 const (
 	DateFormatDashYYYYMMDD           = "2006-01-02"
@@ -199,6 +202,13 @@ func GetLast3dRange(now time.Time) (time.Time, time.Time) {
 func GetLast24HoursRange(now time.Time) (time.Time, time.Time) {
 	endOf := now
 	startOf := endOf.AddDate(0, 0, -1)
+
+	return startOf, endOf
+}
+
+func GetLastPeriodRange(now time.Time, period time.Duration) (time.Time, time.Time) {
+	endOf := now
+	startOf := endOf.Add(-1 * period)
 
 	return startOf, endOf
 }
