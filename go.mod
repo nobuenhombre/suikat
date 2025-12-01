@@ -5,7 +5,9 @@ go 1.22
 toolchain go1.23.0
 
 require (
+	github.com/andybalholm/brotli v1.0.4
 	github.com/fatih/color v1.13.0
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/schema v1.2.0
 	github.com/jackc/pgx/v5 v5.4.3
 	github.com/mholt/archiver/v3 v3.5.1
@@ -14,10 +16,10 @@ require (
 	github.com/xhit/go-str2duration/v2 v2.1.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.9.0
+	golang.org/x/text v0.9.0
 )
 
 require (
-	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
@@ -42,6 +44,5 @@ require (
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
