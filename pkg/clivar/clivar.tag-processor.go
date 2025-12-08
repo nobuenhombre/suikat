@@ -146,7 +146,7 @@ func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField refle
 	nameType := partsTagData[0]
 	valueStr := partsTagData[1]
 
-	partsNameType := strings.Split(nameType, ":")
+	partsNameType := splitLast(nameType, ":")
 	if len(partsNameType) != CountPartsNameType {
 		return nil, &ge.MismatchError{
 			Actual:   tagData,
@@ -175,4 +175,14 @@ func (tag *TagInfo) GetFieldInfo(typeField reflect.StructField, valueField refle
 		DefaultValue: valueStr,
 		Description:  description,
 	}, nil
+}
+
+func splitLast(s, sep string) []string {
+	idx := strings.LastIndex(s, sep)
+
+	if idx == -1 {
+		return []string{s}
+	}
+
+	return []string{s[:idx], s[idx+len(sep):]}
 }
