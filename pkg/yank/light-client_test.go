@@ -3,6 +3,8 @@ package yank
 import (
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestLightClient(t *testing.T) {
@@ -10,8 +12,8 @@ func TestLightClient(t *testing.T) {
 
 	// Create client service
 	func() {
-		defaults := NewDefaults("https://www.siarion.net")
-		defaults.AuthConstructor().AuthBasic("user", "password")
+		defaults := NewDefaults("https://nextjs.org")
+		// defaults.AuthConstructor().AuthBasic("user", "password")
 
 		client = New(defaults)
 	}()
@@ -20,10 +22,8 @@ func TestLightClient(t *testing.T) {
 	func() {
 		result := new(string)
 
-		status, rawBody, err := client.Light().GET("/rus/", result, http.StatusOK)
-		if err != nil {
-			t.Errorf("error: %v", err)
-		}
+		status, rawBody, err := client.Light().GET("/", result, http.StatusOK)
+		require.NoError(t, err)
 
 		t.Logf("status: %v, raw: %v", status, rawBody)
 	}()

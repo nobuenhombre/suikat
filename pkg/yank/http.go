@@ -1,15 +1,17 @@
 package yank
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/http/httptrace"
 	"reflect"
+	"time"
 
 	"github.com/nobuenhombre/suikat/pkg/adapt"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
-	"github.com/nobuenhombre/suikat/pkg/tracktime"
 )
 
 type HTTPHeaders interface {
@@ -32,13 +34,36 @@ func (r *HTTPRequest) AddHeaders(headers http.Header) {
 
 type HTTPResponse struct {
 	*http.Response
-	Timer *tracktime.Tracker
 
 	RawBody []byte
+	Timing  *Timing
 }
 
 func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
-	timer := tracktime.Start("HTTPRequest.Execute()")
+	var (
+		connectStart time.Time
+		connectDone  time.Time
+		wroteRequest time.Time
+		gotFirstByte time.Time
+	)
+
+	trace := &httptrace.ClientTrace{
+		ConnectStart: func(network, addr string) {
+			connectStart = time.Now()
+		},
+		ConnectDone: func(network, addr string, err error) {
+			connectDone = time.Now()
+		},
+		WroteRequest: func(info httptrace.WroteRequestInfo) {
+			wroteRequest = time.Now()
+		},
+		GotFirstResponseByte: func() {
+			gotFirstByte = time.Now()
+		},
+	}
+
+	ctx := httptrace.WithClientTrace(context.Background(), trace)
+	req := r.Request.WithContext(ctx)
 
 	client := &http.Client{}
 
@@ -53,14 +78,19 @@ func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 	}
 
 	//nolint:bodyclose
-	response, err := client.Do(r.Request)
+	response, err := client.Do(req)
 	if err != nil {
 		return nil, ge.Pin(err)
 	}
 
-	timer.Stop()
+	// Считаем времена
+	timing := &Timing{
+		Connect:         connectDone.Sub(connectStart),
+		SendRequest:     wroteRequest.Sub(connectDone),
+		TimeToFirstByte: gotFirstByte.Sub(wroteRequest),
+	}
 
-	return &HTTPResponse{Response: response, Timer: timer}, nil
+	return &HTTPResponse{Response: response, Timing: timing}, nil
 }
 
 func (rs *HTTPResponse) ReadBody() error {

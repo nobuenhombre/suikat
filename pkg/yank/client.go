@@ -3,6 +3,7 @@ package yank
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/nobuenhombre/suikat/pkg/ge"
 )
@@ -74,6 +75,9 @@ func (c *Client) ApplyDefaultsOnRequest(request *Request, ignoreDefaults bool) e
 
 // Request - make http request
 func (c *Client) Request(request *Request, response *Response, ignoreDefaults bool) (err error) {
+	totalStart := time.Now()
+
+	prepareStart := time.Now()
 	err = c.ApplyDefaultsOnRequest(request, ignoreDefaults)
 	if err != nil {
 		return ge.Pin(&ApplyDefaultsError{
@@ -102,6 +106,8 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 		})
 	}
 
+	prepareDuration := time.Since(prepareStart)
+
 	httpResponse, err := httpRequest.Execute()
 	if err != nil {
 		return ge.Pin(&ExecuteHTTPRequestError{
@@ -120,9 +126,9 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 		}
 	}()
 
-	response.Timer = httpResponse.Timer
 	response.Headers = httpResponse.Header
 
+	downloadStart := time.Now()
 	err = httpResponse.ReadBody()
 	if err != nil {
 		return ge.Pin(&ReadBodyHTTPRequestError{
@@ -134,10 +140,12 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			Parent:             err,
 		})
 	}
+	downloadDuration := time.Since(downloadStart)
 
 	response.Raw = httpResponse.RawBody
 	response.HTTPCode = httpResponse.StatusCode
 
+	parseStart := time.Now()
 	err = httpResponse.Parse(response.Data)
 	if err != nil {
 		return ge.Pin(&ParseResponseError{
@@ -149,6 +157,17 @@ func (c *Client) Request(request *Request, response *Response, ignoreDefaults bo
 			ResponseRawHeaders: httpResponse.Header,
 			Parent:             err,
 		})
+	}
+	parseDuration := time.Since(parseStart)
+
+	response.Timing = &Timing{
+		PrepareRequest:  prepareDuration,
+		Connect:         httpResponse.Timing.Connect,
+		SendRequest:     httpResponse.Timing.SendRequest,
+		TimeToFirstByte: httpResponse.Timing.TimeToFirstByte,
+		DownloadContent: downloadDuration,
+		ParseResponse:   parseDuration,
+		Total:           time.Since(totalStart),
 	}
 
 	if httpResponse.StatusCode != response.ExpectedHTTPCode {

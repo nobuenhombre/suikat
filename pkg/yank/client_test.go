@@ -3,6 +3,8 @@ package yank
 import (
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestHTTPRequest(t *testing.T) {
@@ -10,15 +12,15 @@ func TestHTTPRequest(t *testing.T) {
 
 	// Create client service
 	func() {
-		defaults := NewDefaults("https://www.siarion.net")
-		defaults.AuthConstructor().AuthBasic("user", "password")
+		defaults := NewDefaults("https://nextjs.org")
+		// defaults.AuthConstructor().AuthBasic("user", "password")
 
 		client = New(defaults)
 	}()
 
 	// Do request
 	func() {
-		request := NewRequest("/rus/")
+		request := NewRequest("/")
 		request.AuthConstructor().AuthNone()
 		request.QueryConstructor().AddQuery("hello", "world")
 		request.HeaderConstructor().AddHeader("wake-up", "neo")
@@ -29,8 +31,8 @@ func TestHTTPRequest(t *testing.T) {
 		response := NewResponse(result, http.StatusOK)
 
 		err := client.GET(request, response, false)
-		if err != nil {
-			t.Errorf("error: %v", err)
-		}
+		require.NoError(t, err)
+
+		t.Logf("%#v", response.Timing)
 	}()
 }

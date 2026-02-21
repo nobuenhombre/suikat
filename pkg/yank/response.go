@@ -2,8 +2,6 @@ package yank
 
 import (
 	"net/http"
-
-	"github.com/nobuenhombre/suikat/pkg/tracktime"
 )
 
 type Response struct {
@@ -13,7 +11,7 @@ type Response struct {
 	Headers  http.Header
 	Raw      []byte
 	Data     interface{}
-	Timer    *tracktime.Tracker
+	Timing   *Timing
 }
 
 func NewResponse(data interface{}, expectedHTTPCode int) *Response {
