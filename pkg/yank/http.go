@@ -41,6 +41,7 @@ type HTTPResponse struct {
 
 func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 	var (
+		startTime    = time.Now()
 		connectStart time.Time
 		connectDone  time.Time
 		wroteRequest time.Time
@@ -83,10 +84,22 @@ func (r *HTTPRequest) Execute() (httpResponse *HTTPResponse, err error) {
 		return nil, ge.Pin(err)
 	}
 
+	var connect, sendRequest time.Duration
+	if !connectStart.IsZero() && !connectDone.IsZero() {
+		connect = connectDone.Sub(connectStart)
+		sendRequest = wroteRequest.Sub(connectDone)
+	} else {
+		// Если соединение переиспользовано, считаем от начала запроса
+		connect = 0
+		if !wroteRequest.IsZero() {
+			sendRequest = wroteRequest.Sub(startTime)
+		}
+	}
+
 	// Считаем времена
 	timing := &Timing{
-		Connect:         connectDone.Sub(connectStart),
-		SendRequest:     wroteRequest.Sub(connectDone),
+		Connect:         connect,
+		SendRequest:     sendRequest,
 		TimeToFirstByte: gotFirstByte.Sub(wroteRequest),
 	}
 
