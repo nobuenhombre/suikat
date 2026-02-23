@@ -286,6 +286,66 @@ func (e *LimitCountExhaustedError) Is(target error) bool {
 	return errors.As(target, &val)
 }
 
+// VarRequiredError
+// en: error - service required
+// ru: ошибка - требуется сервис
+type VarRequiredError struct {
+	VarName string
+}
+
+// Error
+// en: error text formation
+// ru: формирование текста ошибки
+func (e *VarRequiredError) Error() string {
+	return fmt.Sprintf("var required (name = %v)", e.VarName)
+}
+
+// Is
+// en: compare with target error
+// ru: сравнение с другой ошибкой
+func (e *VarRequiredError) Is(target error) bool {
+	var val *VarRequiredError
+	if !errors.As(target, &val) {
+		return false
+	}
+
+	if val.VarName != e.VarName {
+		return false
+	}
+
+	return true
+}
+
+// HandlerRequiredError
+// en: error - service required
+// ru: ошибка - требуется сервис
+type HandlerRequiredError struct {
+	HandlerName string
+}
+
+// Error
+// en: error text formation
+// ru: формирование текста ошибки
+func (e *HandlerRequiredError) Error() string {
+	return fmt.Sprintf("handler required (name = %v)", e.HandlerName)
+}
+
+// Is
+// en: compare with target error
+// ru: сравнение с другой ошибкой
+func (e *HandlerRequiredError) Is(target error) bool {
+	var val *HandlerRequiredError
+	if !errors.As(target, &val) {
+		return false
+	}
+
+	if val.HandlerName != e.HandlerName {
+		return false
+	}
+
+	return true
+}
+
 // ServiceRequiredError
 // en: error - service required
 // ru: ошибка - требуется сервис
