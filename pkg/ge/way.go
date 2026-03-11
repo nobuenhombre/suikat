@@ -21,7 +21,7 @@ type Way struct {
 // en: returns a formatted string with error coordinates
 // ru: возвращает форматированную строку с координатами ошибки
 func (w *Way) View() string {
-	return fmt.Sprintf("%v : %v, file %v line %v", w.Package, w.Caller, w.File, w.Line)
+	return fmt.Sprintf("%v %v %v line %v", w.Caller, w.Package, w.File, w.Line)
 }
 
 const (

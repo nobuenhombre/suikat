@@ -4,6 +4,7 @@
 package ge
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -89,27 +90,56 @@ func (e *IdentityError) Unwrap() error {
 // en: error text formation
 // ru: формирование текста ошибки
 func (e *IdentityError) Error() string {
-	createdAtStr := fmt.Sprintf("CreatedAt[ %v ], ", e.CreatedAt)
+	createdAtStr := fmt.Sprintf("CreatedAt: %v\n", e.CreatedAt)
 
 	wayStr := ""
 	if e.Way != nil {
-		wayStr = fmt.Sprintf("Way[ %v ], ", e.Way.View())
+		wayStr = fmt.Sprintf("Way: %v\n", e.Way.View())
 	}
 
 	paramsStr := ""
 	if e.Params != nil {
-		paramsStr = fmt.Sprintf("Params[ %v ]", e.Params.View())
-	}
-
-	parentStr := ""
-	if e.Parent != nil {
-		parentStr = fmt.Sprintf("ParentError[ %v ], ", e.Parent.Error())
+		paramsStr = fmt.Sprintf("Params: %v\n", e.Params.View())
 	}
 
 	messageStr := ""
 	if len(e.Message) > 0 {
-		messageStr = fmt.Sprintf("Message[ %v ], ", e.Message)
+		messageStr = fmt.Sprintf("Message: %v\n", e.Message)
 	}
 
-	return strings.TrimSuffix(fmt.Sprintf("%v%v%v%v%v", createdAtStr, wayStr, paramsStr, parentStr, messageStr), ", ")
+	parentStr := ""
+	if e.Parent != nil {
+		parentErrMsg := e.Parent.Error()
+
+		lines := strings.Split(parentErrMsg, "\n")
+		for i := range lines {
+			lines[i] = "\t" + lines[i]
+		}
+
+		parentErrMsg = strings.Join(lines, "\n")
+
+		parentStr = fmt.Sprintf("ParentError:\n%v", parentErrMsg)
+	}
+
+	return strings.TrimSuffix(fmt.Sprintf("%v%v%v%v%v", createdAtStr, wayStr, paramsStr, parentStr, messageStr), ", \n")
+}
+
+func (e *IdentityError) RootError() error {
+	var val *IdentityError
+
+	parent := e.Parent
+
+	for {
+		if errors.As(parent, &val) {
+			parent = val.Parent
+
+			if parent == nil {
+				return val
+			}
+
+			continue
+		}
+
+		return parent
+	}
 }
