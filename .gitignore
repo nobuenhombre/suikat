@@ -1,2 +1,4 @@
 .idea
-/.proxyai/*
+.proxyai
+.qwen
+QWEN.md
